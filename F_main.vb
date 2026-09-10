@@ -18,7 +18,6 @@ Public Class F_main
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
         F_Seleziona_Categoria.Show()
-        'F_Leggi_foglio.ShowDialog()
     End Sub
 
     Sub test_db()
@@ -43,8 +42,7 @@ Public Class F_main
 
     End Sub
 
-    Private Sub NuovoArrivoToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles NuovoArrivoToolStripMenuItem.Click
-        F_Anagrafica.ShowDialog()
+    Private Sub NuovoArrivoToolStripMenuItem_Click(sender As Object, e As EventArgs)
     End Sub
 
     Private Sub Button3_Click(sender As Object, e As EventArgs)
@@ -52,6 +50,46 @@ Public Class F_main
     End Sub
 
     Private Sub Button4_Click(sender As Object, e As EventArgs)
+
+    End Sub
+
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+
+    End Sub
+
+    Private Sub Button3_Click_1(sender As Object, e As EventArgs) Handles Button3.Click
+        F_Anagrafica.ShowDialog()
+
+    End Sub
+
+    Private Sub Button6_Click(sender As Object, e As EventArgs) Handles Button6.Click
+        Try
+            F_MyGraph.Hide()
+        Catch ex As Exception
+
+        End Try
+
+        Try
+            F_Anagrafica.Hide()
+        Catch ex As Exception
+        End Try
+
+        Try
+            F_Foglio_esistente.Hide()
+        Catch ex As Exception
+        End Try
+
+        Try
+            F_Seleziona_Categoria.Hide()
+        Catch ex As Exception
+
+        End Try
+
+
+        End
+    End Sub
+
+    Private Sub DatabasePrincipaleToolStripMenuItem_Click(sender As Object, e As EventArgs)
 
     End Sub
 End Class

@@ -7,12 +7,17 @@ Public Class Class_GIORNALIERO
     Public Property TUTTELERISPOSTE As Boolean
     Public Property Codice As String
     Public Property Testo As String
-    Public Property TOT_POS As Integer
-    Public Property TOT_NEG As Integer
-    Public Property TOT_PROMPT As Integer
-    Public Property TOT As Integer
-    Public Property INTERRUZIONE As Boolean
+    Public Property TOT1_POS As Integer
+    Public Property TOT1_NEG As Integer
+    Public Property TOT1_PROMPT As Integer
+    Public Property TOT1 As Integer
+    Public Property TOT2_POS As Integer
+    Public Property TOT2_NEG As Integer
+    Public Property TOT2_PROMPT As Integer
+    Public Property TOT2 As Integer
+    Public Property COMPILATO As Boolean
     Public Property TERMINE As Boolean
+    Public Property Titolo As String
 
     'Private ReadOnly ConnectionString As String =
     '   "Server=.\SQLEXPRESS;Database=Scuoladellestelle;Trusted_Connection=True;"
@@ -57,7 +62,7 @@ Public Class Class_GIORNALIERO
 
             ' Usa l'operatore LIKE per cercare corrispondenze parziali
             Dim sql As String =
-                "SELECT ID, id_foglio,data,valutativo,tuttelerisposte,Codice,Testo,tot_pos,tot_neg,tot_prompt,tot,interruzione,termine " &
+                "SELECT ID, id_foglio,data,valutativo,tuttelerisposte,Codice,Testo,tot1_pos,tot1_neg,tot1_prompt,tot1,tot2_pos,tot2_neg,tot2_prompt,tot2,COMPILATO,termine,titolo " &
                 "FROM GIORNALIERO " &
                 "WHERE Codice LIKE @Testo"
             Using cmd As New SqliteCommand(sql, cn)
@@ -74,13 +79,20 @@ Public Class Class_GIORNALIERO
                         record.ID = Convert.ToInt32(rd("ID_FOGLIO"))
                         record.Testo = Convert.ToString(rd("TESTO"))
                         record.Codice = Convert.ToString(rd("CODICE"))
-                        record.TOT_POS = Convert.ToString(rd("TOT_pos"))
-                        record.TOT_NEG = Convert.ToString(rd("TOT_neg"))
-                        record.TOT_PROMPT = Convert.ToString(rd("TOT_prompt"))
-                        record.TOT = Convert.ToString(rd("TOT"))
+                        record.TOT1_POS = Convert.ToString(rd("TOT1_pos"))
+                        record.TOT1_NEG = Convert.ToString(rd("TOT1_neg"))
+                        record.TOT1_PROMPT = Convert.ToString(rd("TOT1_prompt"))
+                        record.TOT1 = Convert.ToString(rd("TOT1"))
+                        record.TOT2_POS = Convert.ToString(rd("TOT1_pos"))
+                        record.TOT2_NEG = Convert.ToString(rd("TOT1_neg"))
+                        record.TOT2_PROMPT = Convert.ToString(rd("TOT1_prompt"))
+                        record.TOT2 = Convert.ToString(rd("TOT1"))
                         record.DATA = Convert.ToString(rd("data"))
                         record.VALUTATIVO = Convert.ToBoolean(rd("valutativo"))
                         record.TUTTELERISPOSTE = Convert.ToBoolean(rd("TUTTELERISPOSTE"))
+                        record.COMPILATO = Convert.ToBoolean(rd("COMPILATO"))
+                        record.Titolo = Convert.ToString(rd("Titolo"))
+
 
                         ' Aggiunge il record alla lista dei risultati solo se attivi
                         listaRisultati.Add(record)
@@ -121,16 +133,17 @@ Public Class Class_GIORNALIERO
             ' Determina se inserire un nuovo record o aggiornare quello esistente
             If Me.ID = 0 Then
                 sql = "INSERT INTO GIORNALIERO (ID_FOGLIO, DATA, VALUTATIVO, TUTTELERISPOSTE, Codice, Testo, " &
-                      "TOT_POS, TOT_NEG, TOT_PROMPT, TOT, INTERRUZIONE, TERMINE) " &
+                      "TOT1_POS, TOT1_NEG, TOT1_PROMPT, TOT1,TOT2_POS, TOT2_NEG, TOT2_PROMPT, TOT2, COMPILATO, TERMINE,titolo) " &
                       "VALUES (@ID_FOGLIO, @DATA, @VALUTATIVO, @TUTTELERISPOSTE, @Codice, @Testo, " &
-                      "@TOT_POS, @TOT_NEG, @TOT_PROMPT, @TOT, @INTERRUZIONE, @TERMINE); " &
+                      "@TOT1_POS, @TOT1_NEG, @TOT1_PROMPT, @TOT1,@TOT2_POS, @TOT2_NEG, @TOT2_PROMPT, @TOT2, @COMPILATO, @TERMINE,@Titolo); " &
                       "SELECT last_insert_rowid();"
             Else
                 sql = "UPDATE GIORNALIERO SET " &
                       "ID_FOGLIO = @ID_FOGLIO, DATA = @DATA, VALUTATIVO = @VALUTATIVO, " &
                       "TUTTELERISPOSTE = @TUTTELERISPOSTE, Codice = @Codice, Testo = @Testo, " &
-                      "TOT_POS = @TOT_POS, TOT_NEG = @TOT_NEG, TOT_PROMPT = @TOT_PROMPT, " &
-                      "TOT = @TOT, INTERRUZIONE = @INTERRUZIONE, TERMINE = @TERMINE " &
+                      "TOT1_POS = @TOT1_POS, TOT1_NEG = @TOT1_NEG, TOT1_PROMPT = @TOT1_PROMPT,TOT1 = @TOT1, " &
+                      "TOT2_POS = @TOT2_POS, TOT2_NEG = @TOT2_NEG, TOT2_PROMPT = @TOT2_PROMPT,TOT2 = @TOT2, " &
+                      "COMPILATO = @COMPILATO, TERMINE = @TERMINE, TITOLo = @TITOLo " &
                       "WHERE ID = @ID;"
             End If
 
@@ -144,12 +157,17 @@ Public Class Class_GIORNALIERO
                     cmd.Parameters.AddWithValue("@TUTTELERISPOSTE", If(Me.TUTTELERISPOSTE, 1, 0))
                     cmd.Parameters.AddWithValue("@Codice", Me.Codice)
                     cmd.Parameters.AddWithValue("@Testo", Me.Testo)
-                    cmd.Parameters.AddWithValue("@TOT_POS", Me.TOT_POS)
-                    cmd.Parameters.AddWithValue("@TOT_NEG", Me.TOT_NEG)
-                    cmd.Parameters.AddWithValue("@TOT_PROMPT", Me.TOT_PROMPT)
-                    cmd.Parameters.AddWithValue("@TOT", Me.TOT)
-                    cmd.Parameters.AddWithValue("@INTERRUZIONE", If(Me.INTERRUZIONE, 1, 0))
+                    cmd.Parameters.AddWithValue("@TOT1_POS", Me.TOT1_POS)
+                    cmd.Parameters.AddWithValue("@TOT1_NEG", Me.TOT1_NEG)
+                    cmd.Parameters.AddWithValue("@TOT1_PROMPT", Me.TOT1_PROMPT)
+                    cmd.Parameters.AddWithValue("@TOT1", Me.TOT1)
+                    cmd.Parameters.AddWithValue("@TOT2_POS", Me.TOT2_POS)
+                    cmd.Parameters.AddWithValue("@TOT2_NEG", Me.TOT2_NEG)
+                    cmd.Parameters.AddWithValue("@TOT2_PROMPT", Me.TOT2_PROMPT)
+                    cmd.Parameters.AddWithValue("@TOT2", Me.TOT2)
+                    cmd.Parameters.AddWithValue("@COMPILATO", If(Me.COMPILATO, 1, 0))
                     cmd.Parameters.AddWithValue("@TERMINE", If(Me.TERMINE, 1, 0))
+                    cmd.Parameters.AddWithValue("@TITOLo", Me.Titolo)
 
 
                 Catch ex As Exception
@@ -169,6 +187,28 @@ Public Class Class_GIORNALIERO
             End Using
         End Using
         Return True
+    End Function
+
+    Public Function Carica_titoli()
+
+
+        Dim dt As New DataTable()
+        dt = OttienTitoli()
+        Dim N = dt.Rows.Count - 1
+        Dim j = 0, lst = "", tot = 0, x = ""
+        ReDim Gbl_Elenco_titoli_usati(N)
+
+        For Each riga As DataRow In dt.Rows
+            ' 1. Lettura del campo codice
+            Gbl_Elenco_titoli_usati(j).Titolo = riga("titolo").ToString()
+            'Titolo = riga("titolo").ToString()
+            'tot = riga("quante_volte").ToString()
+            'x = riga("listaid").ToString()
+
+            j = j + 1
+        Next
+
+
     End Function
 
     Public Function Carica_Foglio(idFoglio As Integer) As List(Of Class_GIORNALIERO)
@@ -204,12 +244,17 @@ Public Class Class_GIORNALIERO
                             .TUTTELERISPOSTE = Convert.ToBoolean(reader("TUTTELERISPOSTE")),
                             .Codice = reader("Codice").ToString(),
                             .Testo = reader("Testo").ToString(),
-                            .TOT_POS = Convert.ToInt32(reader("TOT_POS")),
-                            .TOT_NEG = Convert.ToInt32(reader("TOT_NEG")),
-                            .TOT_PROMPT = Convert.ToInt32(reader("TOT_PROMPT")),
-                            .TOT = Convert.ToInt32(reader("TOT")),
-                            .INTERRUZIONE = Convert.ToBoolean(reader("INTERRUZIONE")),
-                            .TERMINE = Convert.ToBoolean(reader("TERMINE"))
+                            .TOT1_POS = Convert.ToInt32(reader("TOT1_POS")),
+                            .TOT1_NEG = Convert.ToInt32(reader("TOT1_NEG")),
+                            .TOT1_PROMPT = Convert.ToInt32(reader("TOT1_PROMPT")),
+                            .TOT1 = Convert.ToInt32(reader("TOT1")),
+                            .TOT2_POS = Convert.ToInt32(reader("TOT2_POS")),
+                            .TOT2_NEG = Convert.ToInt32(reader("TOT2_NEG")),
+                            .TOT2_PROMPT = Convert.ToInt32(reader("TOT2_PROMPT")),
+                            .TOT2 = Convert.ToInt32(reader("TOT2")),
+                            .COMPILATO = Convert.ToBoolean(reader("COMPILATO")),
+                            .TERMINE = Convert.ToBoolean(reader("TERMINE")),
+                            .Titolo = Convert.ToString(reader("TITOLo"))
                         }
 
                         lista.Add(record)
@@ -225,4 +270,100 @@ Public Class Class_GIORNALIERO
         Return lista
 
     End Function
+
+    Public Shared Function OttieniRecordPerDate(data1 As DateTime, data2 As DateTime) As DataTable
+        Dim dt As New DataTable()
+
+
+        Dim query As String = "SELECT * FROM Giornaliero WHERE DATA BETWEEN @DataInizio AND @DataFine ORDER BY Codice, Data"
+        query = "
+        SELECT * 
+        FROM Giornaliero 
+        WHERE (SUBSTR(DATA, 7, 4) || '-' || SUBSTR(DATA, 4, 2) || '-' || SUBSTR(DATA, 1, 2)) 
+        BETWEEN @DataInizio AND @DataFine 
+        ORDER BY Codice, DATA"
+        Using cn = DB.GetConnection_Bambino()
+
+            Using cmd As New SqliteCommand(query, cn)
+                cmd.Parameters.AddWithValue("@DataInizio", data1.ToString("yyyy-MM-dd"))
+                cmd.Parameters.AddWithValue("@DataFine", data2.ToString("yyyy-MM-dd"))
+                'cmd.Parameters.AddWithValue("@DataInizio", data1.ToString("dd/MM/yyyy"))
+                'cmd.Parameters.AddWithValue("@DataFine", data2.ToString("dd/MM/yyyy"))
+
+                Using reader As SqliteDataReader = cmd.ExecuteReader()
+                    dt.Load(reader)
+                End Using
+            End Using
+        End Using
+
+        Return dt
+    End Function
+
+    Public Shared Function OttieniRecordPerCodice(codice As String) As DataTable
+        If codice = "" Then Return Nothing
+
+        Dim dt As New DataTable()
+
+
+
+        Dim query As String = "SELECT * FROM Giornaliero WHERE CODICE = @codice ORDER BY SUBSTR(DATA, 7, 4) || '-' || SUBSTR(DATA, 4, 2) || '-' || SUBSTR(DATA, 1, 2) ASC"
+        Using cn = DB.GetConnection_Bambino()
+
+            Using cmd As New SqliteCommand(query, cn)
+                ' Aggiungiamo il parametro in modo sicuro
+                cmd.Parameters.AddWithValue("@codice", codice)
+
+                Using reader As SqliteDataReader = cmd.ExecuteReader()
+                    dt.Load(reader)
+                End Using
+            End Using
+        End Using
+
+        Return dt
+    End Function
+    Public Shared Function OttieniRecordOrderbydata(Optional soloNoncompilati As Boolean = False) As DataTable
+
+        Dim dt As New DataTable()
+
+        Dim Query = ""
+        If soloNoncompilati Then
+            Query = "SELECT * FROM Giornaliero WHERE COMPILATO = false GROUP BY ID_FOGLIO ORDER BY SUBSTR(DATA, 7, 4) || '-' || SUBSTR(DATA, 4, 2) || '-' || SUBSTR(DATA, 1, 2) DESC"
+        Else
+            Query = "SELECT * FROM Giornaliero ORDER BY SUBSTR(DATA, 7, 4) || '-' || SUBSTR(DATA, 4, 2) || '-' || SUBSTR(DATA, 1, 2) ASC"
+        End If
+        Using cn = DB.GetConnection_Bambino()
+
+            Using cmd As New SqliteCommand(query, cn)
+                ' Aggiungiamo il parametro in modo sicuro
+                Using reader As SqliteDataReader = cmd.ExecuteReader()
+                    dt.Load(reader)
+                End Using
+            End Using
+        End Using
+
+        Return dt
+    End Function
+
+    Public Shared Function OttienTitoli() As DataTable
+
+        Dim dt As New DataTable()
+
+
+
+        'Dim query As String = "Select Case DISTINCT titolo FROM FROM Giornaliero order by titolo"
+        'Dim query As String = "SELECT DISTINCT titolo, COUNT(titolo) As quante_volte, GROUP_CONCAT(ID_Foglio, ';') AS listaid FROM Giornaliero GROUP BY titolo ORDER BY titolo ASC"
+        Dim query As String = "SELECT DISTINCT titolo FROM Giornaliero GROUP BY titolo ORDER BY titolo ASC"
+        Using cn = DB.GetConnection_Bambino()
+
+            Using cmd As New SqliteCommand(query, cn)
+
+                Using reader As SqliteDataReader = cmd.ExecuteReader()
+                    dt.Load(reader)
+                End Using
+            End Using
+        End Using
+
+        Return dt
+    End Function
+
 End Class

@@ -21,6 +21,7 @@
     <PackageReference Include="Open-XML-SDK" Version="2.9.1" />
     <PackageReference Include="PdfiumViewer.Updated" Version="2.14.5" />
     <PackageReference Include="QRCoder" Version="1.8.0" />
+    <PackageReference Include="ScottPlot.WinForms" Version="5.1.59" />
   </ItemGroup>
 
   <ItemGroup>

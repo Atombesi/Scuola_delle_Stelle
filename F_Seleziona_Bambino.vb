@@ -19,7 +19,7 @@
         ComboBox1.Items.Clear()
         Gbl_Elenco_bambini = Class_ANAGRAFICA.CercaPerCognome("", soloattivi)
         ' Mostra il numero di record trovati
-        Gbl_miaLista.Clear()
+        Gbl_miaLista_Anagrafiche.Clear()
         ' Ciclo per leggere i dati trovati
         Dim id As Integer, n As String
         For Each persona In Gbl_Elenco_bambini

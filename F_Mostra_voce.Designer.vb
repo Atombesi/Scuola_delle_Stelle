@@ -316,8 +316,9 @@ Partial Class F_Mostra_voce
         Controls.Add(Panel1)
         Controls.Add(CheckBox1)
         Controls.Add(Button4)
+        FormBorderStyle = FormBorderStyle.FixedSingle
         Name = "F_Mostra_voce"
-        Text = "F_Mostra_voce"
+        Text = "Informazioni sul codice"
         Panel1.ResumeLayout(False)
         Panel1.PerformLayout()
         Panel3.ResumeLayout(False)

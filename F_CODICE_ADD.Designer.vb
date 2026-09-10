@@ -86,7 +86,7 @@ Partial Class F_CODICE_ADD
         ' Label5
         ' 
         Label5.AutoSize = True
-        Label5.Location = New Point(5, 96)
+        Label5.Location = New Point(5, 122)
         Label5.Name = "Label5"
         Label5.Size = New Size(71, 14)
         Label5.TabIndex = 19
@@ -95,22 +95,24 @@ Partial Class F_CODICE_ADD
         ' TextBox2
         ' 
         TextBox2.Location = New Point(85, 63)
+        TextBox2.MaxLength = 80
+        TextBox2.Multiline = True
         TextBox2.Name = "TextBox2"
-        TextBox2.Size = New Size(305, 22)
+        TextBox2.Size = New Size(305, 50)
         TextBox2.TabIndex = 20
         ' 
         ' TextBox3
         ' 
-        TextBox3.Location = New Point(85, 93)
+        TextBox3.Location = New Point(85, 119)
         TextBox3.Multiline = True
         TextBox3.Name = "TextBox3"
-        TextBox3.Size = New Size(305, 55)
+        TextBox3.Size = New Size(305, 44)
         TextBox3.TabIndex = 21
         ' 
         ' CheckBox1
         ' 
         CheckBox1.AutoSize = True
-        CheckBox1.Location = New Point(7, 154)
+        CheckBox1.Location = New Point(7, 170)
         CheckBox1.Name = "CheckBox1"
         CheckBox1.RightToLeft = RightToLeft.Yes
         CheckBox1.Size = New Size(94, 18)
@@ -130,7 +132,7 @@ Partial Class F_CODICE_ADD
         ' Label3
         ' 
         Label3.AutoSize = True
-        Label3.Location = New Point(9, 182)
+        Label3.Location = New Point(9, 198)
         Label3.Name = "Label3"
         Label3.Size = New Size(82, 14)
         Label3.TabIndex = 25
@@ -139,7 +141,7 @@ Partial Class F_CODICE_ADD
         ' Label7
         ' 
         Label7.AutoSize = True
-        Label7.Location = New Point(97, 182)
+        Label7.Location = New Point(97, 198)
         Label7.Name = "Label7"
         Label7.Size = New Size(11, 14)
         Label7.TabIndex = 26
@@ -164,7 +166,7 @@ Partial Class F_CODICE_ADD
         Controls.Add(Label1)
         Font = New Font("Calibri", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         Name = "F_CODICE_ADD"
-        Text = "F_CODICE_ADD"
+        Text = "Voce Esercizio"
         ResumeLayout(False)
         PerformLayout()
     End Sub

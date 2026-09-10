@@ -8,18 +8,17 @@
     End Sub
     Sub Carica_elenco_bambini(Optional soloattivi = False)
         Dim risultati As List(Of Class_ANAGRAFICA) = Class_ANAGRAFICA.CercaPerCognome("", soloattivi)
-
+        Gbl_Elenco_bambini = risultati
         ' Mostra il numero di record trovati
-        Gbl_miaLista.Clear()
+        Gbl_miaLista_Anagrafiche.Clear()
         ' Ciclo per leggere i dati trovati
         Dim id As Integer, n As String
         For Each persona In risultati
             n = persona.Cognome & " " & persona.Nome
-            n = persona.Cognome & " " & persona.Nome
             Dim elemento As New Class_ElementoCombo(persona.ID, n, persona.DBname)
-            Gbl_miaLista.Add(elemento)
+            Gbl_miaLista_Anagrafiche.Add(elemento)
         Next
-        ComboBox1.PopolaLeggero(Gbl_miaLista)
+        ComboBox1.PopolaLeggero(Gbl_miaLista_Anagrafiche)
 
     End Sub
 
@@ -101,6 +100,10 @@
     End Sub
 
     Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
+
+    End Sub
+
+    Private Sub MenuStrip1_ItemClicked(sender As Object, e As ToolStripItemClickedEventArgs) Handles MenuStrip1.ItemClicked
 
     End Sub
 End Class

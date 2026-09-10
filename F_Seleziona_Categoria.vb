@@ -4,12 +4,22 @@ Imports DocumentFormat.OpenXml
 Imports DocumentFormat.OpenXml.Packaging
 Imports DocumentFormat.OpenXml.Spreadsheet
 Imports DocumentFormat.OpenXml.Wordprocessing
+Imports Microsoft.IdentityModel.Tokens
+Imports ScottPlot.Statistics
 Imports MyColor = System.Drawing.Color
+
 Public Class F_Seleziona_Categoria
     Public UltimoFoglioGiornaliero_Inserito As Integer
     Public Giornaliero As New Class_GIORNALIERO
 
     Private Sub F_Crea_Scheda_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
+        ' Definizione dei tooltip per i pulsanti
+        TP1.SetToolTip(Button1, "Crea nuova scheda")
+        TP1.SetToolTip(Button3, "Elimina scheda")
+        TP1.SetToolTip(Button8, "Seleziona ragazzo")
+        TP1.SetToolTip(Button10, "Impostazioni")
+
         Dim n = UBound(ini.ELCAR_LETTERE)
         ReDim Preserve CODICI_ELCAR(n)
         ReDim cod(7)
@@ -17,10 +27,29 @@ Public Class F_Seleziona_Categoria
         For j = 0 To n - 1
             ComboBox1.Items.Add(CODICI_ELCAR(j))
         Next
-        If Label9.Text = "" Or Gbl_DB_BAMBINO = "" Then
-            Call Seleziona_bambino()
 
-        End If
+        ' Imposto la data presentia dell'esercizio in preparazione 
+        Dim mydata As DateTime = DateTime.Today.AddDays(1)
+        Label11.Tag = mydata.ToString("dddd d MMMM yyyy")
+        Label11.Text = "(" + mydata.ToString("dddd d MMMM yyyy") + ")"
+
+
+        Gbl_miaLista_Anagrafiche.Clear()
+        Gbl_Elenco_bambini = Carica_bambini()
+        ' Ciclo per leggere i dati trovati
+        Dim id As Integer, x = ""
+        For Each persona In Gbl_Elenco_bambini
+            x = persona.Cognome & " " & persona.Nome
+            Dim elemento As New Class_ElementoCombo(persona.ID, x, persona.DBname)
+            Gbl_miaLista_Anagrafiche.Add(elemento)
+        Next
+        ' Popolo la combo con i nomi dei bambini 
+        ComboBox8.PopolaLeggero(Gbl_miaLista_Anagrafiche)
+
+        ' Seleziono il primo bambino dell'elenco 
+        Seleziona_bambino(0)
+
+
 
     End Sub
     Sub Azzera_totali_voci_combo(Optional start As Integer = 1)
@@ -29,36 +58,39 @@ Public Class F_Seleziona_Categoria
         If start <= 5 Then Label16.Text = "Tot 0 voci" : Label16.Refresh()
         If start <= 6 Then Label17.Text = "Tot 0 voci" : Label17.Refresh()
     End Sub
-    Sub Seleziona_bambino()
-        Dim jb = F_Seleziona_Bambino.Mostra()
-        If jb < 0 Then
-            Call MsgBox("Bambino non selezionato")
-            Exit Sub
-        End If
+    Sub Seleziona_bambino(Gbl_Jb)
 
-        Gbl_NOME_BAMBINO = Gbl_Elenco_bambini(jb).DBname.ToUpper
+        ' Costruisci_codice_finale il nome del file del bambio e creo il database se non esiste
+        Dim filedb = Costruisci_filenameDB_bambino(Gbl_Jb)
+
+        'If Gbl_Jb < 0 Then
+        '    Call MsgBox("Bambino non selezionato")
+        '    Exit Sub
+        'End If
+
+        Gbl_NOME_BAMBINO = Gbl_Elenco_bambini(Gbl_Jb).Cognome.ToUpper + " " + Gbl_Elenco_bambini(Gbl_Jb).Nome.ToUpper
+        'Gbl_NOME_BAMBINO = Gbl_Elenco_bambini(Gbl_Jb).Nome.ToUpper + " " + Gbl_Elenco_bambini(Gbl_Jb).Cognome.ToUpper
+        Gbl_DB_BAMBINO = Gbl_Elenco_bambini(Gbl_Jb).DBname.ToUpper
         If InStr(Gbl_DB_BAMBINO, ".DB") = 0 Then Gbl_DB_BAMBINO = Gbl_NOME_BAMBINO + ".DB"
 
-        Label9.Text = Gbl_Elenco_bambini(jb).Cognome + " " + Gbl_Elenco_bambini(jb).Nome : Label9.Refresh()
-        Label9.Tag = jb
+        Label9.Text = Gbl_Elenco_bambini(Gbl_Jb).Cognome + " " + Gbl_Elenco_bambini(Gbl_Jb).Nome : Label9.Refresh()
+        Label9.Tag = Gbl_Jb
 
-        Dim filedb = IO.Path.Combine(ini.DB_Bambini_path, Gbl_DB_BAMBINO).ToUpper
-        If Not IO.File.Exists(filedb) Then
-            Dim m = "Il database" + Gbl_DB_BAMBINO + vbCrLf + "NON è stato trovato"
-            m = m + "Vuoi crearlo?"
-            If MsgBox(m, vbYesNo) <> vbYes Then
-                Label9.Text = "" : Label9.Refresh()
-                Label9.Tag = -1
-                Exit Sub
-            End If
-            Crea_DB_Bimbo(filedb)
-        End If
+        'Dim filedb = IO.Path.Combine(ini.DB_Bambini_path, Gbl_DB_BAMBINO).ToUpper
+        'If Not IO.File.Exists(filedb) Then
+        '    Dim m = "Il database" + Gbl_DB_BAMBINO + vbCrLf + "NON è stato trovato"
+        '    m = m + "Vuoi crearlo?"
+        '    If MsgBox(m, vbYesNo) <> vbYes Then
+        '        Exit Sub
+        '    End If
+        '    Crea_DB_Bimbo(filedb)
+        'End If
 
         ' Se non essite la directory delle schede la crea
-        Gbl_SCHEDA_BAMBINO = ini.Path_SCHEDE_DaCompilare
-        If Not IO.Directory.Exists(Gbl_SCHEDA_BAMBINO) Then
-            IO.Directory.CreateDirectory(Gbl_SCHEDA_BAMBINO)
-        End If
+        'Gbl_SCHEDA_BAMBINO = ini.Path_SCHEDE_DaCompilare
+        'If Not IO.Directory.Exists(Gbl_SCHEDA_BAMBINO) Then
+        '    IO.Directory.CreateDirectory(Gbl_SCHEDA_BAMBINO)
+        'End If
 
 
         Gbl_UltimofoglioGiornaliero_inserito = Class_GIORNALIERO.Trova_ultimo_IDFOGLIO
@@ -77,7 +109,11 @@ Public Class F_Seleziona_Categoria
         Dim y = ini.ELCAR_LETTERE(index)
         cod(1) = ComboBox1.Text
         Call Carica_Combobox2(y)
+        Try
+            ComboBox2.SelectedIndex = 0
+        Catch ex As Exception
 
+        End Try
     End Sub
 
     Private Sub ComboBox2_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox2.SelectedIndexChanged
@@ -85,15 +121,21 @@ Public Class F_Seleziona_Categoria
         Gbl_Codice_Elcar_Selezionato = cod(1) + "." + cod(2)
         ComboBox3.Items.Clear() : ComboBox4.Items.Clear() : ComboBox5.Items.Clear() : ComboBox6.Items.Clear()
         For jj = 3 To 7 : cod(jj) = "" : Next
-        ComboBox3.Items.Clear() :
-        ComboBox4.Items.Clear() :
-        ComboBox5.Items.Clear() :
+        ComboBox3.Items.Clear()
+        ComboBox4.Items.Clear()
+        ComboBox5.Items.Clear()
         ComboBox6.Items.Clear()
 
         ' Carico combo3 (Elcar_VOCI)
         Call Carica_Combobox3(Gbl_Codice_Elcar_Selezionato)
         Label12.Text = "Tot " + ComboBox3.Items.Count.ToString + " voci" : Label12.Refresh()
         If ComboBox3.Items.Count = 0 Then ComboBox3.Text = ""
+
+        Try
+            ComboBox3.SelectedIndex = 0
+        Catch ex As Exception
+
+        End Try
 
         'Label5.Text = "codice non trovato!"
         'Label5.Tag = -1
@@ -131,8 +173,18 @@ Public Class F_Seleziona_Categoria
         Label7.Text = "Tot " + ComboBox4.Items.Count.ToString + " voci" : Label7.Refresh()
         If ComboBox4.Items.Count = 0 Then ComboBox4.Text = ""
 
+        Try
+            ComboBox4.SelectedIndex = 0
+        Catch ex As Exception
+
+        End Try
+
     End Sub
     Private Sub ComboBox4_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox4.SelectedIndexChanged
+        Call my_ComboBox4_SelectedIndexChanged()
+
+    End Sub
+    Sub my_ComboBox4_SelectedIndexChanged()
         Dim j = ComboBox4.SelectedIndex
         ComboBox5.Items.Clear() : ComboBox5.Refresh()
 
@@ -183,10 +235,15 @@ Public Class F_Seleziona_Categoria
             Gbl_Codice_Elcar_TestoSelezionato = Gbl_Elenco_Codici_ELCARVOCISUB2(0).TESTO
         End If
         Mostra_Testo_riportato()
+        Try
+            ComboBox5.SelectedIndex = 0
+        Catch ex As Exception
+
+        End Try
 
 
 
-        Dim XC = 1
+
     End Sub
     Function Pulisci_Testo_selezionato(testo, Optional maxleng = 30) As String
         If InStr(testo, "] ") > 0 Then
@@ -399,16 +456,26 @@ Public Class F_Seleziona_Categoria
     End Function
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
         'Aggiunge un codice nuovo
-        Dim j = Val(Button1.Tag)
+        Dim j = Val(cod(5)) + 1
+        Dim x = TextBox1.Text
+        Dim h = CalcolaAltezzaOttimaleTextBox(2)
+        Dim notaInserita As String = InputBoxMultiLine("Inserimento nuova voce", "Testo multilinea (max 80 char su 2 righe)", h, x)
+        If Len(notaInserita) = 0 Then Exit Sub
 
-        Dim Codice_ELCARVOCISUB As New Class_ELCAR_VOCI_SUB2
-        Codice_ELCARVOCISUB.ID_SUB = Gbl_Elenco_Codici_ELCARVOCISUB(j).CODICE_VOCE
-        Codice_ELCARVOCISUB.ELCAR = Gbl_Elenco_Codici_ELCARVOCISUB(j).CODICE_ELCAR
-        Codice_ELCARVOCISUB.Testo = Gbl_Elenco_Codici_ELCARVOCISUB(j).TESTO
-        Codice_ELCARVOCISUB.Testo_Lungo = Gbl_Elenco_Codici_ELCARVOCISUB(j).TESTO_Lungo
-        Codice_ELCARVOCISUB.Deleted = Gbl_Elenco_Codici_ELCARVOCISUB(j).Deleted
-        Dim codice_gentore = Codice_ELCARVOCISUB.ELCAR + "." + Codice_ELCARVOCISUB.ID_SUB.ToString
-        F_CODICE_ADD.Mostra(Codice_ELCARVOCISUB, ComboBox4.Text)
+        Dim Genitore = cod(1) + "." + cod(2) + "." + cod(3) + "." + cod(4)
+        Dim Codice_SUB2 As New Class_ELCAR_VOCI_SUB2
+        Codice_SUB2.ID = 0
+        Codice_SUB2.ID_SUB = 0
+        Codice_SUB2.ELCAR = Genitore
+        Codice_SUB2.Testo = notaInserita
+        Codice_SUB2.Testo_Lungo = ""
+        Codice_SUB2.Deleted = False
+
+        If F_CODICE_ADD.Mostra(Codice_SUB2) Then
+            'Ricarico la combo 
+            Call my_ComboBox4_SelectedIndexChanged()
+        End If
+
 
     End Sub
 
@@ -442,10 +509,16 @@ Public Class F_Seleziona_Categoria
 
         If edit Then
             Dim idr As Integer = DGV1.CurrentRow.Index
-            DGV1.Rows(idr).Cells(0).Value = Label15.Text
-            DGV1.Rows(idr).Cells(1).Value = TextBox1.Text
+            DGV1.Rows(idr).Cells(1).Value = Label15.Text
+            DGV1.Rows(idr).Cells(2).Value = TextBox1.Text
+            'DGV1.Rows(idr).Cells(0).Value = ImageList1.Images(5)
+
         Else
-            DGV1.Rows.Add(Label15.Text, TextBox1.Text)
+            If Button3.Tag = "NEW" Then
+                DGV1.Rows.Add(ImageList1.Images(6), Label15.Text, TextBox1.Text)  ' Blu
+            Else
+                DGV1.Rows.Add(ImageList1.Images(5), Label15.Text, TextBox1.Text) 'Bianca
+            End If
         End If
         DGV1.Refresh()
         Label10.Text = DGV1.Rows.Count
@@ -455,23 +528,34 @@ Public Class F_Seleziona_Categoria
 
 
     Private Sub Button8_Click(sender As Object, e As EventArgs) Handles Button8.Click
-        Call Seleziona_bambino()
-
+        Gbl_Jb = F_Seleziona_Bambino.Mostra()
+        Call Seleziona_bambino(Gbl_Jb)
     End Sub
 
     Private Sub DGV1_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DGV1.CellContentClick
         Dim c = DGV1.CurrentCell.ColumnIndex
-        If c = 0 Then
-            Dim r As Integer = DGV1.CurrentRow.Index
-            Dim cod = "", strindx = ""
-            cod = DGV1(0, r).Value
-            'cod = DGV1(3, r).Value
-            'Call Sincronizza_Combo_con_Griglia(cod)
-            Allinea_combo_al_codice_Elcar(cod)
-        Else
-            Dim m = "Vuoi modificare il codice inserito con quello nuovo Selezionato?" + vbCrLf
-            If MsgBox(m, vbYesNo) <> vbYes Then Exit Sub
-            Call inserisci_il_codice_nella_Griglia(True)
+        Dim j = 0
+        If c > 1 Then Exit Sub
+        Dim r As Integer = DGV1.CurrentRow.Index
+        Dim cod = "", strindx = ""
+        Button7.Enabled = False
+        cod = DGV1(1, r).Value
+
+        If cod = "" Then Exit Sub
+
+        Allinea_combo_al_codice_Elcar(cod)
+        'Call Carica_dati_codice_elcar(cod)
+
+
+        If c <> 0 Then Exit Sub
+
+        If CheckBox4.Checked Then
+            Call Carica_dati_codice_elcar(cod)
+            Dim TESTO = DGV1(1, r).Value
+            F_MyGraph.Mostra(TESTO)
+        End If
+        If cod <> "" Then
+            Button7.Enabled = True
         End If
 
 
@@ -500,17 +584,30 @@ Public Class F_Seleziona_Categoria
         End If
 
     End Sub
+    Sub mostra_info_sul_foglio()
+        Dim j = Val(Label18.Tag)
+        Label18.Text = Gbl_elenco_fogli_bambino(j).titolo
+        Label13.Text = Gbl_UltimofoglioGiornaliero_inserito + 1
+        Label10.Text = DGV1.Rows.Count - 1
+        If DGV1.Rows.Count > 6 Then
+            Button5.Enabled = True
+        Else
+            Button5.Enabled = False
+        End If
+    End Sub
     Sub Mostra_Testo_riportato()
         Label15.Text = Gbl_Codice_Elcar_Selezionato
         TextBox1.Text = Gbl_Codice_Elcar_TestoSelezionato
         Dim N = Split(Gbl_Codice_Elcar_Selezionato, ".").Count
 
         If N > 5 Then
-            Label15.BackColor = MyColor.Orange
+            Label15.BackColor = MyColor.LightBlue
             TP1.SetToolTip(Label15, "è stato utilizzato un codice personalizzato per il ragazzo")
+            Label9.Visible = True
         Else
             Label15.BackColor = System.Drawing.SystemColors.Control
             TP1.SetToolTip(Label15, "")
+            Label9.Visible = False
         End If
 
         Label3.Text = "(" + Len(TextBox1.Text).ToString + ") Char" : Label3.Refresh()
@@ -541,8 +638,9 @@ Public Class F_Seleziona_Categoria
 
 
     Private Sub CheckBox2_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox2.CheckedChanged
-        Dim caricati As Boolean = False
+        Dim caricati = False
         ComboBox6.Items.Clear()
+
         If CheckBox2.Checked Then
             caricati = Carica_elenco_CODICI_ELCAR_VOCI_BAMBINO("")
         Else
@@ -587,7 +685,7 @@ Public Class F_Seleziona_Categoria
     End Sub
 
     Private Sub Button11_Click(sender As Object, e As EventArgs) Handles Button11.Click
-        Call Inserisci_nuovo_esercizio
+        Call Inserisci_nuovo_Esercizio()
     End Sub
 
     Sub Inserisci_nuovo_Esercizio()
@@ -629,6 +727,7 @@ Public Class F_Seleziona_Categoria
         x1 = Trim(x1.ToString.ToUpper)
         Dim x2 = ""
         For j = 0 To n
+            If IsNothing(Gbl_Elenco_Codici_ELCARVOCIPERSONALI(j).TESTO) Then Continue For
             x2 = Trim(Gbl_Elenco_Codici_ELCARVOCIPERSONALI(j).TESTO.ToUpper)
             If x2 = x1 Then
                 Return j
@@ -637,64 +736,155 @@ Public Class F_Seleziona_Categoria
         Return -1
     End Function
     Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
+        Dim t = "salvataggio e stampa del foglio" + vbCrLf
+        Dim testo = "Titolo: " + Label18.Text + vbCrLf
+        Dim md = CDate(Label11.Tag)
+        testo = testo + "  Foglio n." + Label13.Text + " del:" + md.ToShortDateString
 
-        If MsgBox("Vuoi salvare il nuovo foglio di esercizi", vbYesNo) <> vbYes Then
+        Dim m = testo + vbCrLf + vbCrLf + "Vuoi salvare il nuovo foglio di esercizi?"
+        If MsgBox(testo, vbYesNo) <> vbYes Then
             Exit Sub
         End If
+        MostraMessaggioModeless(t, testo, vbInformation)
         Dim j = 0
+
+        '-- Registro nel DB BAMBINO tutte le righe presenti -- 
+        Dim salvato = True
         For Each R In DGV1.Rows
             j = R.Index
-
-            Call Salva_Foglio(j)
-
+            If Not Salva_Foglio(j) Then salvato = False
         Next
+        If Not salvato Then
+            MsgBox("Problemi nella scrittura nel database")
+            Exit Sub
+        End If
+        Stampa_Foglio_Giornaliero()
+
     End Sub
-    Sub Carica_Classe_Giornaliero(j)
-    End Sub
-    Sub Salva_Foglio(r As Integer, Optional Nuovo As Boolean = True)
+
+    Function Carica_datinelFoglio(r As Integer, Optional Nuovo As Boolean = True) As Boolean
+        ' Registra nel database BAMBINO Una riga del foglio --
+        Dim md = CDate(Label11.Tag)
+
         Dim idff = Label13.Text
         Dim IDF = Convert.ToInt16(idff)
         If Nuovo Then Giornaliero.ID = 0
         Giornaliero.Codice = DGV1.Rows(r).Cells(0).Value?.ToString()
-        If IsNothing(Giornaliero.Codice) Then Exit Sub
+        If IsNothing(Giornaliero.Codice) Then Return False
         Giornaliero.Testo = DGV1.Rows(r).Cells(1).Value?.ToString()
         Giornaliero.ID_FOGLIO = IDF
-        Giornaliero.DATA = DateTimePicker1.Text
-        Giornaliero.TOT = 0
-        Giornaliero.TOT_NEG = 0
-        Giornaliero.TOT_POS = 0
-        Giornaliero.TOT_PROMPT = 0
+        Giornaliero.DATA = md.ToShortDateString
+        Giornaliero.TOT1 = 0
+        Giornaliero.TOT1_NEG = 0
+        Giornaliero.TOT1_POS = 0
+        Giornaliero.TOT1_PROMPT = 0
+        Giornaliero.TOT2 = 0
+        Giornaliero.TOT2_NEG = 0
+        Giornaliero.TOT2_POS = 0
+        Giornaliero.TOT2_PROMPT = 0
         Giornaliero.TUTTELERISPOSTE = True
-        Giornaliero.VALUTATIVO = False
-        If Not Giornaliero.Salva Then
-            Call MsgBox("Problemi nel salvataggio")
+        Giornaliero.VALUTATIVO = CheckBox3.Checked
+
+        Return True
+    End Function
+
+    Function Salva_Foglio(r As Integer, Optional Nuovo As Boolean = True) As Boolean
+        ' Registra nel database BAMBINO Una riga del foglio --
+        Dim md = CDate(Label11.Tag)
+
+        Dim idff = Label13.Text
+        Dim IDF = Convert.ToInt16(idff)
+        If Nuovo Then Giornaliero.ID = 0
+        Giornaliero.Codice = DGV1.Rows(r).Cells(0).Value?.ToString()
+        If IsNothing(Giornaliero.Codice) Then Return False
+        Giornaliero.Testo = DGV1.Rows(r).Cells(1).Value?.ToString()
+        Giornaliero.ID_FOGLIO = IDF
+        Giornaliero.DATA = md.ToShortDateString
+        Giornaliero.TOT1 = 0
+        Giornaliero.TOT1_NEG = 0
+        Giornaliero.TOT1_POS = 0
+        Giornaliero.TOT1_PROMPT = 0
+        Giornaliero.TOT2 = 0
+        Giornaliero.TOT2_NEG = 0
+        Giornaliero.TOT2_POS = 0
+        Giornaliero.TOT2_PROMPT = 0
+        Giornaliero.TUTTELERISPOSTE = True
+        Giornaliero.VALUTATIVO = CheckBox3.Checked
+
+        If Not Giornaliero.Salva Then Return False
+        Return True
+    End Function
+    Sub Stampa_Foglio_Giornaliero(Optional Prova = False)
+        Dim ID_foglio = CInt(Label13.Text)
+        Dim titolo = Gbl_Giornaliero.Titolo
+        Dim Data = Strings.Format(CDate(Gbl_VociDiUnFoglio(0).DATA), "yyyy-MM-dd")
+
+        Dim nomefoglio = Costruisci_nome_foglio(ID_foglio, titolo, Data)
+        Dim documento = dir_bar(ini.Path_SCHEDE_DaCompilare) + nomefoglio
+
+        '-- controllo se esiste gia un file con o stesso nome --
+        If IO.File.Exists(documento) Then
+            Dim mm = "E' già presente un foglio con lo stesso nome" + vbCrLf
+            mm = mm + "path:" + ini.Path_SCHEDE_DaCompilare + vbCrLf
+            mm = mm + "nome:" + nomefoglio + vbCrLf
+            mm = mm + "Vuoi salvarlo ugualmente?"
+            If MsgBox(mm, vbYesNo + vbInformation, "Foglio gia presente") = vbNo Then
+                Call MsgBox("Foglio non salvato")
+                Exit Sub
+            Else
+                Try
+                    IO.File.Delete(documento)
+                Catch ex As Exception
+                    Call MsgBox("NON è stato possibile cancellare il foglio esistente")
+                    Exit Sub
+                End Try
+            End If
         End If
 
-    End Sub
-    Sub Stampa_Foglio_Giornaliero()
-        Dim foglio = CInt(Label13.Text)
-        Dim data = DateTimePicker1.Value.ToString("yyyy-MM-dd")
-        'Dim nomefoglio = foglio.ToString("D6") + " (" + data + ")"
-        Dim nomefoglio = Gbl_NOME_BAMBINO + "_" + data + " (" + foglio.ToString + ").DOCX"
-        Dim documento As String = dir_bar(Gbl_SCHEDA_BAMBINO) + nomefoglio
-
-        If IO.File.Exists(nomefoglio) Then
-            Dim x = "Esiste giàu un foglio con lo stesso nome" + vbCrLf + nomefoglio
-            Call MsgBox(x)
-        End If
+        '-- Salvo il foglio --
         IO.File.Copy(ini.Modello_Schede, documento, True)
 
+
+        ID_foglio = CInt(Label13.Text)
+        Data = Strings.Format(CDate(Gbl_VociDiUnFoglio(0).DATA), "yyyy-MM-dd")
+        titolo = Gbl_Giornaliero.Titolo
+        If Not Prova Then
+            Gbl_VociDiUnFoglio = Gbl_Giornaliero.Carica_Foglio(ID_foglio)
+        End If
+        '-- compilo il foglio --
         Using doc As WordprocessingDocument =
             WordprocessingDocument.Open(documento, True)
 
             Dim body As Body = doc.MainDocumentPart.Document.Body
 
-            ' Qui inserisci le tue modifiche
+            If compila_foglio_giornaliero(body, Gbl_NOME_BAMBINO, Data, ID_foglio, titolo) Then
 
-            doc.MainDocumentPart.Document.Save()
+                doc.MainDocumentPart.Document.Save()
+            End If
 
         End Using
+        Dim m = "Foglio (" + nomefoglio + ") preparato" + vbCrLf
+        m = m + "in: " + ini.Path_SCHEDE_DaCompilare
+
+        Call MsgBox(m)
     End Sub
+
+    Function compila_foglio_giornaliero(body As Body, nomebambino As String, data As String, id_foglio As Integer, titolo As String) As Boolean
+        ' iNTESTAZONE 
+        SET_DOCX(body, "<<BAMBINO>>", nomebambino)
+        SET_DOCX(body, "<<FOGLIO>>", id_foglio.ToString)
+        SET_DOCX(body, "<<DATA>>", data)
+        SET_DOCX(body, "<<TITOLO>>", titolo)
+
+        For j = 0 To Gbl_VociDiUnFoglio.Count - 1
+            Dim codice = Gbl_VociDiUnFoglio(j).Codice
+            If codice = "" Then Continue For
+            Dim testo = Gbl_VociDiUnFoglio(j).Testo
+            SET_DOCX(body, "<<COD" + (j + 1).ToString + ">>", codice)
+            SET_DOCX(body, "<<TESTO" + (j + 1).ToString + ">>", testo)
+        Next
+        Return True
+    End Function
     Function Verifica_Se_gia_inserito_Nel_Foglio(cod) As Boolean
         Dim nrow = DGV1.Rows.Count - 1
         For i As Integer = 0 To nrow
@@ -733,8 +923,8 @@ Public Class F_Seleziona_Categoria
 
     End Function
 
-    Private Sub Button6_Click(sender As Object, e As EventArgs) Handles Button6.Click
-        Call Stampa_Foglio_Giornaliero()
+    Private Sub Button6_Click(sender As Object, e As EventArgs)
+        Stampa_Foglio_Giornaliero()
     End Sub
     Sub Trova_tutti_Fogli_bambino(Optional soloUltimo As Boolean = False)
         Dim elenco_fogli As New Class_Elenco_fogli()
@@ -746,8 +936,7 @@ Public Class F_Seleziona_Categoria
             ComboBox7.Items.Add(x)
         Next
 
-    End Sub
-    Sub Carica_foglio_esistente(j)
+
 
     End Sub
 
@@ -755,25 +944,54 @@ Public Class F_Seleziona_Categoria
         Dim J = ComboBox7.SelectedIndex
         Dim modo = True
         If CInt(Label10.Text) > 0 Then modo = False
-        F_Foglio_esistente.Main(J, Label9.Text,, modo)
+        F_Foglio_esistente.Main(J,, modo)
 
         Dim ID_foglio = CInt(Gbl_elenco_fogli_bambino(J).ID_Foglio)
 
         Gbl_VociDiUnFoglio = Gbl_Giornaliero.Carica_Foglio(ID_foglio)
         Dim n = Gbl_VociDiUnFoglio.Count
 
+
     End Sub
+
     Public Sub Carica_foglio(j)
+        Label18.Tag = j
         Dim ID_foglio = CInt(Gbl_elenco_fogli_bambino(j).ID_Foglio)
         Gbl_VociDiUnFoglio = Gbl_Giornaliero.Carica_Foglio(ID_foglio)
-
+        Dim r = 0
         DGV1.Rows.Clear()
+        Dim xtips = "", img_index = 0
         For Each foglio In Gbl_VociDiUnFoglio
-            DGV1.Rows.Add(foglio.Codice, foglio.Testo)
-        Next
-        DGV1.Refresh()
+            Call Carica_dati_codice_elcar(foglio.Codice)
+            Call Trend_1()
 
+
+
+            If Gbl_Graph.Trend = "SUPERATO" Then
+                img_index = 2 : xtips = "Soglia raggiunta - Cambiare Esercizio"
+            ElseIf Gbl_Graph.Trend = "POS4" Then
+                img_index = 6 : xtips = "Trend Positivo (Continuare)"
+            ElseIf Gbl_Graph.Trend = "NEG4" Then
+                img_index = 3 : xtips = "Trend NEGATIVO (Cambiare esercizio)"
+            Else
+                If UBound(Gbl_Percentuale) < 3 Then
+                    img_index = 4 : xtips = "Statistica insufficiente (" + UBound(Gbl_Percentuale).ToString + ") (continuare)"
+                ElseIf UBound(Gbl_Percentuale) < 6 Then
+                    img_index = 3 : xtips = "Statistica insufficiente (" + UBound(Gbl_Percentuale).ToString + ") (continuare)"
+                Else
+                    img_index = 8 : xtips = "trend NON DEFINITO (Riflettere)"
+                End If
+            End If
+            DGV1.Rows.Add(ImageList1.Images(img_index), foglio.Codice, foglio.Testo)
+            r = DGV1.Rows.Count - 1
+            DGV1.Rows(r).Cells(1).ToolTipText = xtips
+
+        Next
+        DGV1.ShowCellToolTips = True
+        DGV1.Refresh()
+        Call mostra_info_sul_foglio()
     End Sub
+
 
     Sub Allinea_combo_al_codice_Elcar(codice)
         Dim x = Split(codice, ".")
@@ -955,7 +1173,160 @@ Public Class F_Seleziona_Categoria
     End Sub
 
     Private Sub PictureBox1_Click(sender As Object, e As EventArgs) Handles PictureBox1.Click
-        Call MsgBox(Gbl_Codice_Elcar_TestoLungo)
+        MsgBox(Gbl_Codice_Elcar_TestoLungo)
 
+    End Sub
+
+    Private Sub CheckBox3_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox3.CheckedChanged
+        If CheckBox3.Checked Then
+            DGV1.BackgroundColor = MyColor.Aquamarine
+            GroupBox4.BackColor = MyColor.Aquamarine
+            CheckBox3.ForeColor = MyColor.Blue
+            GroupBox4.Text = "Foglio esercizi [ADMITTANCE]"
+        Else
+            DGV1.BackgroundColor = SystemColors.ControlDark
+            GroupBox4.BackColor = MyColor.Transparent
+            CheckBox3.ForeColor = MyColor.Black
+            GroupBox4.Text = "Foglio esercizi Standard]"
+        End If
+        DGV1.Refresh()
+    End Sub
+
+    Private Sub Button2_Click(sender As Object, e As EventArgs)
+        Dim m = "Vuoi modificare il codice inserito con quello nuovo Selezionato?" + vbCrLf
+        If MsgBox(m, vbYesNo) <> vbYes Then Exit Sub
+        inserisci_il_codice_nella_Griglia(True)
+
+    End Sub
+
+    Private Sub GroupBox4_Enter(sender As Object, e As EventArgs) Handles GroupBox4.Enter
+
+    End Sub
+
+    Private Sub Button9_Click(sender As Object, e As EventArgs) Handles Button9.Click
+
+
+        ' Ultimo foglio del bambino 
+        If Gbl_elenco_fogli_bambino.Count = 0 Then
+            Call MsgBox("Nessun foglio trovato")
+            Exit Sub
+        End If
+
+        Dim ID_foglio = Gbl_elenco_fogli_bambino(0).ID_Foglio
+        If ID_foglio = 0 Then
+            Call MsgBox("Nessun foglio valido trovato")
+        End If
+
+
+        Dim modo = True
+
+        'If CInt(Label10.Text) > 0 Then modo = False
+        If Label18.Text = " - -" Then modo = False  ' non cè un titolo del foglio
+        F_Foglio_esistente.Main(0, , modo)
+        Call Imposta_tipo_caricamento_ultimo_foglio()
+
+        Gbl_VociDiUnFoglio = Gbl_Giornaliero.Carica_Foglio(ID_foglio)
+        Dim n = Gbl_VociDiUnFoglio.Count
+
+
+    End Sub
+    Sub carica_ultimo_foglio_bambino()
+
+
+        Dim ID_foglio = CInt(Gbl_elenco_fogli_bambino(1).ID_Foglio)
+        Gbl_VociDiUnFoglio = Gbl_Giornaliero.Carica_Foglio(ID_foglio)
+        Dim n = Gbl_VociDiUnFoglio.Count
+        'Dim j = CInt(Label7.Tag)
+        Carica_foglio(1)
+
+    End Sub
+    Private Sub CheckBox4_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox4.CheckedChanged
+    End Sub
+
+    Private Sub Button10_Click(sender As Object, e As EventArgs) Handles Button10.Click
+        CMenuStrip1.Show(Button10, New Point(0, Button10.Height))
+
+    End Sub
+
+    Private Sub GroupBox5_Enter(sender As Object, e As EventArgs) Handles GroupBox5.Enter
+
+    End Sub
+
+    Private Sub ImmediatoToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles TSM_Immediato.Click
+        Imposta_tipo_caricamento_ultimo_foglio()
+
+
+    End Sub
+
+    Private Sub TSM_NONImmediato_Click(sender As Object, e As EventArgs)
+        Imposta_tipo_caricamento_ultimo_foglio()
+
+    End Sub
+    Sub Imposta_tipo_caricamento_ultimo_foglio()
+        If TSM_Immediato.Checked Then
+            Gbl_Caricamento_Immediato = True
+            Button9.BackColor = MyColor.LightGreen
+        Else
+            Gbl_Caricamento_Immediato = False
+            TSM_Immediato.Checked = False
+            Button9.BackColor = SystemColors.Control
+        End If
+    End Sub
+
+    Private Sub Button7_Click(sender As Object, e As EventArgs) Handles Button7.Click
+
+    End Sub
+
+    Private Sub Label18_Click(sender As Object, e As EventArgs) Handles Label18.Click
+        Call Gbl_Giornaliero.Carica_titoli()
+    End Sub
+
+    Private Sub DateTimePicker1_ValueChanged(sender As Object, e As EventArgs)
+
+    End Sub
+
+    Private Sub ComboBox8_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox8.SelectedIndexChanged
+
+    End Sub
+
+    Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
+        Try
+            F_MyGraph.Hide()
+        Catch ex As Exception
+
+        End Try
+
+        Hide()
+    End Sub
+
+    Private Sub Label19_Click(sender As Object, e As EventArgs) Handles Label19.Click
+        Dim dataScelta As DateTime? = SelezionaDataDaCalendario("Seleziona la data di esecuzione dell'esercizio")
+
+        ' Verifica se l'utente ha effettivamente scelto una data o se ha annullato
+        If dataScelta.HasValue Then
+            ' Mostra la data nella label usando il formato esteso che abbiamo visto prima
+            Label11.Tag = dataScelta.Value.ToString("dddd d MMMM yyyy")
+            Label11.Text = "(" + dataScelta.Value.ToString("dddd d MMMM yyyy") + ")"
+        Else
+            ' Gestisci il caso in cui l'utente ha chiuso il calendario senza scegliere
+            MessageBox.Show("Nessuna data selezionata.", "Avviso", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+        End If
+
+
+    End Sub
+
+    Private Sub Button6_Click_1(sender As Object, e As EventArgs) Handles Button6.Click
+        Dim j = 0
+        For Each R In DGV1.Rows
+            j = R.Index
+            Carica_datinelFoglio(j)
+        Next
+
+        Stampa_Foglio_Giornaliero(True)
+
+    End Sub
+
+    Private Sub Button2_Click_1(sender As Object, e As EventArgs) Handles Button2.Click
+        F_Elenco_da_Stampare.Main(Label11.Tag)
     End Sub
 End Class

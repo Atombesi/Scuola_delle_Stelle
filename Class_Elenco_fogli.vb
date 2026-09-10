@@ -3,6 +3,9 @@
 Public Class Class_Elenco_fogli
     Public Property ID_Foglio As Integer
     Public Property Data As String
+    Public titolo As String
+    Public Compilato As Boolean
+
 
 
     Public Function Trova_tutti_fogli() As List(Of Class_Elenco_fogli)
@@ -15,7 +18,7 @@ Public Class Class_Elenco_fogli
             cn.Open()
 
             Dim sql As String =
-                "SELECT DISTINCT ID_Foglio, DATA From GIORNALIERO Order By ID_Foglio DESC"
+                "SELECT DISTINCT ID_Foglio, DATA, TITOLO, COMPILATO From GIORNALIERO Order By ID_Foglio DESC"
 
             Using cmd As New SqliteCommand(sql, cn)
 
@@ -27,7 +30,9 @@ Public Class Class_Elenco_fogli
                             .ID_Foglio = reader.GetInt32(
                                 reader.GetOrdinal("ID_Foglio")
                             ),
-                            .Data = reader("DATA").ToString()
+                            .Data = reader("DATA").ToString(),
+                            .titolo = reader("TITOLO").ToString(),
+                            .Compilato = Convert.ToBoolean(reader("COMPILATO"))
                         }
 
                         lista.Add(foglio)

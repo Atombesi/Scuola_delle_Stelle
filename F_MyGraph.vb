@@ -2,11 +2,12 @@
 Imports System.ComponentModel.Design
 Imports OpenTK.Graphics.OpenGL
 
-Public Structure DatiGrafico
-    Public Data As String
-    Public ValoriY As List(Of Integer) ' Può contenere 1 o 2 valori
-    Public Color As List(Of Integer) ' Può contenere 1 o 2 valori
-End Structure
+'Public Structure DatiGrafico
+'    Public Data As String
+'    Public ValoriY As List(Of Integer) ' Può contenere 1 o 2 valori
+'    Public Color As List(Of Integer) ' Può contenere 1 o 2 valori
+'End Structure
+'Public Gbl_datigrafico As New List(Of DatiGrafico)()
 
 ' La lista che conterrà tutti i tuoi set di dati (da 3 a 30)
 Public Class F_MyGraph
@@ -16,7 +17,9 @@ Public Class F_MyGraph
 
     Function Mostra(Optional TESTO As String = "") As Boolean
         YMax = 25
-        Call Carica_dati()
+        If Carica_dati() = 0 Then Return False
+
+
         Me.SetStyle(ControlStyles.ResizeRedraw, True)
         ' Diciamo alla Form di ridisegnarsi con i nuovi dati
         Me.Invalidate()
@@ -27,7 +30,6 @@ Public Class F_MyGraph
 
         Label1.Refresh()
         Call trend()
-        'Call Trend_fase_1()
         Call Carica_DGV1()
         Panel1.Invalidate() ' Forza il Panel a ridisegnarsi
 
@@ -52,7 +54,7 @@ Public Class F_MyGraph
 
     End Sub
 
-    Sub Carica_dati()
+    Function Carica_dati() As Integer
         Dim N = UBound(Gbl_Graph.Data)
         N = Gbl_Graph.Data.Length
         Dim cod = Gbl_Graph.Cod_ELCAR
@@ -61,8 +63,17 @@ Public Class F_MyGraph
         Dim COL0 = 0, COL1 = 1, TOT1 = 0, TOT2 = 0, TOT = 0
         ListaDati.Clear()
 
+        If N = 0 Then Return N
+        Dim trovati = 0
         For j = 0 To N - 1
+            trovati = trovati + 1
             XX = Gbl_Graph.Data(j).Data
+            Try
+                s1.Data = Date.ParseExact(XX, "dd/MM/yyyy", Nothing)
+            Catch ex As Exception
+                trovati = trovati - 1
+                Continue For
+            End Try
             s1.Data = Date.ParseExact(XX, "dd/MM/yyyy", Nothing)
             Y(j) = Gbl_Graph.Data(j).TOT1_Pos
             XX = Gbl_Graph.Data(j).Data + "]  (" + Gbl_Graph.Cod_ELCAR + ") " + Gbl_Graph.Data(j).Data
@@ -82,8 +93,9 @@ Public Class F_MyGraph
             End If
             ListaDati.Add(s1)
         Next
-
-    End Sub
+        Gbl_datigrafico = ListaDati
+        Return trovati
+    End Function
     Private Sub F_MyGraph_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Me.DoubleBuffered = True
 
@@ -93,150 +105,19 @@ Public Class F_MyGraph
 
         Dim perc = Calcola_Percentuale(val)
         Select Case perc
-            Case = 0 : Return Color.White
-            Case >= 80 : Return Color.Green   ' Verde
-            Case Else : Return Color.Yellow ' Default: Grigio
+            Case = 0
+                Return Color.White
+            Case >= 80
+                Return Color.Green   ' Verde
+            Case Else
+                Return Color.Gray ' Default: Grigio
         End Select
     End Function
-    Private Sub F_MyGraph_Paint(sender As Object, e As PaintEventArgs) Handles Me.Paint
-
-        Exit Sub
-        ' disegna direttamente nella form, ma puoi anche disegnare in un pannello o in un c
-        ' Blocco di sicurezza: se non ci sono dati o la finestra è ridotta a icona, non fare nulla
-        If ListaDati.Count = 0 OrElse Me.ClientSize.Width <= 0 OrElse Me.ClientSize.Height <= 0 Then Return
-
-        Dim g As Graphics = e.Graphics
-        g.SmoothingMode = Drawing2D.SmoothingMode.AntiAlias
-
-        ' --- 1. IMPOSTAZIONI DI SPAZIATURA E AREA DEL GRAFICO ---
-        Dim margineSinistro As Integer = 50
-        Dim margineDestro As Integer = 50
-        Dim margineSuperiore As Integer = 10
-        Dim margineInferiore As Integer = 80
-
-        Dim altezzaGrafico As Integer = Me.ClientSize.Height - margineSuperiore - margineInferiore
-        Dim larghezzaGrafico As Integer = Me.ClientSize.Width - margineSinistro - margineDestro
-        Dim baseGrafico_Y As Integer = Me.ClientSize.Height - margineInferiore
-
-        ' Evita divisioni per zero se l'area del grafico diventa troppo piccola durante il resize
-        If larghezzaGrafico <= 0 OrElse altezzaGrafico <= 0 Then Return
-
-        ' Calcola lo spazio totale per ogni set (Data + Colonne) per garantire l'equidistanza
-        Dim spazioPerSet As Double = larghezzaGrafico / ListaDati.Count
-        Dim larghezzaColonna As Integer = 18
-        Dim spazioTraColonneInterne As Integer = 4
-
-        ' --- 2. PENNELLI, PENNE E FONT ---
-        ' Nota: Non istanziamo pennelloColonna1 qui con un colore fisso poiché diventerà dinamico
-        Dim pennelloColonna2 As New SolidBrush(Color.Orange)
-        Dim pennelloTestoData As New SolidBrush(Color.Black)
-        Dim pennelloTestoValore As New SolidBrush(Color.White) ' Testo bianco dentro le colonne
-        Dim pennaAssi As New Pen(Color.Gray, 1)
-
-        ' Impostazioni della linea spezzata rossa
-        Dim pennaSpezzata As New Pen(Color.Crimson, 3)
-        Dim pennelloNodi As New SolidBrush(Color.Crimson)
-
-        Dim fontData As New Font("Arial", 9)
-        Dim fontValore As New Font("Arial", 8, FontStyle.Bold)
-
-        Dim formatoVerticale As New StringFormat()
-        formatoVerticale.FormatFlags = StringFormatFlags.DirectionVertical
-
-        Dim formatoValoreCentrato As New StringFormat()
-        formatoValoreCentrato.Alignment = StringAlignment.Center
-
-        ' Lista per memorizzare i punti della spezzata
-        Dim puntiSpezzata As New List(Of Point)()
-
-        ' --- 3. DISEGNO ASSE DI BASE ---
-        g.DrawLine(pennaAssi, margineSinistro, baseGrafico_Y, Me.ClientSize.Width - margineDestro, baseGrafico_Y)
-
-        ' --- 4. CICLO PRINCIPALE SUI DATI ---
-        For i As Integer = 0 To ListaDati.Count - 1
-            Dim setCorrente As DatiGrafico = ListaDati(i)
-
-            ' Il centro X esatto di questo gruppo di dati
-            Dim centroX_Set As Integer = CInt(margineSinistro + (i * spazioPerSet) + (spazioPerSet / 2))
-
-            Dim numeroColonne As Integer = setCorrente.ValoriY.Count
-            Dim larghezzaTotaleColonne As Integer = (numeroColonne * larghezzaColonna) + ((numeroColonne - 1) * spazioTraColonneInterne)
-            Dim xInizioColonne As Integer = centroX_Set - (larghezzaTotaleColonne \ 2)
-
-            ' Ciclo per disegnare le colonne interne al set (1 o 2)
-            For j As Integer = 0 To numeroColonne - 1
-                Dim valore As Double = setCorrente.ValoriY(j)
-                If valore > YMax Then valore = YMax
-
-                Dim altezzaPixel As Integer = CInt((valore / YMax) * altezzaGrafico)
-                Dim xColonna As Integer = xInizioColonne + (j * (larghezzaColonna + spazioTraColonneInterne))
-                Dim yColonna As Integer = baseGrafico_Y - altezzaPixel
-
-                ' --- PROTEZIONE RESIZE E COLORE DINAMICO ---
-                ' Controlliamo se l'indice j esiste nella lista Color per evitare l'errore IndexOutOfRange
-                Dim idColore As Integer = 0 ' Default grigio se non specificato
-                If setCorrente.Color IsNot Nothing AndAlso j < setCorrente.Color.Count Then
-                    idColore = setCorrente.Color(j)
-                End If
-
-                ' Recuperiamo il colore tramite la tua funzione
-
-                Dim coloreScelto As Color = GetColoreDaIntero(valore)
-
-                ' DISEGNO DELLA COLONNA con gestione sicura della memoria (Using)
-                Dim rettangoloColonna As New Rectangle(xColonna, yColonna, larghezzaColonna, altezzaPixel)
-
-                ' Scegliamo se usare il colore dinamico (colonna 1) o quello fisso (colonna 2)
-                Dim pennelloUsa As SolidBrush = If(j = 0, New SolidBrush(coloreScelto), pennelloColonna2)
-
-                g.FillRectangle(pennelloUsa, rettangoloColonna)
-
-                ' Se abbiamo creato un pennello al volo per la colonna 1, dobbiamo liberarlo subito
-                If j = 0 Then pennelloUsa.Dispose()
-
-                ' Inserimento del numero intero dentro la colonna
-                Dim valoreIntero As Integer = CInt(Math.Round(setCorrente.ValoriY(j)))
-                Dim testoValore As String = valoreIntero.ToString()
-
-                If altezzaPixel > 15 Then
-                    g.DrawString(testoValore, fontValore, pennelloTestoValore, New RectangleF(xColonna, yColonna + 5, larghezzaColonna, 20), formatoValoreCentrato)
-                End If
-
-                ' --- MODIFICA SPEZZATA ---
-                Dim centroX_Colonna As Integer = xColonna + (larghezzaColonna \ 2)
-                puntiSpezzata.Add(New Point(centroX_Colonna, yColonna))
-            Next
-
-            ' Disegno della data in verticale sotto l'asse delle X
-            g.DrawString(setCorrente.Data, fontData, pennelloTestoData, centroX_Set - 5, baseGrafico_Y + 5, formatoVerticale)
-        Next
-
-        ' --- 5. DISEGNO DELLA SPEZZATA CENTRATA ---
-        If puntiSpezzata.Count >= 2 Then
-            g.DrawLines(pennaSpezzata, puntiSpezzata.ToArray())
-
-            Dim raggioPallino As Integer = 4
-            For Each pt As Point In puntiSpezzata
-                g.FillEllipse(pennelloNodi, pt.X - raggioPallino, pt.Y - raggioPallino, raggioPallino * 2, raggioPallino * 2)
-            Next
-        End If
-
-        ' --- 6. LIBERAZIONE MEMORIA ---
-        pennelloColonna2.Dispose()
-        pennelloTestoData.Dispose()
-        pennelloTestoValore.Dispose()
-        pennaAssi.Dispose()
-        pennaSpezzata.Dispose()
-        pennelloNodi.Dispose()
-        fontData.Dispose()
-        fontValore.Dispose()
-        formatoVerticale.Dispose()
-        formatoValoreCentrato.Dispose()
-    End Sub
     Sub trend()
-        Call Trend_1()
-        Call mostra_label_l1()
-        Call Trend_visualizza()
+        If Trend_1() Then
+            Call mostra_label_l1()
+            Call Trend_visualizza()
+        End If
 
     End Sub
     Sub Trend_visualizza()
@@ -408,7 +289,7 @@ Public Class F_MyGraph
             Dim numeroColonne As Integer = setCorrente.ValoriY.Count
             Dim larghezzaTotaleColonne As Integer = (numeroColonne * larghezzaColonna) + ((numeroColonne - 1) * spazioTraColonneInterne)
             Dim xInizioColonne As Integer = centroX_Set - (larghezzaTotaleColonne \ 2)
-
+            Dim perc = 0
             ' Ciclo per disegnare le colonne interne al set (1 o 2)
             For j As Integer = 0 To numeroColonne - 1
                 Dim valore As Double = setCorrente.ValoriY(j)
@@ -428,11 +309,11 @@ Public Class F_MyGraph
 
                 ' DISEGNO DELLA COLONNA 
                 Dim rettangoloColonna As New Rectangle(xColonna, yColonna, larghezzaColonna, altezzaPixel)
-                Dim pennelloUsa As SolidBrush = If(j = 0, New SolidBrush(coloreScelto), pennelloColonna2)
+                Dim pennelloUsa As SolidBrush = New SolidBrush(coloreScelto)
 
                 g.FillRectangle(pennelloUsa, rettangoloColonna)
 
-                If j = 0 Then pennelloUsa.Dispose()
+                'If j = 0 Then pennelloUsa.Dispose()
 
                 ' Inserimento del numero intero dentro la colonna
                 Dim valoreIntero As Integer = CInt(Math.Round(setCorrente.ValoriY(j)))

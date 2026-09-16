@@ -43,13 +43,13 @@ Partial Class F_Anagrafica
         Button1 = New Button()
         Button2 = New Button()
         Button3 = New Button()
-        MenuStrip1 = New MenuStrip()
-        NuovoBambinoToolStripMenuItem = New ToolStripMenuItem()
         ImageList1 = New ImageList(components)
         Button4 = New Button()
+        Button5 = New Button()
+        Label3 = New Label()
+        CheckBox3 = New CheckBox()
         Panel1.SuspendLayout()
         CType(PictureBox1, ComponentModel.ISupportInitialize).BeginInit()
-        MenuStrip1.SuspendLayout()
         SuspendLayout()
         ' 
         ' CheckBox1
@@ -57,7 +57,7 @@ Partial Class F_Anagrafica
         CheckBox1.AutoSize = True
         CheckBox1.Checked = True
         CheckBox1.CheckState = CheckState.Checked
-        CheckBox1.Location = New Point(8, 258)
+        CheckBox1.Location = New Point(130, 7)
         CheckBox1.Name = "CheckBox1"
         CheckBox1.Size = New Size(78, 19)
         CheckBox1.TabIndex = 9
@@ -67,7 +67,7 @@ Partial Class F_Anagrafica
         ' Label2
         ' 
         Label2.AutoSize = True
-        Label2.Location = New Point(8, 34)
+        Label2.Location = New Point(8, 7)
         Label2.Name = "Label2"
         Label2.Size = New Size(76, 15)
         Label2.TabIndex = 8
@@ -77,7 +77,7 @@ Partial Class F_Anagrafica
         ' 
         ComboBox1.DropDownStyle = ComboBoxStyle.Simple
         ComboBox1.FormattingEnabled = True
-        ComboBox1.Location = New Point(8, 59)
+        ComboBox1.Location = New Point(8, 32)
         ComboBox1.Name = "ComboBox1"
         ComboBox1.Size = New Size(200, 203)
         ComboBox1.TabIndex = 7
@@ -85,6 +85,7 @@ Partial Class F_Anagrafica
         ' Panel1
         ' 
         Panel1.BorderStyle = BorderStyle.FixedSingle
+        Panel1.Controls.Add(CheckBox3)
         Panel1.Controls.Add(PictureBox1)
         Panel1.Controls.Add(TextBox3)
         Panel1.Controls.Add(CheckBox2)
@@ -97,7 +98,7 @@ Partial Class F_Anagrafica
         Panel1.Controls.Add(Label4)
         Panel1.Controls.Add(Label1)
         Panel1.Controls.Add(TextBox4)
-        Panel1.Location = New Point(225, 59)
+        Panel1.Location = New Point(225, 32)
         Panel1.Name = "Panel1"
         Panel1.Size = New Size(241, 193)
         Panel1.TabIndex = 11
@@ -127,9 +128,9 @@ Partial Class F_Anagrafica
         CheckBox2.Location = New Point(12, 161)
         CheckBox2.Name = "CheckBox2"
         CheckBox2.RightToLeft = RightToLeft.Yes
-        CheckBox2.Size = New Size(140, 19)
+        CheckBox2.Size = New Size(58, 19)
         CheckBox2.TabIndex = 10
-        CheckBox2.Text = "In carico alla struttura"
+        CheckBox2.Text = "Attivo"
         CheckBox2.TextAlign = ContentAlignment.MiddleRight
         CheckBox2.UseVisualStyleBackColor = True
         ' 
@@ -208,16 +209,19 @@ Partial Class F_Anagrafica
         ' 
         ' Button1
         ' 
-        Button1.Location = New Point(8, 315)
+        Button1.BackColor = Color.DimGray
+        Button1.Font = New Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        Button1.ForeColor = Color.Snow
+        Button1.Location = New Point(391, 278)
         Button1.Name = "Button1"
-        Button1.Size = New Size(75, 28)
+        Button1.Size = New Size(75, 31)
         Button1.TabIndex = 12
-        Button1.Text = "close"
-        Button1.UseVisualStyleBackColor = True
+        Button1.Text = "Close"
+        Button1.UseVisualStyleBackColor = False
         ' 
         ' Button2
         ' 
-        Button2.Location = New Point(225, 258)
+        Button2.Location = New Point(225, 231)
         Button2.Name = "Button2"
         Button2.Size = New Size(75, 28)
         Button2.TabIndex = 13
@@ -226,27 +230,12 @@ Partial Class F_Anagrafica
         ' 
         ' Button3
         ' 
-        Button3.Location = New Point(313, 259)
+        Button3.Location = New Point(345, 232)
         Button3.Name = "Button3"
         Button3.Size = New Size(56, 28)
         Button3.TabIndex = 14
         Button3.Text = "Annulla"
         Button3.UseVisualStyleBackColor = True
-        ' 
-        ' MenuStrip1
-        ' 
-        MenuStrip1.Items.AddRange(New ToolStripItem() {NuovoBambinoToolStripMenuItem})
-        MenuStrip1.Location = New Point(0, 0)
-        MenuStrip1.Name = "MenuStrip1"
-        MenuStrip1.Size = New Size(478, 24)
-        MenuStrip1.TabIndex = 15
-        MenuStrip1.Text = "MenuStrip1"
-        ' 
-        ' NuovoBambinoToolStripMenuItem
-        ' 
-        NuovoBambinoToolStripMenuItem.Name = "NuovoBambinoToolStripMenuItem"
-        NuovoBambinoToolStripMenuItem.Size = New Size(106, 20)
-        NuovoBambinoToolStripMenuItem.Text = "Nuovo Bambino"
         ' 
         ' ImageList1
         ' 
@@ -262,18 +251,52 @@ Partial Class F_Anagrafica
         ' 
         ' Button4
         ' 
-        Button4.Location = New Point(410, 258)
+        Button4.Location = New Point(410, 231)
         Button4.Name = "Button4"
         Button4.Size = New Size(56, 28)
         Button4.TabIndex = 16
         Button4.Text = "Salva"
         Button4.UseVisualStyleBackColor = True
         ' 
+        ' Button5
+        ' 
+        Button5.Location = New Point(8, 232)
+        Button5.Name = "Button5"
+        Button5.Size = New Size(75, 28)
+        Button5.TabIndex = 17
+        Button5.Text = "Aggiungi"
+        Button5.UseVisualStyleBackColor = True
+        ' 
+        ' Label3
+        ' 
+        Label3.Location = New Point(225, 8)
+        Label3.Name = "Label3"
+        Label3.Size = New Size(241, 17)
+        Label3.TabIndex = 18
+        Label3.Text = "Elenco Bimbi"
+        Label3.TextAlign = ContentAlignment.MiddleCenter
+        ' 
+        ' CheckBox3
+        ' 
+        CheckBox3.AutoSize = True
+        CheckBox3.Checked = True
+        CheckBox3.CheckState = CheckState.Checked
+        CheckBox3.Location = New Point(153, 159)
+        CheckBox3.Name = "CheckBox3"
+        CheckBox3.RightToLeft = RightToLeft.Yes
+        CheckBox3.Size = New Size(71, 19)
+        CheckBox3.TabIndex = 12
+        CheckBox3.Text = "Presente"
+        CheckBox3.TextAlign = ContentAlignment.MiddleRight
+        CheckBox3.UseVisualStyleBackColor = True
+        ' 
         ' F_Anagrafica
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
-        ClientSize = New Size(478, 356)
+        ClientSize = New Size(478, 316)
+        Controls.Add(Label3)
+        Controls.Add(Button5)
         Controls.Add(Button4)
         Controls.Add(Button3)
         Controls.Add(Button2)
@@ -282,15 +305,11 @@ Partial Class F_Anagrafica
         Controls.Add(CheckBox1)
         Controls.Add(Label2)
         Controls.Add(ComboBox1)
-        Controls.Add(MenuStrip1)
-        MainMenuStrip = MenuStrip1
         Name = "F_Anagrafica"
-        Text = "F_Anagrafica"
+        Text = "Anagrafica Ragazzi"
         Panel1.ResumeLayout(False)
         Panel1.PerformLayout()
         CType(PictureBox1, ComponentModel.ISupportInitialize).EndInit()
-        MenuStrip1.ResumeLayout(False)
-        MenuStrip1.PerformLayout()
         ResumeLayout(False)
         PerformLayout()
     End Sub
@@ -313,10 +332,11 @@ Partial Class F_Anagrafica
     Friend WithEvents Button1 As Button
     Friend WithEvents Button2 As Button
     Friend WithEvents Button3 As Button
-    Friend WithEvents MenuStrip1 As MenuStrip
-    Friend WithEvents NuovoBambinoToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents ImageList1 As ImageList
     Friend WithEvents PictureBox1 As PictureBox
     Friend WithEvents Panel_TRASPARENT1 As Panel
     Friend WithEvents Button4 As Button
+    Friend WithEvents Button5 As Button
+    Friend WithEvents Label3 As Label
+    Friend WithEvents CheckBox3 As CheckBox
 End Class

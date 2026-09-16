@@ -37,21 +37,20 @@ Partial Class F_Elenco_da_Stampare
         Column2 = New DataGridViewTextBoxColumn()
         Column3 = New DataGridViewTextBoxColumn()
         Column4 = New DataGridViewTextBoxColumn()
+        Column6 = New DataGridViewTextBoxColumn()
         Label1 = New Label()
-        CheckBox1 = New CheckBox()
-        CheckBox2 = New CheckBox()
         GroupBox1 = New GroupBox()
-        Label13 = New Label()
-        Label12 = New Label()
         Label10 = New Label()
         Label9 = New Label()
-        Label8 = New Label()
         Label6 = New Label()
         Label7 = New Label()
         Label4 = New Label()
         Label5 = New Label()
+        Label8 = New Label()
         Label2 = New Label()
         Label3 = New Label()
+        Label13 = New Label()
+        Label12 = New Label()
         Label14 = New Label()
         Label15 = New Label()
         Button1 = New Button()
@@ -102,11 +101,11 @@ Partial Class F_Elenco_da_Stampare
         ' DGV1
         ' 
         DGV1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        DGV1.Columns.AddRange(New DataGridViewColumn() {Column1, Column5, Column2, Column3, Column4})
+        DGV1.Columns.AddRange(New DataGridViewColumn() {Column1, Column5, Column2, Column3, Column4, Column6})
         DGV1.Location = New Point(2, 38)
         DGV1.Name = "DGV1"
         DGV1.RowHeadersVisible = False
-        DGV1.Size = New Size(494, 275)
+        DGV1.Size = New Size(536, 275)
         DGV1.TabIndex = 37
         ' 
         ' Column1
@@ -157,6 +156,12 @@ Partial Class F_Elenco_da_Stampare
         Column4.Name = "Column4"
         Column4.Width = 300
         ' 
+        ' Column6
+        ' 
+        Column6.HeaderText = "j"
+        Column6.Name = "Column6"
+        Column6.Visible = False
+        ' 
         ' Label1
         ' 
         Label1.BackColor = SystemColors.Control
@@ -167,55 +172,121 @@ Partial Class F_Elenco_da_Stampare
         Label1.TabIndex = 38
         Label1.Text = "Data:"
         ' 
-        ' CheckBox1
-        ' 
-        CheckBox1.AutoSize = True
-        CheckBox1.Checked = True
-        CheckBox1.CheckState = CheckState.Checked
-        CheckBox1.Location = New Point(8, 321)
-        CheckBox1.Name = "CheckBox1"
-        CheckBox1.Size = New Size(123, 19)
-        CheckBox1.TabIndex = 39
-        CheckBox1.Text = "Docx NON trovato"
-        CheckBox1.UseVisualStyleBackColor = True
-        ' 
-        ' CheckBox2
-        ' 
-        CheckBox2.AutoSize = True
-        CheckBox2.Checked = True
-        CheckBox2.CheckState = CheckState.Checked
-        CheckBox2.Location = New Point(137, 321)
-        CheckBox2.Name = "CheckBox2"
-        CheckBox2.Size = New Size(108, 19)
-        CheckBox2.TabIndex = 40
-        CheckBox2.Text = "NON Compilati"
-        CheckBox2.UseVisualStyleBackColor = True
-        ' 
         ' GroupBox1
         ' 
-        GroupBox1.Controls.Add(Label13)
-        GroupBox1.Controls.Add(Label12)
         GroupBox1.Controls.Add(Label10)
         GroupBox1.Controls.Add(Label9)
-        GroupBox1.Controls.Add(Label8)
         GroupBox1.Controls.Add(Label6)
         GroupBox1.Controls.Add(Label7)
         GroupBox1.Controls.Add(Label4)
         GroupBox1.Controls.Add(Label5)
+        GroupBox1.Controls.Add(Label8)
         GroupBox1.Controls.Add(Label2)
         GroupBox1.Controls.Add(Label3)
+        GroupBox1.Font = New Font("Microsoft Sans Serif", 8.25F)
         GroupBox1.Location = New Point(6, 347)
         GroupBox1.Name = "GroupBox1"
-        GroupBox1.Size = New Size(482, 76)
+        GroupBox1.Size = New Size(532, 76)
         GroupBox1.TabIndex = 41
         GroupBox1.TabStop = False
         GroupBox1.Text = "Dettagli"
+        ' 
+        ' Label10
+        ' 
+        Label10.BackColor = SystemColors.Control
+        Label10.Font = New Font("Microsoft Sans Serif", 8.25F)
+        Label10.Location = New Point(361, 36)
+        Label10.Name = "Label10"
+        Label10.Size = New Size(165, 17)
+        Label10.TabIndex = 47
+        Label10.Text = "- -"
+        ' 
+        ' Label9
+        ' 
+        Label9.BackColor = SystemColors.Control
+        Label9.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
+        Label9.Location = New Point(316, 36)
+        Label9.Name = "Label9"
+        Label9.Size = New Size(42, 17)
+        Label9.TabIndex = 46
+        Label9.Text = "Titolo:"
+        ' 
+        ' Label6
+        ' 
+        Label6.BackColor = SystemColors.Control
+        Label6.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
+        Label6.Location = New Point(11, 53)
+        Label6.Name = "Label6"
+        Label6.Size = New Size(61, 17)
+        Label6.TabIndex = 44
+        Label6.Text = "Filename:"
+        ' 
+        ' Label7
+        ' 
+        Label7.BackColor = SystemColors.Control
+        Label7.Font = New Font("Microsoft Sans Serif", 8.25F)
+        Label7.Location = New Point(74, 53)
+        Label7.Name = "Label7"
+        Label7.Size = New Size(290, 17)
+        Label7.TabIndex = 43
+        Label7.Text = "- -"
+        ' 
+        ' Label4
+        ' 
+        Label4.BackColor = SystemColors.Control
+        Label4.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
+        Label4.Location = New Point(11, 16)
+        Label4.Name = "Label4"
+        Label4.Size = New Size(110, 17)
+        Label4.TabIndex = 42
+        Label4.Text = "File da stampare:"
+        ' 
+        ' Label5
+        ' 
+        Label5.BackColor = SystemColors.Control
+        Label5.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
+        Label5.Location = New Point(438, 35)
+        Label5.Name = "Label5"
+        Label5.Size = New Size(88, 17)
+        Label5.TabIndex = 41
+        Label5.Text = "- -"
+        ' 
+        ' Label8
+        ' 
+        Label8.BackColor = SystemColors.Control
+        Label8.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
+        Label8.Location = New Point(367, 53)
+        Label8.Name = "Label8"
+        Label8.Size = New Size(157, 17)
+        Label8.TabIndex = 45
+        Label8.Text = "Stampato:"
+        Label8.TextAlign = ContentAlignment.MiddleCenter
+        ' 
+        ' Label2
+        ' 
+        Label2.BackColor = SystemColors.Control
+        Label2.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
+        Label2.Location = New Point(11, 36)
+        Label2.Name = "Label2"
+        Label2.Size = New Size(61, 17)
+        Label2.TabIndex = 40
+        Label2.Text = "Bambino:"
+        ' 
+        ' Label3
+        ' 
+        Label3.BackColor = SystemColors.Control
+        Label3.Font = New Font("Microsoft Sans Serif", 8.25F)
+        Label3.Location = New Point(74, 36)
+        Label3.Name = "Label3"
+        Label3.Size = New Size(189, 17)
+        Label3.TabIndex = 39
+        Label3.Text = "- -"
         ' 
         ' Label13
         ' 
         Label13.BackColor = SystemColors.Control
         Label13.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
-        Label13.Location = New Point(387, 53)
+        Label13.Location = New Point(263, 328)
         Label13.Name = "Label13"
         Label13.Size = New Size(61, 17)
         Label13.TabIndex = 49
@@ -225,102 +296,11 @@ Partial Class F_Elenco_da_Stampare
         ' 
         Label12.BackColor = SystemColors.Control
         Label12.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
-        Label12.Location = New Point(303, 52)
+        Label12.Location = New Point(179, 327)
         Label12.Name = "Label12"
         Label12.Size = New Size(61, 17)
         Label12.TabIndex = 48
         Label12.Text = "N. voci:"
-        ' 
-        ' Label10
-        ' 
-        Label10.BackColor = SystemColors.Control
-        Label10.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
-        Label10.Location = New Point(74, 52)
-        Label10.Name = "Label10"
-        Label10.Size = New Size(189, 17)
-        Label10.TabIndex = 47
-        Label10.Text = "- -"
-        ' 
-        ' Label9
-        ' 
-        Label9.BackColor = SystemColors.Control
-        Label9.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
-        Label9.Location = New Point(11, 52)
-        Label9.Name = "Label9"
-        Label9.Size = New Size(61, 17)
-        Label9.TabIndex = 46
-        Label9.Text = "Titolo:"
-        ' 
-        ' Label8
-        ' 
-        Label8.BackColor = SystemColors.Control
-        Label8.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
-        Label8.Location = New Point(364, 36)
-        Label8.Name = "Label8"
-        Label8.Size = New Size(109, 17)
-        Label8.TabIndex = 45
-        Label8.Text = "Stampato:"
-        Label8.TextAlign = ContentAlignment.MiddleCenter
-        ' 
-        ' Label6
-        ' 
-        Label6.BackColor = SystemColors.Control
-        Label6.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
-        Label6.Location = New Point(11, 35)
-        Label6.Name = "Label6"
-        Label6.Size = New Size(61, 17)
-        Label6.TabIndex = 44
-        Label6.Text = "Filename:"
-        ' 
-        ' Label7
-        ' 
-        Label7.BackColor = SystemColors.Control
-        Label7.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
-        Label7.Location = New Point(74, 35)
-        Label7.Name = "Label7"
-        Label7.Size = New Size(284, 17)
-        Label7.TabIndex = 43
-        Label7.Text = "- -"
-        ' 
-        ' Label4
-        ' 
-        Label4.BackColor = SystemColors.Control
-        Label4.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
-        Label4.Location = New Point(303, 18)
-        Label4.Name = "Label4"
-        Label4.Size = New Size(41, 17)
-        Label4.TabIndex = 42
-        Label4.Text = "Data:"
-        ' 
-        ' Label5
-        ' 
-        Label5.BackColor = SystemColors.Control
-        Label5.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
-        Label5.Location = New Point(342, 18)
-        Label5.Name = "Label5"
-        Label5.Size = New Size(88, 17)
-        Label5.TabIndex = 41
-        Label5.Text = "- -"
-        ' 
-        ' Label2
-        ' 
-        Label2.BackColor = SystemColors.Control
-        Label2.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
-        Label2.Location = New Point(11, 18)
-        Label2.Name = "Label2"
-        Label2.Size = New Size(61, 17)
-        Label2.TabIndex = 40
-        Label2.Text = "Bambino:"
-        ' 
-        ' Label3
-        ' 
-        Label3.BackColor = SystemColors.Control
-        Label3.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
-        Label3.Location = New Point(74, 18)
-        Label3.Name = "Label3"
-        Label3.Size = New Size(189, 17)
-        Label3.TabIndex = 39
-        Label3.Text = "- -"
         ' 
         ' Label14
         ' 
@@ -344,12 +324,15 @@ Partial Class F_Elenco_da_Stampare
         ' 
         ' Button1
         ' 
+        Button1.BackColor = Color.DimGray
+        Button1.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
+        Button1.ForeColor = Color.Snow
         Button1.Location = New Point(401, 429)
         Button1.Name = "Button1"
         Button1.Size = New Size(81, 27)
         Button1.TabIndex = 44
-        Button1.Text = "Quit"
-        Button1.UseVisualStyleBackColor = True
+        Button1.Text = "Close"
+        Button1.UseVisualStyleBackColor = False
         ' 
         ' Button2
         ' 
@@ -387,16 +370,16 @@ Partial Class F_Elenco_da_Stampare
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
-        ClientSize = New Size(500, 461)
+        ClientSize = New Size(542, 461)
+        Controls.Add(Label13)
         Controls.Add(Button4)
+        Controls.Add(Label12)
         Controls.Add(Button3)
         Controls.Add(Button2)
         Controls.Add(Button1)
         Controls.Add(Label14)
         Controls.Add(Label15)
         Controls.Add(GroupBox1)
-        Controls.Add(CheckBox2)
-        Controls.Add(CheckBox1)
         Controls.Add(Label1)
         Controls.Add(DGV1)
         Controls.Add(Label19)
@@ -406,7 +389,6 @@ Partial Class F_Elenco_da_Stampare
         CType(DGV1, ComponentModel.ISupportInitialize).EndInit()
         GroupBox1.ResumeLayout(False)
         ResumeLayout(False)
-        PerformLayout()
     End Sub
 
     Friend WithEvents Label11 As Label
@@ -414,8 +396,6 @@ Partial Class F_Elenco_da_Stampare
     Friend WithEvents ImageList1 As ImageList
     Friend WithEvents DGV1 As DataGridView
     Friend WithEvents Label1 As Label
-    Friend WithEvents CheckBox1 As CheckBox
-    Friend WithEvents CheckBox2 As CheckBox
     Friend WithEvents GroupBox1 As GroupBox
     Friend WithEvents Label6 As Label
     Friend WithEvents Label7 As Label
@@ -433,10 +413,11 @@ Partial Class F_Elenco_da_Stampare
     Friend WithEvents Button1 As Button
     Friend WithEvents Button2 As Button
     Friend WithEvents Button3 As Button
+    Friend WithEvents Button4 As Button
     Friend WithEvents Column1 As DataGridViewCheckBoxColumn
     Friend WithEvents Column5 As DataGridViewImageColumn
     Friend WithEvents Column2 As DataGridViewTextBoxColumn
     Friend WithEvents Column3 As DataGridViewTextBoxColumn
     Friend WithEvents Column4 As DataGridViewTextBoxColumn
-    Friend WithEvents Button4 As Button
+    Friend WithEvents Column6 As DataGridViewTextBoxColumn
 End Class

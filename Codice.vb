@@ -1,22 +1,30 @@
 ﻿Imports System.Drawing.Drawing2D
 Imports System.Drawing.Imaging
 Imports System.IO
+Imports System.Math
 Imports System.Reflection.Emit
 Imports System.Runtime.InteropServices
+Imports System.Text.RegularExpressions
+'Imports ZXing
+'Imports ZXing.Common
+'Imports ZXing.Windows.Compatibility
+Imports System.Windows.Documents.DocumentStructures
+'Imports DocumentFormat.OpenXml                  ' Contiene i tipi base come UInt32Value o StringValue
+Imports DocumentFormat.OpenXml.Bibliography
+Imports DocumentFormat.OpenXml.Wordprocessing
 Imports Microsoft.Data.SqlClient
 Imports Microsoft.Data.Sqlite
-Imports System.Text.RegularExpressions
-Imports DocumentFormat.OpenXml.Wordprocessing
-Imports MyColor = System.Drawing.Color
-
-
-Imports QRCoder
-Imports ZXing
-Imports ZXing.Common
-Imports ZXing.Windows.Compatibility
-Imports System.Windows.Documents.DocumentStructures
 Imports OpenTK.Graphics.OpenGL
+Imports QRCoder
+Imports MyColor = System.Drawing.Color
 Module Codice
+    Public Structure DatiGrafico
+        Public Data As String
+        Public ValoriY As List(Of Integer) ' Può contenere 1 o 2 valori
+        Public Color As List(Of Integer) ' Può contenere 1 o 2 valori
+    End Structure
+    Public Gbl_datigrafico As New List(Of DatiGrafico)()
+
     Public Structure Struct_Size_Offset
         Public xOffset As Integer
         Public YOffset As Integer
@@ -58,9 +66,15 @@ Module Codice
         Public Size_Cella As Struct_Size_Offset
         Public ELCAR_LETTERE() As String
         Public Modello_Schede As String ' Full_path_Modello Foglio schede
+        Public Modello_Grafico_codici As String ' Full_path_Modello Foglio grafici
         Public Path_SCHEDE_DaCompilare As String
         Public Path_SCHEDE_COMPILATE As String
         Public Graph_interval As Integer ' Intervallo di default per i dati del grafico
+        Public Numero_min_voci_perpagina As Integer
+        Public Perc_soglia_ok As Integer
+        Public Numero_Totale_Risposte As Integer
+
+
     End Structure
     Public ini As Struct_ini
     Public Structure Struct_Graph_data
@@ -90,6 +104,8 @@ Module Codice
         Public Data() As Struct_Graph_data
         Public Trend As String 'PASSATO,NEG4,POS4,UNDEF
         Public Labeltag As String
+        Public Titolo As String
+        Public Bambino As String
     End Structure
 
     Public Structure Struct_Elenco_titoli_usati
@@ -186,11 +202,9 @@ Module Codice
 
         Process.Start(New ProcessStartInfo(percorsoCartella) With {.UseShellExecute = True})
     End Sub
-    Public Function Costruisci_filenameDB_bambino(Indexof_Gbl_Elenco_bambini As Integer, Optional Autocrea As Boolean = True) As String
-        Dim jb = Indexof_Gbl_Elenco_bambini
-        If jb < 0 Then Return ""
+    Public Function Costruisci_filenameDB_bambino(DB_BAMBINO As String, Optional Autocrea As Boolean = True) As String
 
-        Dim DB_BAMBINO = Gbl_Elenco_bambini(Gbl_Jb).DBname.ToUpper
+        If DB_BAMBINO = "" Then Return ""
         If InStr(DB_BAMBINO, ".DB") = 0 Then DB_BAMBINO = DB_BAMBINO + ".DB"
         Gbl_Elenco_bambini(Gbl_Jb).DBname = DB_BAMBINO
         Dim filedb = IO.Path.Combine(ini.DB_Bambini_path, DB_BAMBINO).ToUpper
@@ -242,17 +256,22 @@ Module Codice
             IO.Directory.CreateDirectory(ini.Path_SCHEDE_DaCompilare)
         End If
 
+        x = dir_bar(Gbl_app_path) + "Modello_Grafico_codici.docx"
+        ini.Modello_Grafico_codici = ReadINIString(fileini, k, "Modello Grafici per foglio", x)
+        If Not IO.Directory.Exists(ini.Path_SCHEDE_DaCompilare) Then
+            IO.Directory.CreateDirectory(ini.Path_SCHEDE_DaCompilare)
+        End If
+
 
 
         k = "GENERAL"
-
-
+        ini.Numero_min_voci_perpagina = CInt(ReadINIString(fileini, k, "Numero minimo voci per Pagina", "4"))
+        ini.Numero_Totale_Risposte = CInt(ReadINIString(fileini, k, "Numero di risposte necessario per la prova", "20"))
 
 
         k = "PARAMETER_SCAN"
         ini.Scanrow_Offset = CInt(ReadINIString(fileini, k, "Scanrow_Offset", "50"))
         Gbl_Offset = ini.Scanrow_Offset
-
         ini.Size_Riga.Height = CInt(ReadINIString(fileini, k, "Row_Height", "180"))
         ini.Size_Riga.Width = CInt(ReadINIString(fileini, k, "Row_Width", "1960"))
         ini.Size_Riga.xOffset = CInt(ReadINIString(fileini, k, "Row_XOffset", "995")) 'distanza (in pixel) della prima cella dal 3 spot del qrcode della riga
@@ -267,6 +286,9 @@ Module Codice
 
         k = "GRAPH"
         ini.Graph_interval = CInt(ReadINIString(fileini, k, "Intervallo default dati grafico  (gg)", "15"))
+        ini.Perc_soglia_ok = CInt(ReadINIString(fileini, k, "Valore per il superamento della prova (0-100%)", "80"))
+
+
 
     End Sub
 
@@ -349,24 +371,12 @@ Module Codice
 
         Return imgRuotata
     End Function
-    Function Calcola_angolo_di_Rotazione(x1, y1, x2, y2) As Single
-
-        ' Calcola la differenza orizzontale e verticale
-        Dim deltaX As Single = x2 - x1
-        Dim deltaY As Single = y2 - y1
-
-        ' Calcola l'angolo in radianti e convertilo in gradi
-        Dim angoloRadianti As Double = Math.Atan2(deltaY, deltaX)
-        Dim angoloGradi As Single = CSng(angoloRadianti * (180.0 / Math.PI))
-        Return -angoloGradi
-        ' Ora puoi raddrizzare l'intera pagina prima di ritagliare le 19 celle!
-    End Function
-    Function Crea_DB_Bimbo(dbname) As Boolean
-        If IO.File.Exists(dbname) Then Return True
+    Function Crea_DB_Bimbo(db_filename) As Boolean
+        If IO.File.Exists(db_filename) Then Return True
         Dim db_empty = dir_bar(extr_dir(ini.Database)) + "DB_BAMBINO.db"
-        If InStr(dbname, ".DB") = 0 Then dbname = dbname + ".DB"
-        IO.File.Copy(db_empty, dbname)
-        If IO.File.Exists(dbname) Then
+        If InStr(db_filename, ".DB") = 0 Then db_filename = db_filename + ".DB"
+        IO.File.Copy(db_empty, db_filename)
+        If IO.File.Exists(db_filename) Then
             Return True
         End If
         Return False
@@ -419,49 +429,6 @@ Module Codice
 
 
     End Function
-    Public Sub SET_DOCX(body As Body, codice As String, testo As String)
-        ' Sicurezza: verifica che il body e i parametri non siano nulli
-        If body Is Nothing OrElse String.IsNullOrEmpty(codice) Then Exit Sub
-        If testo Is Nothing Then testo = String.Empty
-
-        ' Recupera tutti i paragrafi presenti nel corpo del documento
-        Dim paragrafi As IEnumerable(Of Paragraph) = body.Descendants(Of Paragraph)()
-
-        For Each p As Paragraph In paragrafi
-            ' Se il testo del paragrafo contiene il codice da sostituire
-            If p.InnerText.Contains(codice) Then
-
-                ' 1. Identifica il primo blocco di formattazione (Run) per usarlo come base
-                Dim primoRun As Run = p.GetFirstChild(Of Run)()
-                Dim proprietàFormattazione As RunProperties = Nothing
-
-                ' Clona le proprietà di formattazione (Font, Dimensione, Grassetto...) se presenti
-                If primoRun IsNot Nothing AndAlso primoRun.RunProperties IsNot Nothing Then
-                    proprietàFormattazione = CType(primoRun.RunProperties.CloneNode(True), RunProperties)
-                End If
-
-                ' 2. Estrae l'intero testo unito del paragrafo ed esegue la sostituzione
-                Dim testoUnito As String = p.InnerText.Replace(codice, testo)
-
-                ' 3. Svuota completamente il paragrafo da tutti i vecchi nodi di testo frammentati
-                p.RemoveAllChildren(Of Run)()
-
-                ' 4. Crea un nuovo blocco di testo pulito e unito
-                Dim nuovoRun As New Run()
-
-                ' Ripristina la formattazione originale sul nuovo testo
-                If proprietàFormattazione IsNot Nothing Then
-                    nuovoRun.Append(proprietàFormattazione)
-                End If
-
-                ' Assegna il testo finale modificato
-                nuovoRun.Append(New Text(testoUnito))
-
-                ' Aggiunge il nuovo blocco al paragrafo
-                p.Append(nuovoRun)
-            End If
-        Next
-    End Sub
 
     Public Function Carica_Grafico(Optional datainiziale As String = "", Optional datafinale As String = "", Optional mostragrafico As Boolean = False) As Integer
         'Public Function Carica_Grafico(Optional datainiziale As String = "", Optional datafinale As String = "", Optional mostragrafico As Boolean = False) As Integer
@@ -537,14 +504,16 @@ Module Codice
 
         Dim dt As DataTable = Class_GIORNALIERO.OttieniRecordPerCodice(cod)
         Do While dt.Rows.Count = 0
+            ReDim Gbl_Graph.Data(0)
             Dim m = "nessun Codice trovato:" + vbCrLf
-            Return 0
+            Return -1
         Loop
         ' Ciclo che attraversa ogni riga della tabella
         Dim J = 0, i = -1
 
         Gbl_Graph.Cod_ELCAR = cod
         Gbl_Graph.Cod_Testo = dt.Rows(0)("testo")
+        Gbl_Graph.Titolo = dt.Rows(0)("titolo")
 
 
         Dim xx = ""
@@ -567,14 +536,13 @@ Module Codice
             Gbl_Graph.Data(i).Valutativo = Convert.ToBoolean(riga("valutativo"))
             Gbl_Graph.Data(i).tuttelerisposte = Convert.ToBoolean(riga("tuttelerisposte"))
             Gbl_Graph.Data(i).Compilato = Convert.ToBoolean(riga("compilato"))
-
         Next
-
+        Return i
     End Function
 
 
 
-    Public Sub Trend_1()
+    Public Function Trend_1() As Boolean
         'Azzera 
 
         Dim ntot = Gbl_Graph.Data.Count
@@ -589,10 +557,17 @@ Module Codice
         Dim valori(nv) As String
         ReDim Gbl_Percentuale(8)
         Dim gg = 0
+
         ' Trova ultimi nv valori validi
         Dim idx(nv)
+
         If ntot > nv Then i0 = ntot - nv
         Do While Not finito
+            If i0 < 0 Then Exit Do
+            If Not Gbl_Graph.Data(i0).Compilato Then
+                i0 = i0 - 1
+                Continue Do
+            End If
             totx2 = 0 : totx1 = 0
             Try
                 totx1 = Gbl_Graph.Data(i0).Tot1
@@ -610,7 +585,6 @@ Module Codice
             End If
             If totx1 = 0 And totx2 = 0 Then
                 xx = i0.ToString + ";" + xx
-
             End If
             i0 = i0 - 1
         Loop
@@ -667,17 +641,20 @@ Module Codice
         '-- Ora effettuo i controlli veri e propri sl trend 
         '-- Calcolo e scrivo la variabile  Gbl_Graph.Trend
         IP = IP - 1
+        If IP < 0 Then
+            Return False
+        End If
         ReDim Preserve Gbl_Percentuale(IP)
 
         Call trend_2(IP)
 
-        Exit Sub
+        Return True
 
 
 
-    End Sub
+    End Function
     Public Sub trend_2(ip)
-        '---------------------------------------------
+        '----- VERDE ---------------------------------
         '---- controllo se ho raggiunto la soglia ----
         '---- 3 Consecutivi >80% allora Passato   ----
         '---------------------------------------------
@@ -697,9 +674,11 @@ Module Codice
 
 
         '-----------------------------------------
-        '-- controllo il se il trend è positivo --
+        '-- controllo il se il trend è positivo -- BLU
+        '-- 4 risultati consecutivi in crescita >= 
         '-----------------------------------------
         Dim trend_pos = 0
+        If Gbl_Percentuale(0) >= 80 Then trend_pos = trend_pos + 1
         For i = 1 To ip
             If Gbl_Percentuale(i) >= 80 Then
                 trend_pos = trend_pos + 1
@@ -712,17 +691,22 @@ Module Codice
                     trend_pos = trend_pos + 1
                 End If
             Else
-                trend_pos = 0
+                If Gbl_Percentuale(i) < 80 Then
+                    trend_pos = 0
+                End If
             End If
         Next
 
         If trend_pos >= 4 Then
             Gbl_Graph.Trend = "POS4"
             Exit Sub
+        ElseIf trend_pos >= 2 And cnt1 >= 2 Then
+            Gbl_Graph.Trend = "POS4"
+            Exit Sub
         End If
 
         '-----------------------------------------
-        '-- controllo il se il trend è negativo --
+        '-- controllo il se il trend è negativo -- ROSSO
         '-----------------------------------------
         Dim trend_neg = 0
         For i = 1 To ip
@@ -738,7 +722,39 @@ Module Codice
             Exit Sub
         End If
 
-        Gbl_Graph.Trend = "UNDEF"
+
+        Dim ngiorni = Gbl_Graph.Data.Count
+        Dim ntot = 0, ntotok = 0
+        For j = 0 To ngiorni - 1
+            If Gbl_Graph.Data(j).Tot1 > 0 Then
+                ntot = ntot + 1
+                If Gbl_Graph.Data(j).Tot1 = 20 Then ntotok = ntotok + 1
+            End If
+            If Gbl_Graph.Data(j).Tot2 > 0 Then
+                ntot = ntot + 1
+                If Gbl_Graph.Data(j).Tot2 = 20 Then ntotok = ntotok + 1
+            End If
+        Next
+
+
+        '-------------------------------
+        '-- controllo se ho zero dati -- BIANCO
+        '-------------------------------
+        If ntot = 0 Then
+            Gbl_Graph.Trend = "NODATA"
+            Exit Sub
+        End If
+
+
+        '----------------------------------------
+        '-- controllo se ho troppi pochi dati -- NERO
+        '----------------------------------------
+        If ntot < 4 Then
+            Gbl_Graph.Trend = "UNDEF"
+            Exit Sub
+        End If
+
+        Gbl_Graph.Trend = "NOTREND"
 
     End Sub
     Function Calcola_Percentuale(POS, Optional MAX = 20) As Integer
@@ -788,4 +804,7 @@ Module Codice
             Return False
         End If
     End Function
+
+
+
 End Module

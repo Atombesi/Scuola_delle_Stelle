@@ -13,6 +13,7 @@
     <Import Include="System.Data" />
     <Import Include="System.Drawing" />
     <Import Include="System.Windows.Forms" />
+	<Import Include="MyColor = System.Drawing.Color" />
   </ItemGroup>
 
   <ItemGroup>

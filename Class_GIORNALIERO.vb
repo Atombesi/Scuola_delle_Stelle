@@ -1,4 +1,5 @@
-﻿Imports Microsoft.Data.Sqlite
+﻿Imports DocumentFormat.OpenXml.Spreadsheet
+Imports Microsoft.Data.Sqlite
 Public Class Class_GIORNALIERO
     Public Property ID As Integer
     Public Property ID_FOGLIO As Integer
@@ -133,9 +134,9 @@ Public Class Class_GIORNALIERO
             ' Determina se inserire un nuovo record o aggiornare quello esistente
             If Me.ID = 0 Then
                 sql = "INSERT INTO GIORNALIERO (ID_FOGLIO, DATA, VALUTATIVO, TUTTELERISPOSTE, Codice, Testo, " &
-                      "TOT1_POS, TOT1_NEG, TOT1_PROMPT, TOT1,TOT2_POS, TOT2_NEG, TOT2_PROMPT, TOT2, COMPILATO, TERMINE,titolo) " &
+                      "TOT1_POS, TOT1_NEG, TOT1_PROMPT, TOT1,TOT2_POS, TOT2_NEG, TOT2_PROMPT, TOT2, COMPILATO, TERMINE,TITOLO) " &
                       "VALUES (@ID_FOGLIO, @DATA, @VALUTATIVO, @TUTTELERISPOSTE, @Codice, @Testo, " &
-                      "@TOT1_POS, @TOT1_NEG, @TOT1_PROMPT, @TOT1,@TOT2_POS, @TOT2_NEG, @TOT2_PROMPT, @TOT2, @COMPILATO, @TERMINE,@Titolo); " &
+                      "@TOT1_POS, @TOT1_NEG, @TOT1_PROMPT, @TOT1,@TOT2_POS, @TOT2_NEG, @TOT2_PROMPT, @TOT2, @COMPILATO, @TERMINE, @TITOLO); " &
                       "SELECT last_insert_rowid();"
             Else
                 sql = "UPDATE GIORNALIERO SET " &
@@ -143,7 +144,7 @@ Public Class Class_GIORNALIERO
                       "TUTTELERISPOSTE = @TUTTELERISPOSTE, Codice = @Codice, Testo = @Testo, " &
                       "TOT1_POS = @TOT1_POS, TOT1_NEG = @TOT1_NEG, TOT1_PROMPT = @TOT1_PROMPT,TOT1 = @TOT1, " &
                       "TOT2_POS = @TOT2_POS, TOT2_NEG = @TOT2_NEG, TOT2_PROMPT = @TOT2_PROMPT,TOT2 = @TOT2, " &
-                      "COMPILATO = @COMPILATO, TERMINE = @TERMINE, TITOLo = @TITOLo " &
+                      "COMPILATO = @COMPILATO, TERMINE = @TERMINE, TITOLO = @TITOLO " &
                       "WHERE ID = @ID;"
             End If
 
@@ -167,7 +168,7 @@ Public Class Class_GIORNALIERO
                     cmd.Parameters.AddWithValue("@TOT2", Me.TOT2)
                     cmd.Parameters.AddWithValue("@COMPILATO", If(Me.COMPILATO, 1, 0))
                     cmd.Parameters.AddWithValue("@TERMINE", If(Me.TERMINE, 1, 0))
-                    cmd.Parameters.AddWithValue("@TITOLo", Me.Titolo)
+                    cmd.Parameters.AddWithValue("@TITOLO", Me.Titolo)
 
 
                 Catch ex As Exception
@@ -207,6 +208,7 @@ Public Class Class_GIORNALIERO
 
             j = j + 1
         Next
+
 
 
     End Function
@@ -254,7 +256,7 @@ Public Class Class_GIORNALIERO
                             .TOT2 = Convert.ToInt32(reader("TOT2")),
                             .COMPILATO = Convert.ToBoolean(reader("COMPILATO")),
                             .TERMINE = Convert.ToBoolean(reader("TERMINE")),
-                            .Titolo = Convert.ToString(reader("TITOLo"))
+                            .Titolo = Convert.ToString(reader("TITOLO"))
                         }
 
                         lista.Add(record)

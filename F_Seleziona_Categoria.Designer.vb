@@ -51,6 +51,9 @@ Partial Class F_Seleziona_Categoria
         Button3 = New Button()
         Button4 = New Button()
         GroupBox4 = New GroupBox()
+        Button13 = New Button()
+        Label21 = New Label()
+        ImageList5 = New ImageList(components)
         Button6 = New Button()
         Label19 = New Label()
         ImageList1 = New ImageList(components)
@@ -74,8 +77,8 @@ Partial Class F_Seleziona_Categoria
         Column2 = New DataGridViewTextBoxColumn()
         Button9 = New Button()
         Button8 = New Button()
-        ImageList5 = New ImageList(components)
         GroupBox5 = New GroupBox()
+        Button12 = New Button()
         ComboBox8 = New ComboBox()
         Button10 = New Button()
         TabControl2 = New TabControl()
@@ -87,16 +90,13 @@ Partial Class F_Seleziona_Categoria
         Panel1 = New Panel()
         Label9 = New Label()
         Label3 = New Label()
-        ImageList2 = New ImageList(components)
-        ImageList3 = New ImageList(components)
-        ImageList4 = New ImageList(components)
         CMenuStrip1 = New ContextMenuStrip(components)
         ToolStripMenuItem1 = New ToolStripMenuItem()
         TSM_Immediato = New ToolStripMenuItem()
         SoloCompilatiToolStripMenuItem = New ToolStripMenuItem()
-        AnagraficaToolStripMenuItem = New ToolStripMenuItem()
-        TSM_Anag_Mostrasoloattivi = New ToolStripMenuItem()
         Button2 = New Button()
+        ImageList2 = New ImageList(components)
+        ImageList4 = New ImageList(components)
         GroupBox1.SuspendLayout()
         CType(PictureBox1, ComponentModel.ISupportInitialize).BeginInit()
         GroupBox2.SuspendLayout()
@@ -390,6 +390,8 @@ Partial Class F_Seleziona_Categoria
         ' 
         ' GroupBox4
         ' 
+        GroupBox4.Controls.Add(Button13)
+        GroupBox4.Controls.Add(Label21)
         GroupBox4.Controls.Add(Button6)
         GroupBox4.Controls.Add(Label19)
         GroupBox4.Controls.Add(Label20)
@@ -413,16 +415,49 @@ Partial Class F_Seleziona_Categoria
         GroupBox4.TabStop = False
         GroupBox4.Text = "Nuovo Foglio Esercizi per:"
         ' 
+        ' Button13
+        ' 
+        Button13.Font = New Font("Segoe UI", 9F)
+        Button13.ForeColor = SystemColors.ControlText
+        Button13.Location = New Point(196, 520)
+        Button13.Name = "Button13"
+        Button13.Size = New Size(94, 22)
+        Button13.TabIndex = 38
+        Button13.Text = "Stampa Graph"
+        Button13.UseVisualStyleBackColor = True
+        ' 
+        ' Label21
+        ' 
+        Label21.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
+        Label21.ImageIndex = 4
+        Label21.ImageList = ImageList5
+        Label21.Location = New Point(7, 60)
+        Label21.Name = "Label21"
+        Label21.Size = New Size(25, 23)
+        Label21.TabIndex = 37
+        ' 
+        ' ImageList5
+        ' 
+        ImageList5.ColorDepth = ColorDepth.Depth32Bit
+        ImageList5.ImageStream = CType(resources.GetObject("ImageList5.ImageStream"), ImageListStreamer)
+        ImageList5.TransparentColor = Color.Transparent
+        ImageList5.Images.SetKeyName(0, "Emoji Objects-117.png")
+        ImageList5.Images.SetKeyName(1, "Emoji Smiley-72.png")
+        ImageList5.Images.SetKeyName(2, "Setting.png")
+        ImageList5.Images.SetKeyName(3, "Emoji Smiley-72.png")
+        ImageList5.Images.SetKeyName(4, "icons8-informazioni-144.png")
+        ' 
         ' Button6
         ' 
         Button6.Font = New Font("Segoe UI", 9F)
         Button6.ForeColor = SystemColors.ControlText
-        Button6.Location = New Point(169, 519)
+        Button6.Location = New Point(121, 519)
         Button6.Name = "Button6"
-        Button6.Size = New Size(114, 22)
+        Button6.Size = New Size(61, 22)
         Button6.TabIndex = 36
         Button6.Text = "Stampa"
         Button6.UseVisualStyleBackColor = True
+        Button6.Visible = False
         ' 
         ' Label19
         ' 
@@ -448,6 +483,8 @@ Partial Class F_Seleziona_Categoria
         ImageList1.Images.SetKeyName(6, "Emoji Symbols-202 - Copy.png")
         ImageList1.Images.SetKeyName(7, "Setting.png")
         ImageList1.Images.SetKeyName(8, "Emoji Objects-108.png")
+        ImageList1.Images.SetKeyName(9, "icons8-full-recycle-bin-48.png")
+        ImageList1.Images.SetKeyName(10, "icons8-elenco-puntato-48.png")
         ' 
         ' Label20
         ' 
@@ -475,9 +512,10 @@ Partial Class F_Seleziona_Categoria
         ' 
         Label18.BorderStyle = BorderStyle.FixedSingle
         Label18.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
-        Label18.Location = New Point(60, 25)
+        Label18.ImageIndex = 0
+        Label18.Location = New Point(85, 25)
         Label18.Name = "Label18"
-        Label18.Size = New Size(183, 23)
+        Label18.Size = New Size(162, 23)
         Label18.TabIndex = 32
         Label18.Text = "- -"
         Label18.TextAlign = ContentAlignment.MiddleLeft
@@ -513,13 +551,16 @@ Partial Class F_Seleziona_Categoria
         ' 
         ' Label14
         ' 
-        Label14.AutoSize = True
         Label14.Font = New Font("Segoe UI", 9F)
+        Label14.ImageAlign = ContentAlignment.MiddleRight
+        Label14.ImageIndex = 10
+        Label14.ImageList = ImageList1
         Label14.Location = New Point(9, 29)
         Label14.Name = "Label14"
-        Label14.Size = New Size(41, 15)
+        Label14.Size = New Size(63, 15)
         Label14.TabIndex = 24
         Label14.Text = "Titolo:"
+        TP1.SetToolTip(Label14, "Doppioclick per caricare titoli")
         ' 
         ' Label11
         ' 
@@ -559,7 +600,7 @@ Partial Class F_Seleziona_Categoria
         ' 
         Label10.AutoSize = True
         Label10.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
-        Label10.Location = New Point(150, 66)
+        Label10.Location = New Point(181, 66)
         Label10.Name = "Label10"
         Label10.Size = New Size(14, 15)
         Label10.TabIndex = 7
@@ -569,7 +610,7 @@ Partial Class F_Seleziona_Categoria
         ' 
         Label8.AutoSize = True
         Label8.Font = New Font("Segoe UI", 9F)
-        Label8.Location = New Point(11, 66)
+        Label8.Location = New Point(42, 66)
         Label8.Name = "Label8"
         Label8.Size = New Size(133, 15)
         Label8.TabIndex = 6
@@ -625,7 +666,7 @@ Partial Class F_Seleziona_Categoria
         ' 
         ' Button9
         ' 
-        Button9.BackColor = Color.MistyRose
+        Button9.BackColor = Color.LightGreen
         Button9.Font = New Font("Segoe UI", 9F)
         Button9.ForeColor = SystemColors.ControlText
         Button9.Location = New Point(240, 19)
@@ -647,18 +688,9 @@ Partial Class F_Seleziona_Categoria
         Button8.TabIndex = 25
         Button8.UseVisualStyleBackColor = True
         ' 
-        ' ImageList5
-        ' 
-        ImageList5.ColorDepth = ColorDepth.Depth32Bit
-        ImageList5.ImageStream = CType(resources.GetObject("ImageList5.ImageStream"), ImageListStreamer)
-        ImageList5.TransparentColor = Color.Transparent
-        ImageList5.Images.SetKeyName(0, "Emoji Objects-117.png")
-        ImageList5.Images.SetKeyName(1, "Emoji Smiley-72.png")
-        ImageList5.Images.SetKeyName(2, "Setting.png")
-        ImageList5.Images.SetKeyName(3, "Emoji Smiley-72.png")
-        ' 
         ' GroupBox5
         ' 
+        GroupBox5.Controls.Add(Button12)
         GroupBox5.Controls.Add(ComboBox8)
         GroupBox5.Controls.Add(Button10)
         GroupBox5.Controls.Add(Button8)
@@ -669,6 +701,19 @@ Partial Class F_Seleziona_Categoria
         GroupBox5.TabIndex = 26
         GroupBox5.TabStop = False
         GroupBox5.Text = "Anagrafica"
+        ' 
+        ' Button12
+        ' 
+        Button12.Font = New Font("Segoe UI", 9F)
+        Button12.ForeColor = SystemColors.ControlText
+        Button12.ImageIndex = 9
+        Button12.ImageList = ImageList1
+        Button12.Location = New Point(406, 20)
+        Button12.Name = "Button12"
+        Button12.Size = New Size(30, 22)
+        Button12.TabIndex = 34
+        TP1.SetToolTip(Button12, "Azzera foglio")
+        Button12.UseVisualStyleBackColor = True
         ' 
         ' ComboBox8
         ' 
@@ -783,35 +828,11 @@ Partial Class F_Seleziona_Categoria
         Label3.TabIndex = 31
         Label3.Text = "(100 char)"
         ' 
-        ' ImageList2
-        ' 
-        ImageList2.ColorDepth = ColorDepth.Depth32Bit
-        ImageList2.ImageStream = CType(resources.GetObject("ImageList2.ImageStream"), ImageListStreamer)
-        ImageList2.TransparentColor = Color.Transparent
-        ImageList2.Images.SetKeyName(0, "Emoji Objects-117.png")
-        ImageList2.Images.SetKeyName(1, "Emoji Smiley-72.png")
-        ' 
-        ' ImageList3
-        ' 
-        ImageList3.ColorDepth = ColorDepth.Depth32Bit
-        ImageList3.ImageStream = CType(resources.GetObject("ImageList3.ImageStream"), ImageListStreamer)
-        ImageList3.TransparentColor = Color.Transparent
-        ImageList3.Images.SetKeyName(0, "Emoji Objects-117.png")
-        ImageList3.Images.SetKeyName(1, "Emoji Smiley-72.png")
-        ' 
-        ' ImageList4
-        ' 
-        ImageList4.ColorDepth = ColorDepth.Depth32Bit
-        ImageList4.ImageStream = CType(resources.GetObject("ImageList4.ImageStream"), ImageListStreamer)
-        ImageList4.TransparentColor = Color.Transparent
-        ImageList4.Images.SetKeyName(0, "Emoji Objects-117.png")
-        ImageList4.Images.SetKeyName(1, "Emoji Smiley-72.png")
-        ' 
         ' CMenuStrip1
         ' 
-        CMenuStrip1.Items.AddRange(New ToolStripItem() {ToolStripMenuItem1, AnagraficaToolStripMenuItem})
+        CMenuStrip1.Items.AddRange(New ToolStripItem() {ToolStripMenuItem1})
         CMenuStrip1.Name = "CMenuStrip1"
-        CMenuStrip1.Size = New Size(273, 48)
+        CMenuStrip1.Size = New Size(273, 26)
         ' 
         ' ToolStripMenuItem1
         ' 
@@ -834,22 +855,6 @@ Partial Class F_Seleziona_Categoria
         SoloCompilatiToolStripMenuItem.Size = New Size(152, 22)
         SoloCompilatiToolStripMenuItem.Text = "Solo Compilati"
         ' 
-        ' AnagraficaToolStripMenuItem
-        ' 
-        AnagraficaToolStripMenuItem.Checked = True
-        AnagraficaToolStripMenuItem.CheckOnClick = True
-        AnagraficaToolStripMenuItem.CheckState = CheckState.Checked
-        AnagraficaToolStripMenuItem.DropDownItems.AddRange(New ToolStripItem() {TSM_Anag_Mostrasoloattivi})
-        AnagraficaToolStripMenuItem.Name = "AnagraficaToolStripMenuItem"
-        AnagraficaToolStripMenuItem.Size = New Size(272, 22)
-        AnagraficaToolStripMenuItem.Text = "Anagrafica"
-        ' 
-        ' TSM_Anag_Mostrasoloattivi
-        ' 
-        TSM_Anag_Mostrasoloattivi.Name = "TSM_Anag_Mostrasoloattivi"
-        TSM_Anag_Mostrasoloattivi.Size = New Size(167, 22)
-        TSM_Anag_Mostrasoloattivi.Text = "Mostra solo Attivi"
-        ' 
         ' Button2
         ' 
         Button2.BackColor = Color.DodgerBlue
@@ -861,6 +866,34 @@ Partial Class F_Seleziona_Categoria
         Button2.TabIndex = 33
         Button2.Text = "Visualizza fogli da stampare"
         Button2.UseVisualStyleBackColor = False
+        ' 
+        ' ImageList2
+        ' 
+        ImageList2.ColorDepth = ColorDepth.Depth32Bit
+        ImageList2.ImageStream = CType(resources.GetObject("ImageList2.ImageStream"), ImageListStreamer)
+        ImageList2.TransparentColor = Color.Transparent
+        ImageList2.Images.SetKeyName(0, "Emoji Objects-117.png")
+        ImageList2.Images.SetKeyName(1, "Emoji Smiley-72.png")
+        ImageList2.Images.SetKeyName(2, "Emoji Symbols-202.png")
+        ImageList2.Images.SetKeyName(3, "Emoji Symbols-211  Yellow.png")
+        ImageList2.Images.SetKeyName(4, "Emoji Symbols-199.png")
+        ImageList2.Images.SetKeyName(5, "Emoji Symbols-200.png")
+        ImageList2.Images.SetKeyName(6, "Emoji Symbols-202 - Copy.png")
+        ImageList2.Images.SetKeyName(7, "Setting.png")
+        ImageList2.Images.SetKeyName(8, "Emoji Objects-108.png")
+        ' 
+        ' ImageList4
+        ' 
+        ImageList4.ColorDepth = ColorDepth.Depth32Bit
+        ImageList4.ImageStream = CType(resources.GetObject("ImageList4.ImageStream"), ImageListStreamer)
+        ImageList4.TransparentColor = Color.Transparent
+        ImageList4.Images.SetKeyName(0, "Emoji Symbols-199.png")
+        ImageList4.Images.SetKeyName(1, "Emoji Symbols-200.png")
+        ImageList4.Images.SetKeyName(2, "Emoji Symbols-201.png")
+        ImageList4.Images.SetKeyName(3, "Emoji Symbols-202 - Copy.png")
+        ImageList4.Images.SetKeyName(4, "Emoji Symbols-202.png")
+        ImageList4.Images.SetKeyName(5, "Emoji Symbols-211  Yellow.png")
+        ImageList4.Images.SetKeyName(6, "Emoji Symbols-206.png")
         ' 
         ' F_Seleziona_Categoria
         ' 
@@ -954,9 +987,6 @@ Partial Class F_Seleziona_Categoria
     Friend WithEvents Label20 As Label
     Friend WithEvents Button10 As Button
     Friend WithEvents ImageList5 As ImageList
-    Friend WithEvents ImageList2 As ImageList
-    Friend WithEvents ImageList3 As ImageList
-    Friend WithEvents ImageList4 As ImageList
     Friend WithEvents Stato As DataGridViewImageColumn
     Friend WithEvents col1 As DataGridViewTextBoxColumn
     Friend WithEvents Col2 As DataGridViewTextBoxColumn
@@ -967,10 +997,13 @@ Partial Class F_Seleziona_Categoria
     Friend WithEvents ToolStripMenuItem1 As ToolStripMenuItem
     Friend WithEvents TSM_Immediato As ToolStripMenuItem
     Friend WithEvents SoloCompilatiToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents AnagraficaToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents TSM_Anag_Mostrasoloattivi As ToolStripMenuItem
     Friend WithEvents Label9 As Label
     Friend WithEvents Button2 As Button
     Friend WithEvents Label19 As Label
     Friend WithEvents Button6 As Button
+    Friend WithEvents Label21 As Label
+    Friend WithEvents ImageList2 As ImageList
+    Friend WithEvents ImageList4 As ImageList
+    Friend WithEvents Button12 As Button
+    Friend WithEvents Button13 As Button
 End Class

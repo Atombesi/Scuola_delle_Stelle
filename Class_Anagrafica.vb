@@ -8,6 +8,7 @@ Public Class Class_ANAGRAFICA
     Public Property Nik As String
     Public Property DBname As String
     Public Property Attivo As Boolean
+    Public Property Assente As Boolean
 
 
     Private ReadOnly ConnectionString As String =
@@ -19,8 +20,8 @@ Public Class Class_ANAGRAFICA
         Using cn = DB.GetConnection_Scuoladellestelle()
             If ID = 0 Then
                 Dim sql As String =
-                    "INSERT INTO ANAGRAFICA  (Nome,Cognome,DAta_nascita,Data_Creazione,Nik,DBname,Attivo) 
-                     VALUES (@Nome,@Cognome,@DAta_nascita,@Data_Creazione,@Nik,@DBname,@Attivo);
+                    "INSERT INTO ANAGRAFICA  (Nome,Cognome,DAta_nascita,Data_Creazione,Nik,DBname,Attivo,assente) 
+                     VALUES (@Nome,@Cognome,@DAta_nascita,@Data_Creazione,@Nik,@DBname,@Attivo,@assente);
                      SELECT last_insert_rowid();"
                 Using cmd As New SqliteCommand(sql, cn)
                     cmd.Parameters.AddWithValue("@Nome", Nome)
@@ -30,31 +31,35 @@ Public Class Class_ANAGRAFICA
                     cmd.Parameters.AddWithValue("@Nik", Nik)
                     cmd.Parameters.AddWithValue("@DBname", DBname)
                     cmd.Parameters.AddWithValue("@Attivo", Attivo)
+                    cmd.Parameters.AddWithValue("@Assente", Assente)
 
                     ID = Convert.ToInt32(cmd.ExecuteScalar())
                 End Using
             Else
+
                 Dim sql As String =
-                    "UPDATE ANAGRAFICA R
+                    "UPDATE ANAGRAFICA
                      SET Nome=@Nome,
-                     SET Cognome=@Cognome,
-                     SET DAta_nascita=@DAta_nascita,
-                     SET Data_Creazione=@Data_Creazione
-                     SET Nik=@Nik
-                     SET DBname=@DBname
-                     SET Attivo=@Attivo
+                     Cognome=@Cognome,
+                     DAta_nascita=@DAta_nascita,
+                     Data_Creazione=@Data_Creazione,
+                     Nik=@Nik,
+                     DBname=@DBname,
+                     Attivo=@Attivo,
+                     Assente=@Assente
                      WHERE ID=@ID"
 
                 Using cmd As New SqliteCommand(sql, cn)
 
                     cmd.Parameters.AddWithValue("@Nome", Nome)
-                    cmd.Parameters.AddWithValue("@ID", ID)
                     cmd.Parameters.AddWithValue("@Cognome", Cognome)
                     cmd.Parameters.AddWithValue("@DAta_nascita", DAta_nascita)
                     cmd.Parameters.AddWithValue("@Data_Creazione", Data_Creazione)
                     cmd.Parameters.AddWithValue("@Nik", Nik)
                     cmd.Parameters.AddWithValue("@DBname", DBname)
                     cmd.Parameters.AddWithValue("@Attivo", Attivo)
+                    cmd.Parameters.AddWithValue("@Assente", Assente)
+                    cmd.Parameters.AddWithValue("@ID", ID)
 
                     cmd.ExecuteNonQuery()
 
@@ -72,7 +77,7 @@ Public Class Class_ANAGRAFICA
         Using cn = DB.GetConnection_Scuoladellestelle()
 
             Dim sql As String =
-            "SELECT ID, Nome, Cognome, DAta_nascita, Data_Creazione, Nik, DBname, Attivo " &
+            "SELECT ID, Nome, Cognome, DAta_nascita, Data_Creazione, Nik, DBname, Attivo, Assente " &
             "FROM ANAGRAFICA " &
             "WHERE ID = @ID"
 
@@ -94,6 +99,7 @@ Public Class Class_ANAGRAFICA
                         record.Nik = Convert.ToString(rd("Nik"))
                         record.DBname = Convert.ToString(rd("DBname"))
                         record.Attivo = Convert.ToInt32(rd("Attivo"))
+                        record.Assente = Convert.ToInt32(rd("Assente"))
 
                         ' 3. RESTITUISCE IL RECORD TROVATO
                         Return record
@@ -116,7 +122,7 @@ Public Class Class_ANAGRAFICA
 
             ' Usa l'operatore LIKE per cercare corrispondenze parziali
             Dim sql As String =
-                "SELECT ID, Nome, Cognome, DAta_nascita, Data_Creazione, Nik, DBname,Attivo " &
+                "SELECT ID, Nome, Cognome, DAta_nascita, Data_Creazione, Nik, DBname,Attivo, Assente " &
                 "FROM ANAGRAFICA " &
                 "WHERE Cognome LIKE @Testo"
 
@@ -140,6 +146,7 @@ Public Class Class_ANAGRAFICA
                         record.Nik = Convert.ToString(rd("Nik"))
                         record.DBname = Convert.ToString(rd("DBname"))
                         record.Attivo = Convert.ToInt32(rd("Attivo"))
+                        record.Assente = Convert.ToInt32(rd("Assente"))
 
                         ' Aggiunge il record alla lista dei risultati solo se attivi
                         If soloattivi And Not record.Attivo Then

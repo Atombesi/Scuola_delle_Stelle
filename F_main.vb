@@ -92,4 +92,14 @@ Public Class F_main
     Private Sub DatabasePrincipaleToolStripMenuItem_Click(sender As Object, e As EventArgs)
 
     End Sub
+
+    Private Sub Button4_Click_1(sender As Object, e As EventArgs) Handles Button4.Click
+        If Gbl_Elenco_bambini Is Nothing Then
+            Gbl_Elenco_bambini = Carica_bambini()
+        End If
+
+        Dim oggi = Now.ToShortDateString
+        F_Elenco_da_Stampare.Main(oggi)
+
+    End Sub
 End Class

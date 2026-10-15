@@ -1,3 +1,10 @@
 <Solution>
-  <Project Path="Scuola_delle_Stelle.vbproj" />
+  <Configurations>
+    <BuildType Name="All" />
+    <BuildType Name="Debug" />
+    <BuildType Name="Release" />
+  </Configurations>
+  <Project Path="Scuola_delle_Stelle.vbproj">
+    <BuildType Solution="All|*" Project="Debug" />
+  </Project>
 </Solution>

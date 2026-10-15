@@ -1,170 +1,1004 @@
-ID;CODICE_ELCAR;CODICE_VOCE;TESTO_VOCE;DESCRIZIONE
-1;IV.A;1;(FD con Visual Cue) Ascolta e esegue compiti richiesti con voce e guida visiva (es. l'insegnante indica la macchinina, dice "dammi la macchinina!" e tende la mano)  ;"A)Matching 2D o 3D con uno stimolo distrattore bianco, si possono usare prompt gestuali o aiuti visivi; B) segue instruzioni vocali con prompt gestuali o aiuti visivi per due delle seguenti istruzioni: “guarda qui”, “Guardami”, “siediti”, “resta seduto”, rispondere al nome, “vieni qui”, “vieni con me”, “vai nell’area giochi”, “vai (in un’area specifica)”: C) Imitazione con oggetti: scegliere 2 oggetti e azioni appropriate per l’età (fare avanti e indietro con una macchinina, suonare uno strumento musicale, premere i pulsanti di un gioco sonoro). L’insegnante fa vedere allo studente come fare l’azione con l’oggetto che deve imitare, e dà l’istruzione vocale “Fai come me”. Si può iniziare da semplici giochi causa-effetto ed evitare di scegliere azioni associate con il gioco simbolico."
-2;V.A;1;Sta nell'area giochi per 10 minuti;Per considerare questo item come acquisito, lo studente deve rimanere nell'area giochi della classe per l'intera sessione di 10 minuti, senza che l'insegnante fornisca aiuti o feedback per due sessioni consecutive
-3;V.A;2;Rimane seduto al tavolo durante l'istruzione 1:1 per un tempo di osservazione di 5 minuti;Si dovrebbe svolgere questa probe durante sessioni d’insegnamento adeguate allo studente, utilizzando le Learn Unit.
-4;V.A;3;Rimane seduto al tavolo mentre l'insegnante lavora con un altro studente, per un tempo di osservazione di 5 minuti;Fornire allo studente un’attività che sia in grado di completare in modo indipendente
-5;V.A;4;Rimane seduto al tavolo in attività  di gruppo per un tempo di osservazione di 5 minuti;
-6;V.A;5;Quando gli viene chiesto, si siede per terra per fare un'attività  senza disturbare gli altri, per un tempo di osservazione di 5 minuti;
-7;V.A;6;Quando gli viene chiesto, si siede per terra per fare un'attività  senza disturbare gli altri, per un tempo di osservazione di 5 minuti;
-8;V.A;7;Aspetta per 10 secondi la consegna di un rinforzatore senza emettere comportamenti inappropriati ;
-9;V.A;8;Quando gli viene chiesto passa ad un'altra attività  o ad un altro setting senza disturbare la classe:;
-10;V.A;9;Restituisce i giocatolli o i rinforzi all'adulto senza emettere comportamenti inadeguati;
-11;V.A;10;Non è aggressivo nei confronti degli adulti;
-12;V.A;11;Non è aggressivo nei confronti dei coetanei;
-13;V.A;12;Utilizza in modo appropriato i materiali di classe;Ad es. non li lancia né li distrugge
-14;V.A;13;Accetta piccole disapprovazioni senza emettere comportamenti problema o diventare meno collaborativo ;
-15;V.A;14;Accetta le correzioni senza emettere comportamenti problema o diventare meno collaborativo;
-16;V.A;15;Ignora il comportamento inappropriato degli altri (non lo commenta);
-17;V.A;16;Alza la mano con tranquillità  per attirare l'attenzione dell'insegnante;
-18;V.A;17;Cammina vicino all'insegnante senza tenerla per mano;Lo studente dovrebbe camminare autonomamente  in corridoio vicino all’insegnante senza scappare
-19;V.A;18;Si mette in fila entro 5 secondi;
-20;V.A;19;Cammina in fila senza disturbare o parlare con gli altri;
-21;V.A;20;Segue le regole di classe durante:;
-22;V.A;21;Dà  risposte corrette alle domande dell'insegnante durante una lezione di gruppo;
-23;V.A;22;Segue le istruzioni dell'insegnante entro 5 secondi con aiuto gestuale;
-24;V.A;23;Segue le istruzioni  dell'insegnante entro 5 secondi;
-25;V.A;24;Segue le routine di classe con prompt gestuali:;
-26;V.A;25;Arrivo la mattina;Lo studente dovrebbe togliersi la giacca e lo zaino e metterli al loro posto
-27;V.A;26;Utilizzo del bagno;Lo studente dovrebbe  abbassarsi i vestiti, usare il bagno, usare la carta igienica e ritirarsi su i vestiti in autonomia, da solo
-28;V.A;27;Lavarsi le mani;Lo studente dovrebbe aprire l’acqua, usare il sapone, insaponarsi le mani, risciacquarle e asciugarsi, sia quando quest’azione fa parte delle routine di classe, sia quando ha le mani sporche
-29;V.A;28;Pranzo ;Lo studente deve saper individuare il suo materiale per il pranzo, sedersi a tavola, mangiare in modo autonomo e ripulire quando gli viene chiesto
-30;V.A;29;Mettere in ordine;Quando gli viene chiesto o nel momento in cui è un’azione richiesta dalla routine di classe, lo studente rimette  a posto i giocattoli e i materiali 
-31;V.A;30;Uscita di scuola;Quando gli viene chiesto o nel momento in cui è un’azione richiesta dalla routine di classe, lo studente recupera le proprie cose e si mette la giacca se necessario
-32;V.A;31;Mette in bocca solo edibili ;Lo studente non mette in bocca oggetti non edibili
-33;V.A;32;Manifesta disagio quando è bagnato ;Chiede di essere cambiato o tenta di togliersi le mutandine o il pannolone  bagnato 
-34;V.A;33;Rispetta il programma di toilet training previsto;Lo studente fa i bisogni in bagno e rimane asciutto fino al successivo momento in bagno previsto dal suo programma, con un minimo di intervallo tra una seduta al bagno e l’altra di 1 ora
-35;V.A;34;Chiede di andare al bagno;
-36;V.A;35;Collabora nello spogliarsi e nel vestirsi;Permette, senza protestare, ai genitori o ai caregiver di assistere alla routine di spogliarsi e vestirsi oppure si spoglia e si veste da solo
-37;V.A;36;Usa i fazzoletti per soffiarsi il naso quando necessario;
-38;V.A;37;Usa il tovagliolo per pulirsi il viso quando necessario;
-39;V.A;38;Completa PSI in autonomia:;Prende i quaderni e le schede (o i suoi materiali), svolge i compiti da solo e richiama l’attenzione dell’insegnante quando ha finito
-40;V.A;39;Peer tutoring:;L’acquisizione dei seguenti reperotiri è indicata da  più TPRA senza errori
-41;V.A;40;Raccoglie dati con il 90% di corrispondenza a quelli raccolti dall'insegnante su:;
-42;V.A;41;Gestisce i propri materiali per una sessione/giornata di insegnamento (token, matite, etc);
-43;V.A;42;Dimostra capacità  di gestione di sè in relazione al comportamento in classe:;
-44;V.B;1;Risponde in modo adeguato all'adulto quando viene chiamato per nome;Risponde voltandosi, con contatto oculare, o risponde vocalmente se appropriato
-45;V.B;2;Risponde in modo adeguato ai coetanei quando viene chiamato per nome;
-46;V.B;3;Guarda negli occhi quando risponde ad una domanda;
-47;V.B;4;Guarda negli occhi mentre parla (speaker)  durante una conversational unit;
-48;V.B;5;Guarda negli occhi mentre ascolta (listener) durante una conversational unit;
-49;V.B;6;Su richiesta dell'insegnante resta seduto e la guarda mentre parla per un minimo di 10 secondi durante l'insegnamento 1:1;
-50;V.B;7;Su richiesta dell'insegnante resta seduto e la guarda mentre parla per un minimo di 10 secondi durante l'insegnamento di gruppo ;
-51;V.B;8;Cerca gli adulti quando:;
-52;V.B;9;Accetta il contatto fisico (no evitamento) con:;
-53;V.B;10;Parla con gli altri in modo adeguato (no aggressività  verbale) con:;
-54;V.B;11;Arriva a scuola sorridendo ed entra in classe senza protestare;
-55;V.B;12;Fa commenti positivi sulla scuola, i compagni e l'insegnante;
-56;V.B;13;Ride quando gli stimoli antecedenti sono appropriati;
-57;V.B;14;Piange o esprime dolore se ferito o malato, nelle adeguate circostanze;
-58;V.B;15;Richiama l'attenzione dell'adulto in modo appropriato utilizzando gesti o vocalizzazioni:;
-59;V.B;16;Richiama l'attenzione dei coetanei in modo appropriato utilizzando gesti o vocalizzazioni:;
-60;V.B;17;Non interrompe mentre gli altri parlano;
-61;V.B;18;Non emette comportamenti inadeguati nelle situazioni in cui gli viene chiesto qualcosa:;
-62;V.B;19;Risponde vocalmente a circostanze usuali (es. "Salute" se qualcuno starnutisce);
-63;V.B;20;Difende le sue cose vocalmente ed in modo adeguato ;
-64;V.B;21;Si impegna nel gioco parallelo (entro 1 metro e mezzo da un pari in setting di gioco libero) durante una probe di 5 minuti;
-65;V.B;22;Partecipa ad un'attività  strutturata con i compagni senza disturbarli durante una probe di 5 minuti;
-66;V.B;23;Si impegna nel gioco cooperativo durante una probe di 5 minuti;
-67;V.B;24;Durante il gioco libero alterna attività  in cui partecipa a un gioco con un compagno prendendo il turno durante una probe di 5 minuti;
-68;V.B;25;Condivide giocattoli e libri con i pari nel gioco libero durante una probe di 5 minuti;
-69;V.B;26;Interagisce positivamente con un adulto durante il gioco libero durante una probe di 5 minuti;
-70;V.B;27;Interagisce positivamente con i pari durante il gioco libero durante una probe di 5 minuti;
-71;V.B;28;Dice le regole di un gioco ;
-72;V.B;29;Risponde in modo adeguato quando;
-73;V.B;30;Segue le istruzioni dei coetanei;
-74;V.B;31;Dà  indicazioni accurate ai coetanei;
-75;V.B;32;Utilizza il rinforzo sociale con gli altri (dice "Grande!", "wow", "come sei bravo!");
-76;VI.A;1;Cerca un giocattolo o un rinforzo quando portato fuori dalla sua vista;
-77;VI.A;2;Sceglie gli oggetti preferiti:;
-78;VI.A;3;Emette mand con gesti nel setting d'insegnamento ;
-79;VI.A;4;Emette mand con gesti nel setting generico ;
-80;VI.A;5;Prende la mano dell'adulto per comunicare un bisogno;
-81;VI.A;6;Vocalizza il mand con suoni e approssimazioni ;
-82;VI.B;1;Nuovi movimenti a 1 step;
-83;VI.B;2;Nuovi movimenti incrociati a 1 step ;
-84;VI.B;3;Nuovi movimenti a 2 step;
-85;VI.B;4;Azioni con oggetti;
-86;VI.B;5;Imitazioni movimento del viso (non motori-orali);
-87;VI.B;6;Imitazioni movimenti motori orali;
-88;VI.C;1;Nuovo movimento a 1 step;
-89;VI.C;2;Nuovo movimento incrociato singolo ;
-90;VI.C;3;Nuovi movimenti a 2 step;
-91;VI.C;4;Nuove azioni con oggetti;
-92;VI.C;5;Imitazioni movimento del viso (non motori-orali);
-93;VI.C;6;Imitazioni movimenti motori orali;
-94;VI.D;1;Tocca o indica un esemplare singolo (oggetto o immagine);
-95;VI.D;2;Matching Visivo generalizzato;
-96;VI.D;3;Risponde adeguatamente all'antecedente "uguale" con stimoli visivi ;
-97;VI.D;4;Smista oggetti simili o uguali in 2 gruppi (dati 10 oggetti, 5 per ogni tipologia);
-98;VII.A;1;Mantiene il contatto oculare come parte dell'istruzione ("Guardami") per 3 secondi;
-99;VII.A;2;Segue un'istruzione verbale vocale a 1 step in un setting 1:1;
-100;VII.A;3;Segue un'istruzione verbale vocale a 2 step in un setting 1:1;
-101;VII.A;4;Segue istruzioni verbali vocali a 1 step in un setting di gruppo con almeno 2 coetanei;
-102;VII.A;5;Segue istruzioni verbali vocali a 2 step in un setting di gruppo;
-103;VII.A;6;Risponde al segnale dell'insegnante;
-104;VII.A;7;Consegna un elenco di 3 oggetti da un campo di 5 o più oggetti;
-105;VII.A;8;Consegna un elenco di 3 oggetti da altre zone della classe;
-106;VIII.A;1;Gesti;
-107;VIII.A;2;Gesti con approssimazione vocale;
-108;VIII.A;3;Gesti e approssimazioni vocali sostituiscono mand socialmente inadeguati (piangere, afferrare, colpire;
-109;VIII.A;4;Parole senza funzione, ecolalia (parroting) o babbling canonico;
-110;VIII.A;5;Ripete 5 parole monosillabiche con corrispondenza punto a punto;
-111;VIII.A;6;Ripete 5 parole bisillabiche con corrispondenza punto a punto;
-112;VIII.A;7;Ripete 5 parole trisillabiche con corrispondenza punto a punto;
-113;VIII.A;8;Ripete frasi di 2 parole con corrispondenza punto a punto ;
-114;VIII.A;9;Ripete frasi di 3-5 parole con corrispondenza punto a punto;
-115;VIII.A;10;Risponde "Si" e "no" con funzione di mand;
-116;VIII.B;1;Emette mand intraverbali;
-117;VIII.B;2;Quando emette un mand guarda negli occhi;
-118;VIII.B;3;Mand per cibo e bevande;
-119;VIII.B;4;Mand per oggetti ;
-120;VIII.B;5;Mand per stimoli vestibolare, propriocettivi o tattili ;
-121;VIII.B;6;Mand per attività  ;
-122;VIII.B;6;Mand per aiuto;
-123;VIII.B;7;Mand per terminare o rimuovere un'attività  dall'ambiente;
-124;VIII.B;8;Mand per interazione sociale;
-125;VIII.B;9;Mand per un turno o un'opportunità ;
-126;VIII.C;1;Emette mand usando "Cosa?";
-127;VIII.C;2;Emette mand usando "Quando?";
-128;VIII.C;3;Emette mand usando "Dove?";
-129;VIII.C;4;Emette mand usando "Chi?";
-130;VIII.C;5;Emette mand usando "Come?";
-131;VIII.C;6;Usa "per favore";
-132;VIII.D;1;Usa "Posso avere", "Vorrei", "potrei avere";
-133;VIII.D;2;Usa "questo", "quello";
-134;VIII.D;3;Mand con gesti come comportamento autoclitico ;
-135;VIII.D;4;Usa aggettivi descrittivi come autoclitici ;
-136;VIII.D;5;tilizza grammatica e struttura della frase appropriata alla sua età ;
-137;VIII.E;1;Emette Tact intraverbali;
-138;VIII.E;2;Denomina stimoli (immagini e oggetti), non persone;
-139;VIII.E;3;Denomina eventi privati, fisici o emotivi;
-140;VIII.E;4;Denomina cià² che gli piace o non gli piace;
-141;VIII.E;5;Emette tact come esclamazione ;
-142;VIII.E;6;Denomina stranezze, assurdità  o cose che mancano ;
-143;VIII.E;7;Emette tact come introduzione;
-144;VIII.E;8;Denomina la sua proprietà  o quella degli altri ;
-145;VIII.E;9;Risponde "Sì" o "No" con funzione di tact;
-;VIII.F;1;Emette tact con gesti come comportamento autoclitico;
-;VIII.F;2;Usa tact di specificazione (ad es. questo/quello);
-;VIII.F;3;Usa aggettivi descrittivi come autoclitici ;
-;VIII.F;4;Usa grammatica e struttura adeguata alla sua età  ;
-;VIII.G;1;Emette tact indipendenti in seguito all'insegnamento del mand;
-;VIII.G;2;Emette mand indipendenti in seguito all'insegnamento del tact;
-;VIII.G;3;Emette in tact autoclitici appresi con con funzione mand, senza insegnamento ;
-;VIII.G;4;Emette in mand autoclitici appresi con con funzione tact, senza insegnamento;
-;VIII.H;1;Intraverbali concatenati e completamento;
-;VIII.H;2;Versi degli animali e inversione;
-;VIII.H;3;Domande di informazioni personali ;
-;VIII.H;4;Associazioni e risposte concatenate ;
-;VIII.H;5;Funzione di oggetti comuni e inversione;
-;VIII.H;6;Funzione di oggetti meno comuni e inversione;
-;VIII.H;7;Funzione delle parti del corpo e inversione;
-;VIII.H;8;Domande che iniziano con:;
-;VIII.H;9;Cosa: conoscenze generali prescolari;
-;VIII.H;10;Cosa: esperienze personali;
-;VIII.H;11;Cosa: azioni per la cura di se e per la propria sicurezza;
-;VIII.H;12;Come: 1 step, 2 step, 3 step;
-;VIII.H;13;Eventi privati ;
-;VIII.H;14;Multiply controlled categories with modifiers as ;
-;VIII.H;15;Eventi passati ;
-;VIII.H;16;Tact multipli in risposta all'argomento richiesto con 1,2,3, >3 tact/autoclitici;
+ID;CODICE_ELCAR;CODICE_VOCE;TESTO_VOCE;DESCRIZIONE;
+;Elcar;I.A;;Stimoli potenziali rinforzatori;Stimuli potential reinforcers
+;Elcar Voci;I.A;1;Specchio: guardarsi;Mirror: looking at self
+;Elcar Voci;I.A;2;Specchio: guardare gli altri;Mirror: looking at others
+;Elcar Voci;I.A;3;Specchio: guardare azioni;M irror: looking at actions
+;Elcar Voci;I.A;4;Specchio: guardare oggetti in movimento;Mirror: looking at moving objects
+;Elcar Voci;I.A;5;Specchio: guardare oggetti fermi;M irror: looking at stationary objects
+;Elcar Voci;I.A;6;Specchio: guardare rinforzatori;M irror: looking at reinforcers
+;Elcar Voci;I.A;7;Tattile: pressione leggera;Tactile Light Pressure
+;Elcar Voci;I.A;8;Tattile: pressione profonda;Tactile: Deep Pressure
+;Elcar Voci;I.A;9;Tattile: contatto fisico giocoso;Tactile: Playful physical contact
+;Elcar Voci;I.A;10;Tattile: consistenze;Tactile: Texmres
+;Elcar Voci;I.A;11;Giocattoli in setting a operante libero;Toys in free-operant setting
+;Elcar Voci;I.A;12;Cibo in setting a operante libero;Edibles in free-operant seting
+;Elcar Voci;I.A;13;Libri in setting a operante libero;Books in free operant seaing
+;Elcar Voci;I.A;14;Libri sonori in setting a operante libero;Books wit sound in free operant seeing
+;Elcar Voci;I.A;15;Libri tattili/con texture in setting a operante libero;Books with texNres in free operant se�ing
+;Elcar Voci;I.A;16;Musica;US IC
+;Elcar Voci;I.A;17;Video con dialoghi;Video with dialogue
+;Elcar Voci;I.A;18;Video con musica;Video with music
+;Elcar Voci;I.A;19;Video con suoni;Video with sourds
+;Elcar Voci;I.A;20;Movimento fisico: saltare;Physical movement: jumping
+;Elcar Voci;I.A;21;Movimento fisico: dondolarsi sull'altalena;Physical movement: swinging
+;Elcar Voci;I.A;22;Movimento fisico: rimbalzare su una palla;Physical movement: bouncing on a ball
+;Elcar Voci;I.A;23;Aromi / Profumi;Scents
+;Elcar Voci;I.A;24;Gioco del cucù;Peek-a-boo
+;Elcar Voci;I.A;25;Giocattolo sonoro;Noisy toy
+;Elcar Voci;I.A;26;Giocattolo luminoso;Light Up Toy
+;Elcar Voci;I.A;27;Bolle di sapone;Bubbles
+;Elcar;I.B;;Osservazione del gioco libero;free play observation
+;Elcar Voci;I.B;1;1 Stereotipia;1 Stereotypy
+;Elcar Voci;I.B;2;Comportamenti aberranti (es. allontanarsi dall'area giochi, distruzione di oggetti/aggressione);Aberrant behaviors (e.g., leaving toy are� object 2 assault)
+;Elcar Voci;I.B;3;3 Passività;3 Passlvity
+;Elcar Voci;I.B;4;Attività di gioco adeguate (elencare tutte le attività selezionate);Appropriate Play Aciivities (List all activities selected)
+;Elcar;II.A;;Rinforzo condizionato per l'osservazione di stimoli tridimensionali;Conditioned Reinforcement for Observing 3-Dimensional Stimuli
+;Elcar Voci;II.A;1;Giocattoli causa-effetto;Cause and Effect toys
+;Elcar Voci;II.A;2;Oggetto (non preferito): fermo;Object (non-preferred): stationary
+;Elcar Voci;II.A;3;Oggetto (non preferito): in movimento;Object (non-preferred): moving
+;Elcar Voci;II.A;4;Oggetto preferito: fermo;Preferred Object: stationary
+;Elcar Voci;II.A;5;Oggetto preferito: in movimento;Preferred Object: moving
+;Elcar Voci;II.A;6;Rimozione dell'oggetto (non preferito);Removal of object (non-preferred)
+;Elcar Voci;II.A;7;Rimozione dell'oggetto preferito;Removal of preferred object
+;Elcar;II.B;;Rinforzo condizionato per l'osservazione di stimoli bidimensionali;Conditioned Reinforcement for Observing 2-Dimensional Stimuli
+;Elcar Voci;II.B;1;Figure (singole);Pictures (in isolation)
+;Elcar Voci;II.B;2;Figure in un libro;Pictures in a book
+;Elcar Voci;II.B;3;Lettere e numeri;Letters and numbers
+;Elcar Voci;II.B;4;Immagini su dispositivo digitale;Pictures on digital device
+;Elcar Voci;II.B;5;Lettere e numeri su dispositivo digitale;Leners and numbers on digital device
+;Elcar;II.C;;Rinforzo condizionato per l'osservazione dei volti;Conditioned Reinforcement for Observing faces
+;Elcar Voci;II.C;1;Movimento entro circa 60 cm;moving within 2 feet
+;Elcar Voci;II.C;2;Movimento entro circa 60 cm all'altezza degli occhi;moving within 2ft at eye level
+;Elcar Voci;II.C;3;Espressioni facciali senza emissione di suoni;Making facial expressions without sound
+;Elcar Voci;II.C;4;Entrare/uscire dalla stanza in silenzio;Entering/leaving the room quietly
+;Elcar;II.D;;Rinforzo condizionato per l'osservazione delle voci;Conditioned Reinforcement for Observing Voices
+;Elcar Voci;II.D;1;Entrare nella stanza e parlare;Entering the room and speaking
+;Elcar Voci;II.D;2;Emissione di suoni vocali non lessicali;Emitting non-lexical vocal sounds
+;Elcar Voci;II.D;3;Raccontare una storia senza immagini;Telling a story without pictures
+;Elcar Voci;II.D;4;Quando viene chiamato il proprio nome;When name is called
+;Elcar Voci;II.D;5;Quando si riceve un'approvazione;When given an approval
+;Elcar Voci;II.D;6;Quando viene data un'istruzione;When given a direction
+;Elcar;II.E;;Rinforzo condizionato per l'osservazione di suoni ambientali;Conditioned Reinforcement for Observing Environmental Sounds
+;Elcar Voci;II.E;1;Suoni ambientali;Environmental sounds
+;Elcar Voci;II.E;2;Presentazione di musica senza stimoli visivi;The presenMdon of music without visual stimuli
+;Elcar;II.F;;Attenzione condivisa;Joint Attention
+;Elcar Voci;II.F;1;Contatto visivo coordinato durante i mand;Coordinated eye contact during mands
+;Elcar Voci;II.F;2;Risponde con orientamento a 2 punti se indirizzato/a verso un oggetto tramite spostamento dello sguardo e gesto di indicare avviati da:;Responds with 2-point orientation when directed to an object with gaze shift and poindng inidated by:
+;Elcar voci sub;II.F.2;1;un adulto;an adult
+;Elcar voci sub;II.F.2;2;un pari;a peer
+;Elcar Voci;II.F;3;Risponde con orientamento a 2 punti se indirizzato/a verso un oggetto tramite spostamento dello sguardo (senza indicare) avviato da:;Responds w ith 2-point orientadon w hen directed to an object with gaze shifi (without pointii y) initiated by:
+;Elcar voci sub;II.F.3;1;un adulto;an adult
+;Elcar voci sub;II.F.3;2;un pari;a peer
+;Elcar Voci;II.F;4;Risponde con orientamento a 3 punti se indirizzato/a verso un oggetto tramite spostamento dello sguardo (con o senza gesto di indicare) avviato da:;Responds w ith 3-point onen ta�on when directed to an object with gaze shift (with or without pointing) initiated by
+;Elcar voci sub;II.F.4;1;un adulto;an adult
+;Elcar voci sub;II.F.4;2;un pari;a peer
+;Elcar Voci;II.F;5;Inizia l'attenzione condivisa (con orientamento a 2 o 3 punti);Initiates joint attention (with a 2-pt or 3-pt orienta�on)
+;Elcar voci sub;II.F.5;1;con un adulto;with an adult
+;Elcar voci sub;II.F.5;2;con un pari;with a peer
+;Elcar;II.G;;Rinforzo condizionato per la corrispondenza ascolto-parola (Hear-Say);Conditioned Reinforcement for Hear-Say Correspondence
+;Elcar Voci;II.G;1;Tenta l'emulazione vocale;Attempts Vocal Emulation
+;Elcar;III.A;;Operanti verbali;Verbal Operants
+;Elcar Voci;III.A;1;Ecoico;Echoic
+;Elcar voci sub;III.A.1;1;Pari;Peers
+;Elcar voci sub;III.A.1;2;Adulti;Adults
+;Elcar Voci;III.A;2;Tact;Tact
+;Elcar voci sub;III.A.2;1;Pari;Peers
+;Elcar voci sub;III.A.2;2;Adulti;Adults
+;Elcar Voci;III.A;3;Mand;Mand
+;Elcar voci sub;III.A.3;1;Pari;Peers
+;Elcar voci sub;III.A.3;2;Adulti;Adults
+;Elcar Voci;III.A;4;Intraverbale;Intraverbal
+;Elcar voci sub;III.A.4;1;Pari;Peers
+;Elcar voci sub;III.A.4;2;Adulti;Adults
+;Elcar Voci;III.A;5;Unità conversazionali;Conversational Units
+;Elcar voci sub;III.A.5;1;Pari;Peers
+;Elcar voci sub;III.A.5;2;Adulti;Adults
+;Elcar Voci;III.A;6;Self-talk come corrispondenza dire-fare;Self talk as say-do correspondence
+;Elcar Voci;III.A;7;Self-talk durante il gioco simbolico;Self-Talk during imaginary play
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;
+;;;;;

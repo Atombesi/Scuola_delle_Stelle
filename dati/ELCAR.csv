@@ -1,30 +1,38 @@
 ID;CODICE;TESTO
-1;IV.A;Attenzione istruzionale
-2;V.A;Repertori di autonomia a scuola
-3;V.B;Interazioni adeguate a scuola
-4;VI.A;Comunicazione Pre-Verbale
-5;VI.B;Imitazione di nuovi movimenti 
-6;VI.C;Imitazione generalizzata
-7;VI.D;Basi del Controllo Visivo dello Stimolo
-8;VII.A;Istruzioni vocali 
-9;VIII.A;Speaker principiante 
-10;VIII.B;Mand
-11;VIII.C;Mand per informazioni
-12;VIII.D;Mand con autoclitici
-13;VIII.E;Tact 
-14;VIII.F;Tact con autoclitici
-15;VIII.G;Trasformazione di operazioni motivazionali 
-16;VIII.H;Intraverbali
-17;IX.A;Rinforzatori scolastici 
-18;IX.B;Rinforzatori per la lettura 
-19;IX.C;Rinforzatori per materie scientifiche
-20;X.A;Matching 
-21;X.B;Competenze di base (Listener e Speaker)
-22;X.C;Concetti  (Listener e Speaker)
-23;X.D;Pre-lettura
-24;X.G;Scrittura
-25;XI.A;Abilità Grafo-Motorie
-26;XI.B;Strumenti/oggetti/materiali di classe (manipulatives)
-27;XI.C;Movimenti grosso motori
-28;XI.E;Lettura
-29;XI.F;Matematica
+1;I.A;Stimoli potenziali rinforzatori
+2;I.B;Osservazione del gioco libero
+3;II.A;Rinforzo condizionato per l'osservazione di stimoli tridimensionali
+4;II.B;Rinforzo condizionato per l'osservazione di stimoli bidimensionali
+5;II.C;Rinforzo condizionato per l'osservazione dei volti
+6;II.D;Rinforzo condizionato per l'osservazione delle voci
+7;II.E;Rinforzo condizionato per l'osservazione di suoni ambientali
+8;II.F;Attenzione condivisa
+9;II.G;Rinforzo condizionato per la corrispondenza ascolto-parola (Hear-Say)
+10;III.A;Operanti verbali
+11;IV.A;Attenzione istruzionale
+12;V.A;Repertori di autonomia a scuola
+13;V.B;Interazioni adeguate a scuola
+14;VI.A;Comunicazione Pre-Verbale
+15;VI.B;Imitazione di nuovi movimenti 
+16;VI.C;Imitazione generalizzata
+17;VI.D;Basi del Controllo Visivo dello Stimolo
+18;VII.A;Istruzioni vocali 
+19;VIII.A;Speaker principiante 
+20;VIII.B;Mand
+21;VIII.C;Mand per informazioni
+22;VIII.D;Mand con autoclitici
+23;VIII.E;Tact 
+24;VIII.F;Tact con autoclitici
+25;VIII.G;Trasformazione di operazioni motivazionali 
+26;VIII.H;Intraverbali
+27;IX.A;Rinforzatori scolastici 
+28;IX.B;Rinforzatori per la lettura 
+29;IX.C;Rinforzatori per materie scientifiche
+30;X.A;Matching 
+31;X.B;Competenze di base (Listener e Speaker)
+32;X.C;Concetti  (Listener e Speaker)
+33;X.D;Pre-lettura
+34;X.G;Scrittura
+35;XI.A;Abilità Grafo-Motorie
+36;XI.B;Strumenti/oggetti/materiali di classe (manipulatives)
+37;XI.C;Movimenti grosso motori

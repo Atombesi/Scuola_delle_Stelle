@@ -1,0 +1,42 @@
+Domande  Fabiola sui Grafici
+
+1) Grafici Giornalieri totali CP (con legenda voci CP)
+   presumo riportino, per ogni colonna (giorno), il totale delle 3 voci CP segnate in quel giorno in modo da vedere la variazione nel tempo.
+   A questo punto presumo anche che le voci CP rimangono sempre le stesse per un po di tempo (qualche settimana) prima di essere cambiate.
+   Quando si modificano (anche modificando una sola voce CP delle tre) io rifaccio un nuovo foglio grafico,
+   altrimenti nella legenda non so piu cosa riportare 
+   Corretto?
+
+2) Grafici Giornalieri Totali di tutte le voci
+   Come ci siamo detti mostro in ogni colonna (giorno) il totale delle interazioni (RIsposte) delle voci ELCAR,CP,ROUTINE 
+   sovrapponendo anche il totale delle risposte positive delle soli voci ELCAR.
+   Guardando i fogli che mi hai dato, posso presumere un numero massimo di voci pari a 500 
+   Esagerando, (20 questi elcar con tutte doppie risposte =400)+(45 voci di routine) + (3x15 voci CP) = 490. vuoi che lasci 600?
+   
+   
+3) Schede delle voci di routine
+   Ho visto che tu usi un solo foglio per la compilazione delle voci di routine che utilizzi per diversi giorni. 
+   IO pero quando preparo il foglio giornaliero, devo comunque avere un elenco delle voci che vi dovro far compilare (ELCAR,CP e ROUTINE)
+   Quindi per evitare problemi (ho cambiato le voci ma non ho ristampato il foglio e quindi non coincido, ho pensato di stampare ogni giorno insieme all'elenco delle VOCI ELCAR anche un nuovo foglio delle voci di routine con una sola colonna
+   Il file DOCX da stampare è sempre unico ma contiene 2 pagine. ( te lo allego ) Dimmi se va bene. 
+   E' anche piu pulito da compilare,
+  
+
+4)  mi puoi dire il numero massimo di quesiti ELCAR che puoi inserire in un foglio giornaliero?   
+	Esiste anche un numero minimo? 
+	nel caso ti avviso e non ti faccio proseguire con il salvataggio?
+
+5)  Le VOCI CP devono essere sempre 3 per ogni foglio o possono essere anche meno?
+    anche qui, nel caso ti avviso e ti impedisco il salvataggio?
+
+6)  per le voci di routine ho previsto un max di 45 voci. E' sufficiente?
+
+Ora una domanda... io ho tolto come mi hai detto, la voce titolo che poteva legare tra di loro i differenti fogli giornalieri. 
+Vedo pero nei vari grafici (solo nei Grafici) la presenza di una voce PROGRAMMA (il mio titolo) scritta sempre a mano
+La scrivete a mano voi sul foglio dei grafici?
+Non è che per caso poi vi serve per poter collegare tra di loro fogli diversi nel tempo?
+
+
+
+
+   

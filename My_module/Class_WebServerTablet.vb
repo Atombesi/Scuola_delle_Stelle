@@ -9,7 +9,7 @@ Imports System.Text.Json
 Imports System.Windows
 
 Public Class Class_WebServerTablet
-
+    Public Shared FormPrincipaleRiferimento As F_main
     Private _listener As HttpListener
     Private _isListening As Boolean = False
 
@@ -143,6 +143,140 @@ Public Class Class_WebServerTablet
                     Dim statoHardware As Integer = Class_DEVICE.Dispositivo_Registrato_Stato(deviceId, nomeAssegnato)
 
                     If statoHardware = 1 Then
+                        ' Il dispositivo è già abilitato, mandiamo l'OK
+                        rispostaJson = "{""type"":""HANDSHAKE_OK"",""nome_dispositivo"":""" & nomeAssegnato & """}"
+
+                        'ElseIf statoHardware = 0 Then
+                        '    ' È già nel DB ma ancora in attesa. 
+                        '    ' Mostriamo comunque la maschera nel caso l'amministratore voglia abilitarlo ora
+                        '    MostraMascheraAbilitazioneInThreadSicuro(deviceId, notaUtente)
+
+                        '    rispostaJson = "{""type"":""HANDSHAKE_PENDING"",""messaggio"":""In attesa di abilitazione...""}"
+
+                        'ElseIf statoHardware = -1 Then
+                        '    ' Nuovo dispositivo: lo registriamo nel DB come pending
+                        '    Dim inserimentoOK As Boolean = Class_DEVICE.RegistraNuovoDispositivo(deviceId, notaUtente)
+
+                        '    ' INTERCETTAZIONE: Apriamo la maschera di approvazione a schermo sul Server!
+                        '    MostraMascheraAbilitazioneInThreadSicuro(deviceId, notaUtente)
+
+                        '    rispostaJson = "{""type"":""HANDSHAKE_PENDING"",""messaggio"":""Richiesta inviata con successo...""}"
+
+                    ElseIf statoHardware = 0 OrElse statoHardware = -1 Then
+                        ' Se è un nuovo dispositivo (-1), lo registriamo nel DB come pending
+                        If statoHardware = -1 Then
+                            Dim inserimentoOK As Boolean = Class_DEVICE.RegistraNuovoDispositivo(deviceId, notaUtente)
+                        End If
+
+                        ' INTERCETTAZIONE SILENZIOSA: Aggiungiamo alla coda ed accendiamo l'icona sul Form principale
+                        AttivaSegnalazioneSulForm(deviceId)
+
+                        rispostaJson = "{""type"":""HANDSHAKE_PENDING"",""messaggio"":""In attesa di abilitazione...""}"
+                    End If
+                End If
+
+                ' --- 2. GESTIONE PACCHETTO RICHIESTA ELENCO ---
+                If messaggioRicevuto.Contains("""type"":""RICHIEDI_ELENCO""") Then
+                    Dim datiElenco As String = GeneraJsonElencoFogli()
+                    rispostaJson = "{""type"":""ELENCO_FOGLI_RISPOSTA"", ""dati"":" & datiElenco & "}"
+                End If
+
+                ' Spedisce la risposta corretta nel tubo aperto del Socket
+                If Not String.IsNullOrEmpty(rispostaJson) Then
+                    Dim bufferRisposta() As Byte = Encoding.UTF8.GetBytes(rispostaJson)
+                    Await ws.SendAsync(New ArraySegment(Of Byte)(bufferRisposta), WebSocketMessageType.Text, True, CancellationToken.None)
+                End If
+
+                ' --- 2. GESTIONE INVIO ELENCO FOGLI ---
+                If messaggioRicevuto.Contains("""type"":""RICHIEDI_ELENCO""") Then
+                    Dim datiElenco As String = GeneraJsonElencoFogli()
+                    rispostaJson = "{""type"":""ELENCO_FOGLI_RISPOSTA"", ""dati"":" & datiElenco & "}"
+                End If
+
+                ' --- 3. GESTIONE INVIO FOGLIO RICHIESTO ---
+                If messaggioRicevuto.Contains("""type"":""RICHIEDI_FOGLIO""") Then
+                    ' Eseguiamo il parsing nativo del JSON inviato dal tablet
+                    Dim parser As System.Text.Json.JsonDocument = System.Text.Json.JsonDocument.Parse(messaggioRicevuto)
+                    Dim root As System.Text.Json.JsonElement = parser.RootElement
+
+                    ' Estraiamo in modo matematico l'ID inviato dinamicamente dal tablet (es. 101, 102, ecc.)
+                    Dim idRichiesto As Integer = root.GetProperty("id_questionario").GetInt32()
+                    Dim jsonFoglioBambino As String = Carica_Foglio_da_inviare_al_Tablet(idRichiesto)
+                    rispostaJson = "{""type"":""FOGLIO_RICEVUTO"", ""dati"":" & jsonFoglioBambino & "}"
+
+                    ' 🎯 LA CORREZIONE: Spingiamo fisicamente i byte nel Socket verso il tablet!
+                    If Not String.IsNullOrEmpty(rispostaJson) Then
+                        Dim bufferRisposta() As Byte = Encoding.UTF8.GetBytes(rispostaJson)
+                        Await ws.SendAsync(New ArraySegment(Of Byte)(bufferRisposta), WebSocketMessageType.Text, True, CancellationToken.None)
+                        Console.WriteLine("🟢 SUCCESS: File JSON del foglio spedito al tablet con successo.")
+                    End If
+
+                    ' 🎯 IMPORTANTE: Interrompiamo questo ciclo di messaggi per rimettere la While in ascolto del click dopo
+                    Exit Function
+                End If
+
+
+            Catch ex As Exception
+                Console.WriteLine("CRASH DENTRO IL LOOP DEL SOCKET VB: " & ex.Message)
+                Exit While
+            End Try
+        End While
+
+        Console.WriteLine("🏁 Thread di ascolto terminato. Il socket non è più monitorato.")
+    End Function
+
+    Private Sub AttivaSegnalazioneSulForm(ByVal deviceId As String)
+
+        ' Controlliamo che sia stata accoppiata
+        If Class_WebServerTablet.FormPrincipaleRiferimento Is Nothing Then Return
+        Dim frmReal As F_main = Class_WebServerTablet.FormPrincipaleRiferimento
+        If frmReal.InvokeRequired Then
+            frmReal.Invoke(Sub() AttivaSegnalazioneSulForm(deviceId))
+        Else
+            ' Evita di aggiungere duplicati se il tablet invia più richieste
+            If Not DispositiviInAttesa.Contains(deviceId) Then
+                DispositiviInAttesa.Add(deviceId)
+            End If
+
+            ' Accendi la tua icona di segnalazione (es. una PictureBox o un pulsante)
+            ' Immaginiamo si chiami PctNotifica
+            frmReal.PctNotifica.Visible = True
+            frmReal.PctNotifica.Refresh()
+            ' Opzionale: puoi cambiare il colore di sfondo o mostrare un contatore, es:
+            ' Form1.BtnNotifiche.Text = "Richieste (" & Form1.DispositiviInAttesa.Count & ")"
+        End If
+    End Sub
+    Private Async Function GestisciMessaggiTablet_OLD(ByVal ws As WebSocket) As Task
+        Dim buffer(4096) As Byte
+        Console.WriteLine("🔄 Thread di ascolto WebSocket avviato per il dispositivo.")
+
+        While ws.State = WebSocketState.Open
+            Try
+                ' Il PC rimane in attesa bloccante dentro la While finché non arriva un click dal tablet
+                Dim result As WebSocketReceiveResult = Await ws.ReceiveAsync(New ArraySegment(Of Byte)(buffer), CancellationToken.None)
+
+                If result.MessageType = WebSocketMessageType.Close Then
+                    Await ws.CloseAsync(WebSocketCloseStatus.NormalClosure, "Chiusura richiesta", CancellationToken.None)
+                    Console.WriteLine("🔴 CANALE CHIUSO dal tablet.")
+                    Exit While
+                End If
+
+                Dim messaggioRicevuto As String = Encoding.UTF8.GetString(buffer, 0, result.Count)
+                Console.WriteLine("Messaggio ricevuto dal tablet: " & messaggioRicevuto)
+
+                Dim rispostaJson As String = ""
+
+                ' --- 1. GESTIONE PACCHETTO HANDSHAKE ---
+                If messaggioRicevuto.Contains("""type"":""HANDSHAKE""") Then
+                    Dim parser As System.Text.Json.JsonDocument = System.Text.Json.JsonDocument.Parse(messaggioRicevuto)
+                    Dim root As System.Text.Json.JsonElement = parser.RootElement
+                    Dim deviceId As String = root.GetProperty("device_id").GetString()
+                    Dim notaUtente As String = root.GetProperty("nota_utente").GetString()
+                    Dim nomeAssegnato As String = ""
+
+                    Dim statoHardware As Integer = Class_DEVICE.Dispositivo_Registrato_Stato(deviceId, nomeAssegnato)
+
+                    If statoHardware = 1 Then
                         rispostaJson = "{""type"":""HANDSHAKE_OK"",""nome_dispositivo"":""" & nomeAssegnato & """}"
                     ElseIf statoHardware = 0 Then
                         rispostaJson = "{""type"":""HANDSHAKE_PENDING"",""messaggio"":""In attesa di abilitazione...""}"
@@ -164,6 +298,35 @@ Public Class Class_WebServerTablet
                     Await ws.SendAsync(New ArraySegment(Of Byte)(bufferRisposta), WebSocketMessageType.Text, True, CancellationToken.None)
                 End If
 
+                ' --- 2. GESTIONE INVIO ELENCO FOGLI ---
+                If messaggioRicevuto.Contains("""type"":""RICHIEDI_ELENCO""") Then
+                    Dim datiElenco As String = GeneraJsonElencoFogli()
+                    rispostaJson = "{""type"":""ELENCO_FOGLI_RISPOSTA"", ""dati"":" & datiElenco & "}"
+                End If
+
+                ' --- 3. GESTIONE INVIO FOGLIO RICHIESTO ---
+                If messaggioRicevuto.Contains("""type"":""RICHIEDI_FOGLIO""") Then
+                    ' Eseguiamo il parsing nativo del JSON inviato dal tablet
+                    Dim parser As System.Text.Json.JsonDocument = System.Text.Json.JsonDocument.Parse(messaggioRicevuto)
+                    Dim root As System.Text.Json.JsonElement = parser.RootElement
+
+                    ' Estraiamo in modo matematico l'ID inviato dinamicamente dal tablet (es. 101, 102, ecc.)
+                    Dim idRichiesto As Integer = root.GetProperty("id_questionario").GetInt32()
+                    Dim jsonFoglioBambino As String = Carica_Foglio_da_inviare_al_Tablet(idRichiesto)
+                    rispostaJson = "{""type"":""FOGLIO_RICEVUTO"", ""dati"":" & jsonFoglioBambino & "}"
+
+                    ' 🎯 LA CORREZIONE: Spingiamo fisicamente i byte nel Socket verso il tablet!
+                    If Not String.IsNullOrEmpty(rispostaJson) Then
+                        Dim bufferRisposta() As Byte = Encoding.UTF8.GetBytes(rispostaJson)
+                        Await ws.SendAsync(New ArraySegment(Of Byte)(bufferRisposta), WebSocketMessageType.Text, True, CancellationToken.None)
+                        Console.WriteLine("🟢 SUCCESS: File JSON del foglio spedito al tablet con successo.")
+                    End If
+
+                    ' 🎯 IMPORTANTE: Interrompiamo questo ciclo di messaggi per rimettere la While in ascolto del click dopo
+                    Exit Function
+                End If
+
+
             Catch ex As Exception
                 Console.WriteLine("CRASH DENTRO IL LOOP DEL SOCKET VB: " & ex.Message)
                 Exit While
@@ -172,110 +335,6 @@ Public Class Class_WebServerTablet
 
         Console.WriteLine("🏁 Thread di ascolto terminato. Il socket non è più monitorato.")
     End Function
-
-    Private Async Function GestisciMessaggiTablet_OLD(ByVal ws As WebSocket) As Task
-        Dim buffer(4096) As Byte ' Buffer di lettura di 4KB
-
-        While ws.State = WebSocketState.Open
-            Try
-                ' Rimane in attesa di un messaggio inviato dal tablet
-                Dim result As WebSocketReceiveResult = Await ws.ReceiveAsync(New ArraySegment(Of Byte)(buffer), CancellationToken.None)
-
-                ' Se il tablet chiude la connessione, usciamo dal ciclo
-                If result.MessageType = WebSocketMessageType.Close Then
-                    Await ws.CloseAsync(WebSocketCloseStatus.NormalClosure, "Chiusura richiesta", CancellationToken.None)
-                    Console.WriteLine("🔴 CANALE CHIUSO: Il tablet si è disconnesso.")
-                    Exit While
-                End If
-
-                ' Converte i byte ricevuti in testo stringa JSON
-                Dim messaggioRicevuto As String = Encoding.UTF8.GetString(buffer, 0, result.Count)
-                Console.WriteLine("Messaggio ricevuto dal tablet: " & messaggioRicevuto)
-
-                ' --- ELABORAZIONE DEI COMANDI DEL TABLET ---
-                Dim rispostaJson As String = ""
-
-                ' ===================================================================
-                ' 1. LOGICA AUTENTICAZIONE E REGISTRAZIONE DISPOSITIVI (SQLite)
-                ' ===================================================================
-                If messaggioRicevuto.Contains("""type"":""HANDSHAKE""") Then
-
-                    Dim parser As System.Text.Json.JsonDocument = System.Text.Json.JsonDocument.Parse(messaggioRicevuto)
-                    Dim root As System.Text.Json.JsonElement = parser.RootElement
-
-                    Dim deviceId As String = root.GetProperty("device_id").GetString()
-                    Dim notaUtente As String = root.GetProperty("nota_utente").GetString()
-
-                    Dim nomeAssegnato As String = ""
-
-                    ' 🎯 LA SVOLTA: Chiediamo a SQLite lo stato reale. 
-                    ' Modifica la tua funzione in modo che interroghi il campo ENABLED:
-                    ' Se non trova nulla -> ritorna -1
-                    ' Se trova ENABLED = 0 -> ritorna 0
-                    ' Se trova ENABLED = 1 -> ritorna 1
-                    Dim statoHardware As Integer = Class_DEVICE.Dispositivo_Registrato_Stato(deviceId, nomeAssegnato)
-
-                    If statoHardware = 1 Then
-                        ' Il dispositivo è nel DB ed è stato APPROVATO (ENABLED = 1)
-                        rispostaJson = "{""type"":""HANDSHAKE_OK"",""nome_dispositivo"":""" & nomeAssegnato & """}"
-                        Console.WriteLine("🟢 DISPOSITIVO AUTORIZZATO: " & nomeAssegnato)
-
-                    ElseIf statoHardware = 0 Then
-                        ' Il dispositivo esiste nel DB ma è ancora in attesa (ENABLED = 0)
-                        rispostaJson = "{""type"":""HANDSHAKE_PENDING"",""messaggio"":""Il dispositivo è censito nel sistema. In attesa che il gestore attivi la spunta di abilitazione sul PC Windows...""}"
-                        Console.WriteLine("⏳ ACCESSO SOSPESO: Il tablet è in lista d'attesa.")
-
-                    ElseIf statoHardware = -1 Then
-                        ' Il dispositivo non esiste proprio -> Eseguiamo la INSERT distinta per la prima volta
-                        Dim inserimentoOK As Boolean = Class_DEVICE.RegistraNuovoDispositivo(deviceId, notaUtente)
-
-                        If inserimentoOK Then
-                            rispostaJson = "{""type"":""HANDSHAKE_PENDING"",""messaggio"":""Richiesta inviata con successo! Postazione inserita nel database SQLite. In attesa di approvazione...""}"
-                            Console.WriteLine("🟡 NUOVA RICHIESTA: Dispositivo registrato ora in SQLite.")
-                        Else
-                            rispostaJson = "{""type"":""HANDSHAKE_ERROR"",""messaggio"":""Errore di scrittura nel file del database SQLite.""}"
-                        End If
-                    End If
-
-                    ' Spedisce il verdetto reale nel Socket ed esce subito
-                    If Not String.IsNullOrEmpty(rispostaJson) Then
-                        Dim bufferRisposta() As Byte = Encoding.UTF8.GetBytes(rispostaJson)
-                        Await ws.SendAsync(New ArraySegment(Of Byte)(bufferRisposta), WebSocketMessageType.Text, True, CancellationToken.None)
-                    End If
-
-                    Exit Function
-                End If
-
-                ' ===================================================================
-                ' 📄 RICHIESTA DATI REALI (Attiva solo se l'Handshake precedente ha ritornato OK)
-                ' ===================================================================
-
-
-                ' Nota: puoi usare un parser JSON (come JavaScriptSerializer) oppure un semplice Contains per massima velocità
-                If messaggioRicevuto.Contains("""type"":""RICHIEDI_ELENCO""") Then
-                    ' 🎯 Il tablet ha premuto "Aggiorna Elenco Fogli" -> Inviamo la lista dei bambini
-                    Dim datiElenco As String = GeneraJsonElencoFogli()
-                    rispostaJson = "{""type"":""ELENCO_FOGLI_RISPOSTA"", ""dati"":" & datiElenco & "}"
-
-                ElseIf messaggioRicevuto.Contains("""type"":""SALVA_FOGLIO""") Then
-                    ' 🎯 Il tablet ha inviato il foglio compilato -> Esegui qui la tua scrittura su file/DB
-                    ' (Il testo inviato conterrà anche i dati compilati)
-                    rispostaJson = "{""type"":""SALVA_FOGLIO_OK""}"
-                End If
-
-                ' Se abbiamo una risposta pronta, la rispediamo indietro dentro il tubo aperto
-                If Not String.IsNullOrEmpty(rispostaJson) Then
-                    Dim bufferRisposta() As Byte = Encoding.UTF8.GetBytes(rispostaJson)
-                    Await ws.SendAsync(New ArraySegment(Of Byte)(bufferRisposta), WebSocketMessageType.Text, True, CancellationToken.None)
-                End If
-
-            Catch ex As Exception
-                Console.WriteLine("Errore durante la comunicazione WebSocket: " & ex.Message)
-                Exit While
-            End Try
-        End While
-    End Function
-
 
 
     Public Shared Function GeneraJsonElencoFogli() As String
@@ -387,5 +446,23 @@ Public Class Class_WebServerTablet
         Return "127.0.0.1"
     End Function
 
+    Private Sub MostraMascheraAbilitazioneInThreadSicuro(ByVal deviceId As String, ByVal notaUtente As String)
+        ' Verifica qual è il Form principale attivo sul tuo server per usare il suo contesto grafico
+        ' Esempio: se il tuo form principale si chiama FormMainServer
+        If F_main.InvokeRequired Then
+            ' Se il socket è in un thread secondario, invoca la funzione sul thread principale
+            F_main.Invoke(Sub() MostraMascheraAbilitazioneInThreadSicuro(deviceId, notaUtente))
+        Else
+            ' Siamo sul thread principale: possiamo aprire la maschera in sicurezza!
+            Dim frm As New F_Client()
+
+            ' Passiamo i dati del tablet al form di approvazione per mostrarli a schermo
+            frm.LblDeviceID.Text = deviceId
+            frm.T_nomeclient.Text = notaUtente
+
+            ' Mostra il form a schermo (ShowDialog impedisce di cliccare altrove finché non si decide)
+            frm.ShowDialog()
+        End If
+    End Sub
 End Class
 

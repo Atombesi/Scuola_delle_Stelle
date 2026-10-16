@@ -1,4 +1,5 @@
 ﻿Imports System.Windows
+Imports DocumentFormat.OpenXml.Spreadsheet
 Imports Microsoft.Data.Sqlite
 
 Public Class F_main
@@ -9,6 +10,7 @@ Public Class F_main
 
     Private Sub F_main_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
+        Class_WebServerTablet.FormPrincipaleRiferimento = Me
         P_liste.Visible = False
         P_Setting.Visible = False
         P_liste.Left = P_schede.Left
@@ -50,20 +52,37 @@ Public Class F_main
     End Sub
 
 
+    Private Sub PctNotifica_Click(sender As Object, e As EventArgs) Handles PctNotifica.Click
+        ' Se per qualche motivo la lista si è svuotata, nascondi l'icona ed esci
+        If DispositiviInAttesa.Count = 0 Then
+            PctNotifica.Visible = False
+            PctNotifica.Refresh()
+            Return
+        End If
 
-    Private Sub Label2_Click(sender As Object, e As EventArgs)
+        ' Prendi il primo dispositivo della coda
+        Dim prossimoDeviceId As String = DispositiviInAttesa(0)
 
-    End Sub
+        ' Apri la maschera che hai preparato
+        Dim frm As New F_Client()
+        frm.IdDispositivoDaAbilitare = prossimoDeviceId
+        frm.T_nomeclient.Text = "Richiesta di connessione in sospeso..."
 
-    Private Sub NuovoArrivoToolStripMenuItem_Click(sender As Object, e As EventArgs)
-    End Sub
+        ' Mostra la maschera
+        frm.ShowDialog()
 
-    Private Sub Button3_Click(sender As Object, e As EventArgs)
+        ' Una volta chiusa la maschera, rimuoviamo il dispositivo dalla coda 
+        ' (sia che sia stato approvato, sia che sia stato rifiutato/rimandato)
+        DispositiviInAttesa.RemoveAt(0)
 
-    End Sub
-
-    Private Sub Button4_Click(sender As Object, e As EventArgs)
-
+        ' Se non ci sono più dispositivi in attesa, nascondi l'icona
+        If DispositiviInAttesa.Count = 0 Then
+            PctNotifica.Visible = False
+        Else
+            PctNotifica.Visible = True
+            ' Se ce ne sono altri, aggiorna l'interfaccia (es. se mostri un contatore)
+        End If
+        PctNotifica.Refresh()
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
@@ -130,6 +149,10 @@ Public Class F_main
     End Sub
 
     Private Sub Label1_Click(sender As Object, e As EventArgs) Handles Label1.Click
+
+
+        Dim jsonFoglioBambino As String = Carica_Foglio_da_inviare_al_Tablet(5)
+
         Dim ip = Class_WebServerTablet.OttieniIPAscoltoReale
         Call MsgBox(ip)
     End Sub
@@ -211,4 +234,6 @@ Public Class F_main
             End If
         End If
     End Sub
+
+
 End Class

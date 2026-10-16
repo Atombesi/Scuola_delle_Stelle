@@ -62,6 +62,7 @@ Public Class Class_DEVICE
     Public Shared Function Dispositivo_Registrato_Stato(ByVal deviceId As String, ByRef nomeDevice As String) As Integer
         ' Ritorna: 1 = Approvato, 0 = In Attesa, -1 = Non Presente
         nomeDevice = ""
+        Dim abilitato = -1
 
         Try
             Using cn = DB.GetConnection_Scuoladellestelle()
@@ -75,9 +76,13 @@ Public Class Class_DEVICE
                         If reader.Read() Then
                             Dim enabled As Integer = Convert.ToInt32(reader("ENABLED"))
                             nomeDevice = reader("NOME").ToString()
-
+                            Abilitato = reader("ENABLED")
                             ' Esiste! Ritorna il valore reale del flag (1 o 0)
-                            Return enabled
+                            If abilitato = 1 Then
+                                Return 1
+                            Else
+                                Return 0
+                            End If
                         Else
                             ' Non esiste proprio nel DB
                             Return -1
@@ -90,8 +95,86 @@ Public Class Class_DEVICE
             Return -1
         End Try
     End Function
+    Public Shared Function Load(id) As Class_DEVICE
+        Try
+            Using cn = DB.GetConnection_Scuoladellestelle()
+                If cn.State <> ConnectionState.Open Then cn.Open()
 
-    Public Shared Function RegistraNuovoDispositivo(ByVal deviceId As String, ByVal messaggioUtente As String) As Boolean
+                Dim queryRilevamento As String = "SELECT * FROM DEVICE WHERE MAC = @mac"
+                Using cmd As New SqliteCommand(queryRilevamento, cn)
+                    cmd.Parameters.AddWithValue("@mac", id)
+
+                    Using reader As SqliteDataReader = cmd.ExecuteReader()
+                        If reader.Read() Then
+                            Dim record As New Class_DEVICE()
+                            record.NOME = reader("NOME").ToString()
+                            record.ID = CInt(reader("ID"))
+                            record.MAC = reader("MAC").ToString()
+                            record.ENABLED = CBool(reader("ENABLED"))
+                            record.STATO = reader("STATO").ToString
+                            Return record
+                        Else
+                            ' Non esiste proprio nel DB
+                            Return Nothing
+                        End If
+                    End Using
+                End Using
+            End Using
+        Catch ex As Exception
+            Console.WriteLine("Errore SQLite: " & ex.Message)
+            Return Nothing
+        End Try
+
+    End Function
+    Public Shared Function Trova_dispositivo(deviceId As String) As Boolean
+
+        Try
+            Using cn = DB.GetConnection_Scuoladellestelle()
+                If cn.State <> ConnectionState.Open Then cn.Open()
+
+                Dim queryRilevamento As String = "SELECT * FROM DEVICE WHERE MAC = @mac"
+                Using cmd As New SqliteCommand(queryRilevamento, cn)
+                    cmd.Parameters.AddWithValue("@mac", deviceId)
+
+                    Using reader As SqliteDataReader = cmd.ExecuteReader()
+                        If reader.Read() Then
+                            Dim record As New Class_DEVICE()
+                            record.NOME = reader("NOME").ToString()
+                            record.ID = CInt(reader("ID"))
+                            record.MAC = reader("MAC").ToString()
+                            record.ENABLED = CBool(reader("ENABLED"))
+                            record.STATO = reader("STATO").ToString
+                            Return True
+                        Else
+                            ' Non esiste proprio nel DB
+                            Return False
+                        End If
+                    End Using
+                End Using
+            End Using
+        Catch ex As Exception
+            Console.WriteLine("Errore SQLite: " & ex.Message)
+            Return False
+        End Try
+
+    End Function
+    Public Shared Function Abilita_dispositivo(ID_device As String, Optional Abilitato As Boolean = False) As Boolean
+        If Trova_dispositivo(ID_device) Then
+            Dim record = Load(ID_device)
+            If Abilitato Then
+                record.ENABLED = 1
+                record.STATO = "OK"
+            Else
+                record.ENABLED = 0
+            End If
+            record.Save()
+            Return True
+
+        End If
+    End Function
+
+
+    Public Shared Function RegistraNuovoDispositivo(ByVal deviceId As String, ByVal messaggioUtente As String, Optional Abilitato As Boolean = False) As Boolean
         ' In SQLite, i nomi dei campi e parametri seguono lo stesso standard standardizzato
         Dim queryInserimento As String = "INSERT INTO DEVICE (NOME, ENABLED, MAC, STATO) VALUES (@nome, 0, @mac, @stato)"
 
@@ -103,8 +186,13 @@ Public Class Class_DEVICE
                     ' Configurazione dei parametri inseriti dall'utente del tablet
                     cmdInsert.Parameters.AddWithValue("@nome", "Richiesta: " & messaggioUtente)
                     cmdInsert.Parameters.AddWithValue("@mac", deviceId)
-                    cmdInsert.Parameters.AddWithValue("@stato", "In attesa")
-
+                    If Abilitato Then
+                        cmdInsert.Parameters.AddWithValue("@enabled", 1)
+                        cmdInsert.Parameters.AddWithValue("@stato", "Abilitato")
+                    Else
+                        cmdInsert.Parameters.AddWithValue("@enabled", 0)
+                        cmdInsert.Parameters.AddWithValue("@stato", "In attesa")
+                    End If
                     ' Esegue l'inserimento fisico nel file del database SQLite
                     cmdInsert.ExecuteNonQuery()
                     Return True

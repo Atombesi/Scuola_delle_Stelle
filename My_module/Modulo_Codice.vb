@@ -223,12 +223,48 @@ Module Modulo_Codice
     Public GbL_Logfile As String
     Public cod(7) As String
 
+    ' --- VARIABILI DI STATO TABLET ---
+    Public DispositiviInAttesa As New List(Of String)
+    ' Carica questo valore all'avvio dal tuo DB SQLite locale (True se già abilitato in passato)
+    Private Gbl_TabletAbilitato As Boolean = False
+    ' Contatore di sicurezza per evitare che server e tablet si scambino rifiuti all'infinito
+    Private TentativiAbilitazione As Integer = 0
+    ' Il timer per gestire il timeout di 5 secondi (creato con il prefisso WithEvents per intercettare il ticchettio)
+    Private WithEvents TimeoutTimer As New System.Windows.Forms.Timer()
 
     Dim img, bmp As Bitmap
-    'Public CODICI_ELCAR = New String() {"I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII", "XIII", "XIV", "XV"}
 
 
+    Function Carica_Foglio_da_inviare_al_Tablet(id_todolist) As String
+        'Trova_tutti_fogli_Bambino ID foglio e DBNome 
+        If id_todolist = 0 Then Return Nothing
+        Dim xx = Class_TODOLIST.Load(id_todolist)
+        Dim id_foglio = CInt(xx.ID_FOGLIO)
+        Dim DB_BAMBINO = xx.DB_BAMBINO
 
+        If id_foglio = 0 Then Return Nothing
+        If DB_BAMBINO = "" Then Return Nothing
+
+        Dim foglio = Carica_foglio(id_foglio, DB_BAMBINO)
+
+        Dim Foglio_json As Struct_foglio_Json
+        Foglio_json.Bambino = foglio.Bambino
+        Foglio_json.Data_foglio = foglio.Data
+        Foglio_json.ID_foglio = foglio.ID_foglio
+        Foglio_json.ID_Bambino = foglio.ID_Bambino
+        Foglio_json.ID_Questionario = id_todolist
+        Foglio_json.Stato = "IN COMPILAZIONE"
+        Foglio_json.VociDiUnFoglio = foglio.VociDiUnFoglio
+        Foglio_json.RT = foglio.RT
+        Foglio_json.CP = foglio.CP
+        Foglio_json.Data_creazione = Now.ToString
+
+        ' 🎯 CHIAMATA ASSOLUTA: Specifichiamo tutto il percorso per evitare conflitti con System.Text
+        Dim jsonOttenuto As String = System.Text.Json.JsonSerializer.Serialize(Foglio_json)
+        Return jsonOttenuto
+
+
+    End Function
     Function Trova_tutti_fogli_Bambino() As Integer
         Dim elenco_fogli As New Class_Elenco_fogli()
         Gbl_elenco_fogli_bambino = elenco_fogli.Trova_tutti_fogli()

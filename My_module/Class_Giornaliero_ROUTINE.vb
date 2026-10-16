@@ -16,43 +16,45 @@ Public Class Class_Giornaliero_ROUTINE
            "Server=.\SQLEXPRESS;Database=Scuoladellestelle;Trusted_Connection=True;"
     Public Function Carica_per_Foglio(ID_Foglio As Integer) As List(Of Class_Giornaliero_ROUTINE)
         Dim listaRisultati As New List(Of Class_Giornaliero_ROUTINE)()
-        Using cn = DB.GetConnection_Bambino()
 
-            ' Usa l'operatore LIKE per cercare corrispondenze parziali
-            Dim sql As String =
-                "SELECT ID, ID_FOGLIO, ID_VOCE, data, TESTO, TOT, COMPILATO, N_VOCE " &
-                "FROM GIORNALIERO_ROUTINE " &
-                "WHERE ID_FOGLIO LIKE @ID_FOGLIO"
-            Using cmd As New SqliteCommand(sql, cn)
-                ' Il carattere % indica a SQLite di trovare qualsiasi carattere prima e dopo il testo
-                cmd.Parameters.AddWithValue("@ID_FOGLIO", ID_Foglio)
-
-                Using rd = cmd.ExecuteReader()
-
-                    ' Usa While al posto di If perché ci possono essere più record corrispondenti
-                    While rd.Read()
-                        ' Crea una nuova istanza della classe per ogni riga trovata
-                        Dim record As New Class_Giornaliero_ROUTINE()
-                        record.ID = Convert.ToInt32(rd("ID"))
-                        record.ID_FOGLIO = Convert.ToInt32(rd("ID_FOGLIO"))
-                        record.ID_VOCE = Convert.ToInt32(rd("ID_VOCE"))
-                        record.TESTO = Convert.ToString(rd("TESTO"))
-                        record.TOT = Convert.ToInt32(rd("TOT"))
-                        record.DATA = Convert.ToString(rd("data"))
-                        record.ID_VOCE = Convert.ToInt32(rd("ID_VOCE"))
-                        record.COMPILATO = Convert.ToBoolean(rd("COMPILATO"))
-                        record.N_voce = Convert.ToInt32(rd("N_voce"))
+        Try
+            Using cn = DB.GetConnection_Bambino()
+                ' Forza l'apertura se chiusa
+                If cn.State <> ConnectionState.Open Then cn.Open()
 
 
-                        ' Aggiunge il record alla lista dei risultati solo se attivi
-                        listaRisultati.Add(record)
-                    End While
+                Dim sql = "SELECT * FROM GIORNALIERO_ROUTINE WHERE ID_FOGLIO = @ID_FOGLIO"
 
+
+                Using cmd As New SqliteCommand(sql, cn)
+                    cmd.Parameters.AddWithValue("@ID_FOGLIO", ID_Foglio)
+
+                    Using rd As SqliteDataReader = cmd.ExecuteReader()
+                        While rd.Read()
+                            Dim record As New Class_Giornaliero_ROUTINE()
+
+                            record.ID = Convert.ToInt32(rd("ID"))
+                            record.ID_FOGLIO = Convert.ToInt32(rd("ID_FOGLIO"))
+                            record.ID_VOCE = Convert.ToInt32(rd("ID_VOCE"))
+                            record.TOT = Convert.ToInt32(rd("TOT"))
+                            If Not rd.IsDBNull(rd.GetOrdinal("TESTO")) Then record.TESTO = rd("TESTO").ToString() Else record.TESTO = ""
+                            If Not rd.IsDBNull(rd.GetOrdinal("DATA")) Then record.DATA = rd("DATA").ToString() Else record.DATA = ""
+                            ' Converte lo 0 o 1 del DB in Boolean/Integer a seconda della tua classe
+                            record.COMPILATO = Convert.ToInt32(rd("COMPILATO"))
+                            record.N_voce = Convert.ToInt32(rd("N_voce"))
+
+                            listaRisultati.Add(record)
+                        End While
+                    End Using
                 End Using
             End Using
-        End Using
+        Catch ex As Exception
+            Console.WriteLine("Errore in Carica_per_Foglio Routine: " & ex.Message)
+        End Try
+
         Return listaRisultati
     End Function
+
 
 
     Public Function Salva() As Boolean

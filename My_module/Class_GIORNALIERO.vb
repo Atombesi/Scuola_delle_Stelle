@@ -194,60 +194,57 @@ Public Class Class_GIORNALIERO
 
         Dim lista As New List(Of Class_GIORNALIERO)
 
-        Dim sql As String =
-            "SELECT * " &
-            "FROM GIORNALIERO " &
-            "WHERE ID_Foglio = @ID_Foglio " &
-            "ORDER BY ID"
+        Dim sql As String = "SELECT * FROM GIORNALIERO WHERE ID_Foglio = @ID_Foglio ORDER BY ID"
+        Try
+            Using cn = DB.GetConnection_Bambino()
+                ' Controlla lo stato della connessione prima di aprirla
+                If cn.State <> ConnectionState.Open Then cn.Open()
 
-        Using cn = DB.GetConnection_Bambino
-            cn.Open()
+                Using cmd As New SqliteCommand(sql, cn)
+                    cmd.Parameters.AddWithValue("@ID_Foglio", idFoglio)
 
-            Using cmd As New SqliteCommand(sql, cn)
+                    Using reader As SqliteDataReader = cmd.ExecuteReader()
+                        While reader.Read()
 
-                cmd.Parameters.AddWithValue(
-                    "@ID_Foglio",
-                    idFoglio
-                )
+                            Dim record As New Class_GIORNALIERO()
 
-                Using reader As SqliteDataReader =
-                    cmd.ExecuteReader()
+                            record.ID = Convert.ToInt32(reader("ID"))
+                            record.ID_FOGLIO = Convert.ToInt32(reader("ID_Foglio"))
 
-                    While reader.Read()
+                            ' 🎯 PROTEZIONE STRINGHE: Il metodo .ToString() nativo trasforma i NULL in ""
+                            record.DATA = reader("DATA").ToString()
+                            record.Codice = reader("Codice").ToString()
+                            record.Testo = reader("Testo").ToString()
 
-                        Dim record As New Class_GIORNALIERO With {
-                            .ID = Convert.ToInt32(reader("ID")),
-                            .ID_FOGLIO = Convert.ToInt32(reader("ID_Foglio")),
-                            .DATA = reader("DATA").ToString(),
-                            .VALUTATIVO = Convert.ToBoolean(reader("VALUTATIVO")),
-                            .TUTTELERISPOSTE = Convert.ToBoolean(reader("TUTTELERISPOSTE")),
-                            .Codice = reader("Codice").ToString(),
-                            .Testo = reader("Testo").ToString(),
-                            .TOT1_POS = Convert.ToInt32(reader("TOT1_POS")),
-                            .TOT1_NEG = Convert.ToInt32(reader("TOT1_NEG")),
-                            .TOT1_PROMPT = Convert.ToInt32(reader("TOT1_PROMPT")),
-                            .TOT1 = Convert.ToInt32(reader("TOT1")),
-                            .TOT2_POS = Convert.ToInt32(reader("TOT2_POS")),
-                            .TOT2_NEG = Convert.ToInt32(reader("TOT2_NEG")),
-                            .TOT2_PROMPT = Convert.ToInt32(reader("TOT2_PROMPT")),
-                            .TOT2 = Convert.ToInt32(reader("TOT2")),
-                            .COMPILATO = Convert.ToBoolean(reader("COMPILATO")),
-                            .TERMINE = Convert.ToBoolean(reader("TERMINE"))
-                        }
+                            ' 🎯 SAFECTOR BOOLEANI: SQLite salva i Boolean come 0 o 1 (Integer)
+                            record.VALUTATIVO = Convert.ToBoolean(Convert.ToInt32(reader("VALUTATIVO")))
+                            record.TUTTELERISPOSTE = Convert.ToBoolean(Convert.ToInt32(reader("TUTTELERISPOSTE")))
+                            record.COMPILATO = Convert.ToBoolean(Convert.ToInt32(reader("COMPILATO")))
+                            record.TERMINE = Convert.ToBoolean(Convert.ToInt32(reader("TERMINE")))
 
-                        lista.Add(record)
+                            ' Campi numerici interi
+                            record.TOT1_POS = Convert.ToInt32(reader("TOT1_POS"))
+                            record.TOT1_NEG = Convert.ToInt32(reader("TOT1_NEG"))
+                            record.TOT1_PROMPT = Convert.ToInt32(reader("TOT1_PROMPT"))
+                            record.TOT1 = Convert.ToInt32(reader("TOT1"))
 
-                    End While
+                            record.TOT2_POS = Convert.ToInt32(reader("TOT2_POS"))
+                            record.TOT2_NEG = Convert.ToInt32(reader("TOT2_NEG"))
+                            record.TOT2_PROMPT = Convert.ToInt32(reader("TOT2_PROMPT"))
+                            record.TOT2 = Convert.ToInt32(reader("TOT2"))
 
+                            lista.Add(record)
+                        End While
+                    End Using
                 End Using
-
             End Using
-
-        End Using
+        Catch ex As Exception
+            Console.WriteLine("Errore in Carica_Foglio Giornaliero: " & ex.Message)
+        End Try
 
         Return lista
-
     End Function
+
 
     Public Shared Function OttieniRecordPerDate(data1 As DateTime, data2 As DateTime) As DataTable
         Dim dt As New DataTable()

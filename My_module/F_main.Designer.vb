@@ -48,6 +48,7 @@ Partial Class F_main
         CheckBox3 = New CheckBox()
         CheckBox4 = New CheckBox()
         TP1 = New ToolTip(components)
+        PctNotifica = New Label()
         P_schede.SuspendLayout()
         P_Stampe.SuspendLayout()
         P_liste.SuspendLayout()
@@ -57,9 +58,9 @@ Partial Class F_main
         ' Button1
         ' 
         Button1.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
-        Button1.Location = New Point(3, 48)
+        Button1.Location = New Point(5, 48)
         Button1.Name = "Button1"
-        Button1.Size = New Size(102, 41)
+        Button1.Size = New Size(108, 41)
         Button1.TabIndex = 0
         Button1.Text = "Compilazione Schede"
         Button1.UseVisualStyleBackColor = True
@@ -67,9 +68,9 @@ Partial Class F_main
         ' Button2
         ' 
         Button2.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
-        Button2.Location = New Point(3, 3)
+        Button2.Location = New Point(5, 3)
         Button2.Name = "Button2"
-        Button2.Size = New Size(103, 41)
+        Button2.Size = New Size(109, 41)
         Button2.TabIndex = 1
         Button2.Text = "Schede Giornaliere"
         Button2.UseVisualStyleBackColor = True
@@ -77,9 +78,9 @@ Partial Class F_main
         ' Button3
         ' 
         Button3.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
-        Button3.Location = New Point(3, 32)
+        Button3.Location = New Point(5, 32)
         Button3.Name = "Button3"
-        Button3.Size = New Size(103, 25)
+        Button3.Size = New Size(109, 25)
         Button3.TabIndex = 9
         Button3.Text = "Anagrafiche"
         Button3.UseVisualStyleBackColor = True
@@ -87,9 +88,9 @@ Partial Class F_main
         ' Button4
         ' 
         Button4.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
-        Button4.Location = New Point(5, 5)
+        Button4.Location = New Point(7, 5)
         Button4.Name = "Button4"
-        Button4.Size = New Size(101, 25)
+        Button4.Size = New Size(107, 25)
         Button4.TabIndex = 10
         Button4.Text = "Stampa Fogli"
         Button4.UseVisualStyleBackColor = True
@@ -114,6 +115,13 @@ Partial Class F_main
         ImageList1.Images.SetKeyName(1, "icons8-wi-fi-connesso-96.png")
         ImageList1.Images.SetKeyName(2, "icons8-wi-fi-disconnected-96.png")
         ImageList1.Images.SetKeyName(3, "icons8-wi-fi-off-96.png")
+        ImageList1.Images.SetKeyName(4, "CP03.png")
+        ImageList1.Images.SetKeyName(5, "Emoji Objects-45.png")
+        ImageList1.Images.SetKeyName(6, "Emoji Symbols-201.png")
+        ImageList1.Images.SetKeyName(7, "Client-1.png")
+        ImageList1.Images.SetKeyName(8, "Client-2.png")
+        ImageList1.Images.SetKeyName(9, "Client-3.png")
+        ImageList1.Images.SetKeyName(10, "Client-4.png")
         ' 
         ' Label1
         ' 
@@ -141,7 +149,7 @@ Partial Class F_main
         P_schede.Controls.Add(Button1)
         P_schede.Location = New Point(4, 7)
         P_schede.Name = "P_schede"
-        P_schede.Size = New Size(110, 92)
+        P_schede.Size = New Size(120, 92)
         P_schede.TabIndex = 16
         ' 
         ' P_Stampe
@@ -151,15 +159,15 @@ Partial Class F_main
         P_Stampe.Controls.Add(Button4)
         P_Stampe.Location = New Point(4, 105)
         P_Stampe.Name = "P_Stampe"
-        P_Stampe.Size = New Size(110, 64)
+        P_Stampe.Size = New Size(120, 64)
         P_Stampe.TabIndex = 17
         ' 
         ' Button7
         ' 
         Button7.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
-        Button7.Location = New Point(5, 34)
+        Button7.Location = New Point(7, 34)
         Button7.Name = "Button7"
-        Button7.Size = New Size(101, 25)
+        Button7.Size = New Size(107, 25)
         Button7.TabIndex = 11
         Button7.Text = "Stampa Grafici"
         Button7.UseVisualStyleBackColor = True
@@ -173,15 +181,15 @@ Partial Class F_main
         P_liste.Controls.Add(Button3)
         P_liste.Location = New Point(130, 6)
         P_liste.Name = "P_liste"
-        P_liste.Size = New Size(110, 161)
+        P_liste.Size = New Size(120, 161)
         P_liste.TabIndex = 18
         ' 
         ' Button10
         ' 
         Button10.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
-        Button10.Location = New Point(4, 91)
+        Button10.Location = New Point(6, 91)
         Button10.Name = "Button10"
-        Button10.Size = New Size(103, 25)
+        Button10.Size = New Size(109, 25)
         Button10.TabIndex = 12
         Button10.Text = "Voci CP"
         Button10.UseVisualStyleBackColor = True
@@ -189,9 +197,9 @@ Partial Class F_main
         ' Button9
         ' 
         Button9.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
-        Button9.Location = New Point(4, 62)
+        Button9.Location = New Point(6, 62)
         Button9.Name = "Button9"
-        Button9.Size = New Size(103, 25)
+        Button9.Size = New Size(109, 25)
         Button9.TabIndex = 11
         Button9.Text = "Voci routine"
         Button9.UseVisualStyleBackColor = True
@@ -199,9 +207,9 @@ Partial Class F_main
         ' Button8
         ' 
         Button8.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
-        Button8.Location = New Point(3, 2)
+        Button8.Location = New Point(5, 2)
         Button8.Name = "Button8"
-        Button8.Size = New Size(103, 25)
+        Button8.Size = New Size(109, 25)
         Button8.TabIndex = 10
         Button8.Text = "Gestione fogli"
         Button8.UseVisualStyleBackColor = True
@@ -210,9 +218,9 @@ Partial Class F_main
         ' 
         CheckBox2.Appearance = Appearance.Button
         CheckBox2.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
-        CheckBox2.Location = New Point(7, 177)
+        CheckBox2.Location = New Point(9, 177)
         CheckBox2.Name = "CheckBox2"
-        CheckBox2.Size = New Size(106, 27)
+        CheckBox2.Size = New Size(112, 27)
         CheckBox2.TabIndex = 19
         CheckBox2.Text = "Gestione Liste"
         CheckBox2.TextAlign = ContentAlignment.MiddleCenter
@@ -227,15 +235,15 @@ Partial Class F_main
         P_Setting.Controls.Add(Button14)
         P_Setting.Location = New Point(246, 7)
         P_Setting.Name = "P_Setting"
-        P_Setting.Size = New Size(110, 161)
+        P_Setting.Size = New Size(120, 161)
         P_Setting.TabIndex = 20
         ' 
         ' Button11
         ' 
         Button11.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
-        Button11.Location = New Point(3, 90)
+        Button11.Location = New Point(5, 90)
         Button11.Name = "Button11"
-        Button11.Size = New Size(102, 25)
+        Button11.Size = New Size(108, 25)
         Button11.TabIndex = 12
         Button11.Text = "Voci CP"
         Button11.UseVisualStyleBackColor = True
@@ -243,9 +251,9 @@ Partial Class F_main
         ' Button12
         ' 
         Button12.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
-        Button12.Location = New Point(3, 61)
+        Button12.Location = New Point(5, 61)
         Button12.Name = "Button12"
-        Button12.Size = New Size(102, 25)
+        Button12.Size = New Size(108, 25)
         Button12.TabIndex = 11
         Button12.Text = "Network"
         Button12.UseVisualStyleBackColor = True
@@ -253,9 +261,9 @@ Partial Class F_main
         ' Button13
         ' 
         Button13.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
-        Button13.Location = New Point(2, 2)
+        Button13.Location = New Point(4, 2)
         Button13.Name = "Button13"
-        Button13.Size = New Size(102, 25)
+        Button13.Size = New Size(108, 25)
         Button13.TabIndex = 10
         Button13.Text = "Opend File Ini"
         Button13.UseVisualStyleBackColor = True
@@ -263,9 +271,9 @@ Partial Class F_main
         ' Button14
         ' 
         Button14.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
-        Button14.Location = New Point(2, 31)
+        Button14.Location = New Point(4, 31)
         Button14.Name = "Button14"
-        Button14.Size = New Size(102, 25)
+        Button14.Size = New Size(108, 25)
         Button14.TabIndex = 9
         Button14.Text = "Open file log"
         Button14.UseVisualStyleBackColor = True
@@ -274,9 +282,9 @@ Partial Class F_main
         ' 
         CheckBox3.Appearance = Appearance.Button
         CheckBox3.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
-        CheckBox3.Location = New Point(10, 211)
+        CheckBox3.Location = New Point(11, 211)
         CheckBox3.Name = "CheckBox3"
-        CheckBox3.Size = New Size(61, 27)
+        CheckBox3.Size = New Size(58, 27)
         CheckBox3.TabIndex = 21
         CheckBox3.Text = "Setting"
         CheckBox3.TextAlign = ContentAlignment.MiddleCenter
@@ -290,19 +298,32 @@ Partial Class F_main
         CheckBox4.ImageAlign = ContentAlignment.BottomCenter
         CheckBox4.ImageIndex = 2
         CheckBox4.ImageList = ImageList1
-        CheckBox4.Location = New Point(78, 212)
+        CheckBox4.Location = New Point(70, 212)
         CheckBox4.Name = "CheckBox4"
         CheckBox4.Size = New Size(32, 27)
         CheckBox4.TabIndex = 22
         CheckBox4.TextAlign = ContentAlignment.MiddleCenter
         CheckBox4.UseVisualStyleBackColor = False
         ' 
+        ' PctNotifica
+        ' 
+        PctNotifica.ImageAlign = ContentAlignment.MiddleLeft
+        PctNotifica.ImageIndex = 5
+        PctNotifica.ImageList = ImageList1
+        PctNotifica.Location = New Point(101, 213)
+        PctNotifica.Name = "PctNotifica"
+        PctNotifica.Size = New Size(24, 27)
+        PctNotifica.TabIndex = 23
+        PctNotifica.Text = "    "
+        PctNotifica.Visible = False
+        ' 
         ' F_main
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
         CancelButton = Button6
-        ClientSize = New Size(121, 327)
+        ClientSize = New Size(128, 327)
+        Controls.Add(PctNotifica)
         Controls.Add(CheckBox4)
         Controls.Add(CheckBox3)
         Controls.Add(P_Setting)
@@ -349,5 +370,6 @@ Partial Class F_main
     Friend WithEvents CheckBox3 As CheckBox
     Friend WithEvents CheckBox4 As CheckBox
     Friend WithEvents TP1 As ToolTip
+    Friend WithEvents PctNotifica As Label
 
 End Class

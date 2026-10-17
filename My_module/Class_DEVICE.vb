@@ -126,7 +126,7 @@ Public Class Class_DEVICE
         End Try
 
     End Function
-    Public Shared Function Trova_dispositivo(deviceId As String) As Boolean
+    Public Shared Function Trova_dispositivo(deviceId As String) As (Esito As Boolean, Devices As Class_DEVICE)
 
         Try
             Using cn = DB.GetConnection_Scuoladellestelle()
@@ -144,22 +144,23 @@ Public Class Class_DEVICE
                             record.MAC = reader("MAC").ToString()
                             record.ENABLED = CBool(reader("ENABLED"))
                             record.STATO = reader("STATO").ToString
-                            Return True
+                            Return (True, record)
                         Else
                             ' Non esiste proprio nel DB
-                            Return False
+                            Return (False, Nothing)
                         End If
                     End Using
                 End Using
             End Using
         Catch ex As Exception
             Console.WriteLine("Errore SQLite: " & ex.Message)
-            Return False
+            Return (False, Nothing)
         End Try
 
     End Function
     Public Shared Function Abilita_dispositivo(ID_device As String, Optional Abilitato As Boolean = False) As Boolean
-        If Trova_dispositivo(ID_device) Then
+        Dim result = Trova_dispositivo(ID_device)
+        If result.esito Then
             Dim record = Load(ID_device)
             If Abilitato Then
                 record.ENABLED = 1

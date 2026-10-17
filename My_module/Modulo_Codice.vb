@@ -173,7 +173,14 @@ Module Modulo_Codice
         Public Property ID_foglio As Integer
         Public Property ID_Bambino As Integer
         Public Property Filename As String
+        Public Property note As String  ' ci vuole la minuscola per android dio cane
+        Public Property disponibile As Integer ' ci vuole la minuscola per android dio cane
     End Structure
+    Structure Struct_Decode_Android_message
+        Public deviceId As String
+        Public type As String
+    End Structure
+
 
 
     Public Gbl_Elenco_fogli_stampa() As Struct_FogliDaStampare
@@ -238,7 +245,7 @@ Module Modulo_Codice
     Function Carica_Foglio_da_inviare_al_Tablet(id_todolist) As String
         'Trova_tutti_fogli_Bambino ID foglio e DBNome 
         If id_todolist = 0 Then Return Nothing
-        Dim xx = Class_TODOLIST.Load(id_todolist)
+        Dim xx = Class_TODOLIST.Load_By_ID(id_todolist)
         Dim id_foglio = CInt(xx.ID_FOGLIO)
         Dim DB_BAMBINO = xx.DB_BAMBINO
 
@@ -508,7 +515,7 @@ Module Modulo_Codice
         K = "PATH"
 
         Dim y = Gbl_app_path + "\Scuola_delle_Stelle.log"
-        ini.File_Log = ReadINIString(fileini, k, "File log", y)
+        ini.File_Log = ReadINIString(fileini, K, "File log", y)
         GbL_Logfile = ini.File_Log
 
         If Not IO.File.Exists(GbL_Logfile) Then
@@ -517,20 +524,20 @@ Module Modulo_Codice
 
 
         y = Gbl_app_path + "\db_ragazzi"
-        ini.DB_Bambini_path = ReadINIString(fileini, k, "Db_Bimbi_path", y)
+        ini.DB_Bambini_path = ReadINIString(fileini, K, "Db_Bimbi_path", y)
         If Not IO.Directory.Exists(ini.DB_Bambini_path) Then
             IO.Directory.CreateDirectory(ini.DB_Bambini_path)
         End If
 
         x = dir_bar(Gbl_app_path) + "DA_STAMPARE_SCHEDE"
-        ini.Path_SCHEDE_DaStampare = ReadINIString(fileini, k, "Schede_da_Stampare", x)
+        ini.Path_SCHEDE_DaStampare = ReadINIString(fileini, K, "Schede_da_Stampare", x)
         If Not IO.Directory.Exists(ini.Path_SCHEDE_DaStampare) Then
             IO.Directory.CreateDirectory(ini.Path_SCHEDE_DaStampare)
         End If
 
 
         x = dir_bar(Gbl_app_path) + "DA_STAMPARE_GRAFICI"
-        ini.Path_GRAFICI_DaStampare = ReadINIString(fileini, k, "grafici_da_Stampare", x)
+        ini.Path_GRAFICI_DaStampare = ReadINIString(fileini, K, "grafici_da_Stampare", x)
         If Not IO.Directory.Exists(ini.Path_GRAFICI_DaStampare) Then
             IO.Directory.CreateDirectory(ini.Path_GRAFICI_DaStampare)
         End If
@@ -591,14 +598,14 @@ Module Modulo_Codice
         '--- SOGLIE ---
         '------------------------------------------
         K = "SOGLIE"
-        ini.Numero_min_voci_perpagina = CInt(ReadINIString(fileini, k, "Numero minimo voci per Pagina", "4"))
-        ini.Numero_Totale_Risposte = CInt(ReadINIString(fileini, k, "Numero di risposte necessario per la prova", "20"))
-        ini.Numero_min_CP = CInt(ReadINIString(fileini, k, "Numero Minimo di voci Comportamentali inseribili", "1"))
-        ini.Numero_min_RT = CInt(ReadINIString(fileini, k, "Numero Minimo di voci di routine inseribili", "10"))
+        ini.Numero_min_voci_perpagina = CInt(ReadINIString(fileini, K, "Numero minimo voci per Pagina", "4"))
+        ini.Numero_Totale_Risposte = CInt(ReadINIString(fileini, K, "Numero di risposte necessario per la prova", "20"))
+        ini.Numero_min_CP = CInt(ReadINIString(fileini, K, "Numero Minimo di voci Comportamentali inseribili", "1"))
+        ini.Numero_min_RT = CInt(ReadINIString(fileini, K, "Numero Minimo di voci di routine inseribili", "10"))
 
-        k = "GRAPH"
-        ini.Graph_interval = CInt(ReadINIString(fileini, k, "Intervallo default dati grafico  (gg)", "15"))
-        ini.Perc_soglia_ok = CInt(ReadINIString(fileini, k, "Valore per il superamento della prova (0-100%)", "80"))
+        K = "GRAPH"
+        ini.Graph_interval = CInt(ReadINIString(fileini, K, "Intervallo default dati grafico  (gg)", "15"))
+        ini.Perc_soglia_ok = CInt(ReadINIString(fileini, K, "Valore per il superamento della prova (0-100%)", "80"))
 
 
 
@@ -1395,5 +1402,76 @@ Module Modulo_Codice
 
 
     End Function
+    Public Sub AggiornaDatabaseFoglioInCompilazione(ByVal jsonGrezzo As String)
+        Try
+            ' Il parsing avviene qui dentro in modo isolato e pulito
+            Dim parser As System.Text.Json.JsonDocument = System.Text.Json.JsonDocument.Parse(jsonGrezzo)
+            Dim root As System.Text.Json.JsonElement = parser.RootElement
 
+            Dim idFoglio As Integer = root.GetProperty("id_questionario").GetInt32()
+            Dim tabletId As String = root.GetProperty("device_id").GetString()
+
+            If Not Verifica_ID_messaggio(tabletId) Then Exit Sub
+
+            '1) Trovo id Device
+            Dim device As New Class_DEVICE
+            Dim result = device.Trova_dispositivo(tabletId)
+            If result.Esito Then
+                'Aggiorno e salv
+                Dim id = result.Devices.ID
+                Dim todolist = Class_TODOLIST.Load_By_IDT_IDF(id)
+                todolist.CLIENT_ID = id
+                todolist.CLIENT_NOME = result.Devices.NOME
+                todolist.CLIENT_DATAINVIO = Now.ToString
+                todolist.CLIENT_DATARICONSEGNA = "INVIATO PER LA COMPILAZIONE IL " + todolist.CLIENT_DATAINVIO
+                todolist.Save()
+            End If
+            Console.WriteLine("🎯 DB AGGIORNATO: Foglio " & idFoglio & " assegnato a " & tabletId)
+        Catch ex As Exception
+            Console.WriteLine("ERRORE NEL PARSING DELLA CONFERMA DB: " & ex.Message)
+        End Try
+    End Sub
+    Public Function Verifica_ID_messaggio(ByVal ID_Messaggio As String) As Boolean
+        ' Se la stringa è vuota o composta solo da spazi, non è valida
+        If String.IsNullOrWhiteSpace(ID_Messaggio) Then Return False
+
+        ' Espressione regolare per Android ID:
+        ' ^         = Inizio della stringa
+        ' [0-9a-fA-F] = Accetta solo numeri da 0 a 9 e lettere da A a F (sia minuscole che maiuscole)
+        ' {16}      = Devono essere ESATTAMENTE 16 caratteri
+        ' $         = Fine della stringa
+        Dim espressioneAndroid As String = "^[0-9a-fA-F]{16}$"
+
+        ' Ritorna True se rispetta il formato, altrimenti False
+        Return Regex.IsMatch(ID_Messaggio, espressioneAndroid)
+    End Function
+
+
+    Public Function Decode_Android_message(ByVal msg As String) As Struct_Decode_Android_message
+        Dim info As New Struct_Decode_Android_message
+        info.type = ""
+        info.deviceId = ""
+
+        Try
+            If Not String.IsNullOrWhiteSpace(msg) AndAlso (msg.Trim().StartsWith("{") OrElse msg.Trim().StartsWith("[")) Then
+                Using parser As System.Text.Json.JsonDocument = System.Text.Json.JsonDocument.Parse(msg)
+                    Dim root As System.Text.Json.JsonElement = parser.RootElement
+
+                    ' 1. Estrazione sicura del Tipo Comando
+                    If root.TryGetProperty("type", Nothing) Then
+                        info.type = root.GetProperty("type").GetString()
+                    End If
+
+                    ' 2. Estrazione sicura del Dispositivo (cerca sia device_id che il minuscolo device_id hardware)
+                    If root.TryGetProperty("device_id", Nothing) Then
+                        info.deviceId = root.GetProperty("device_id").GetString()
+                    End If
+                End Using
+            End If
+        Catch ex As Exception
+            Console.WriteLine("⚠️ Errore silenziato nel pre-parsing del messaggio JSON: " & ex.Message)
+        End Try
+
+        Return info
+    End Function
 End Module

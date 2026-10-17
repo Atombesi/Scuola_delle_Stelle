@@ -70,8 +70,61 @@ Public Class Class_TODOLIST
         ' Restituisce la lista (sarà vuota se non trova nessuna corrispondenza)
         Return listaRisultati
     End Function
+    Public Shared Function Load_By_IDT_IDF(Id_tablet As Integer) As Class_TODOLIST
+        ' Inizializza la lista che conterrà i risultati trovati
+        Dim listaRisultati As New List(Of Class_TODOLIST)()
+        Dim sql_string = ""
+        Dim record As New Class_TODOLIST()
 
-    Public Shared Function Load(Idd As Integer) As Class_TODOLIST
+        Using cn = DB.GetConnection_Scuoladellestelle()
+
+
+            sql_string = "SELECT * FROM TODOLIST WHERE CLIENT_ID = @CLIENT_ID"
+            If cn.State <> ConnectionState.Open Then
+                cn.Open()
+            End If
+
+            Using cmd As New SqliteCommand(sql_string, cn)
+                cmd.Parameters.AddWithValue("@CLIENT_ID", Id_tablet)
+
+                ' Il carattere % indica a SQLite di trovare qualsiasi carattere prima e dopo il testo
+                'cmd.Parameters.AddWithValue("@Testo", "%" & testoCercato & "%")
+                Try
+
+                    Using rd As SqliteDataReader = cmd.ExecuteReader()
+
+                        ' Usa While al posto di If perché ci possono essere più record corrispondenti
+                        If rd.Read() Then
+                            ' Crea una nuova istanza della classe per ogni riga trovata
+                            record.ID = Convert.ToInt32(rd("ID"))
+                            record.ID_FOGLIO = Convert.ToInt32(rd("ID_FOGLIO"))
+                            record.DB_BAMBINO = Convert.ToString(rd("DB_BAMBINO"))
+                            record.ID_BAMBINO = Convert.ToInt32(rd("ID_BAMBINO"))
+                            record.DATA_FOGLIO = Convert.ToString(rd("DATA_FOGLIO"))
+                            record.NOMEFILE = Convert.ToString(rd("NOMEFILE"))
+                            record.BAMBINO = Convert.ToString(rd("BAMBINO"))
+                            record.COMPILATO = Convert.ToInt32(rd("COMPILATO"))
+                            record.CLIENT_ID = Convert.ToInt32(rd("CLIENT_ID"))
+                            record.CLIENT_NOME = Convert.ToString(rd("CLIENT_NOME"))
+                            record.CLIENT_DATAINVIO = Convert.ToString(rd("CLIENT_DATAINVIO"))
+                            record.CLIENT_DATARICONSEGNA = Convert.ToString(rd("CLIENT_DATARICONSEGNA"))
+                            Dim i = Convert.ToBoolean(1)
+                            Return record
+                        End If
+
+                    End Using
+                Catch ex As Exception
+                    Console.WriteLine(ex.ToString)
+                End Try
+
+            End Using
+        End Using
+
+        ' Restituisce la lista (sarà vuota se non trova nessuna corrispondenza)
+        Return Nothing
+    End Function
+
+    Public Shared Function Load_By_ID(Idd As Integer) As Class_TODOLIST
         ' Inizializza la lista che conterrà i risultati trovati
         Dim listaRisultati As New List(Of Class_TODOLIST)()
         Dim sql_string = ""
@@ -90,29 +143,34 @@ Public Class Class_TODOLIST
 
                 ' Il carattere % indica a SQLite di trovare qualsiasi carattere prima e dopo il testo
                 'cmd.Parameters.AddWithValue("@Testo", "%" & testoCercato & "%")
+                Try
 
-                Using rd As SqliteDataReader = cmd.ExecuteReader()
+                    Using rd As SqliteDataReader = cmd.ExecuteReader()
 
-                    ' Usa While al posto di If perché ci possono essere più record corrispondenti
-                    If rd.Read() Then
-                        ' Crea una nuova istanza della classe per ogni riga trovata
-                        record.ID = Convert.ToInt32(rd("ID"))
-                        record.ID_FOGLIO = Convert.ToInt32(rd("ID_FOGLIO"))
-                        record.DB_BAMBINO = Convert.ToString(rd("DB_BAMBINO"))
-                        record.ID_BAMBINO = Convert.ToInt32(rd("ID_BAMBINO"))
-                        record.DATA_FOGLIO = Convert.ToString(rd("DATA_FOGLIO"))
-                        record.NOMEFILE = Convert.ToString(rd("NOMEFILE"))
-                        record.BAMBINO = Convert.ToString(rd("BAMBINO"))
-                        record.COMPILATO = Convert.ToInt32(rd("COMPILATO"))
-                        record.CLIENT_ID = Convert.ToInt32(rd("CLIENT_ID"))
-                        record.CLIENT_NOME = Convert.ToString(rd("CLIENT_NOME"))
-                        record.CLIENT_DATAINVIO = Convert.ToString(rd("CLIENT_DATAINVIO"))
-                        record.CLIENT_DATARICONSEGNA = Convert.ToString(rd("CLIENT_DATARICONSEGNA"))
-                        Dim i = Convert.ToBoolean(1)
-                        Return record
-                    End If
+                        ' Usa While al posto di If perché ci possono essere più record corrispondenti
+                        If rd.Read() Then
+                            ' Crea una nuova istanza della classe per ogni riga trovata
+                            record.ID = Convert.ToInt32(rd("ID"))
+                            record.ID_FOGLIO = Convert.ToInt32(rd("ID_FOGLIO"))
+                            record.DB_BAMBINO = Convert.ToString(rd("DB_BAMBINO"))
+                            record.ID_BAMBINO = Convert.ToInt32(rd("ID_BAMBINO"))
+                            record.DATA_FOGLIO = Convert.ToString(rd("DATA_FOGLIO"))
+                            record.NOMEFILE = Convert.ToString(rd("NOMEFILE"))
+                            record.BAMBINO = Convert.ToString(rd("BAMBINO"))
+                            record.COMPILATO = Convert.ToInt32(rd("COMPILATO"))
+                            record.CLIENT_ID = Convert.ToInt32(rd("CLIENT_ID"))
+                            record.CLIENT_NOME = Convert.ToString(rd("CLIENT_NOME"))
+                            record.CLIENT_DATAINVIO = Convert.ToString(rd("CLIENT_DATAINVIO"))
+                            record.CLIENT_DATARICONSEGNA = Convert.ToString(rd("CLIENT_DATARICONSEGNA"))
+                            Dim i = Convert.ToBoolean(1)
+                            Return record
+                        End If
 
-                End Using
+                    End Using
+                Catch ex As Exception
+                    Console.WriteLine(ex.ToString)
+                End Try
+
             End Using
         End Using
 

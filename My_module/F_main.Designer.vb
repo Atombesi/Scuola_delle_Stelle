@@ -99,9 +99,9 @@ Partial Class F_main
         ' 
         Button6.BackColor = Color.DimGray
         Button6.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
-        Button6.Location = New Point(5, 259)
+        Button6.Location = New Point(64, 306)
         Button6.Name = "Button6"
-        Button6.Size = New Size(65, 36)
+        Button6.Size = New Size(59, 36)
         Button6.TabIndex = 12
         Button6.Text = "ESCI"
         Button6.UseVisualStyleBackColor = False
@@ -127,20 +127,20 @@ Partial Class F_main
         ' 
         Label1.ImageIndex = 0
         Label1.ImageList = ImageList1
-        Label1.Location = New Point(76, 263)
+        Label1.Location = New Point(5, 251)
         Label1.Name = "Label1"
-        Label1.Size = New Size(41, 29)
+        Label1.Size = New Size(29, 29)
         Label1.TabIndex = 13
         Label1.Text = " "
         ' 
         ' CheckBox1
         ' 
         CheckBox1.AutoSize = True
-        CheckBox1.Location = New Point(7, 305)
+        CheckBox1.Location = New Point(7, 316)
         CheckBox1.Name = "CheckBox1"
-        CheckBox1.Size = New Size(100, 19)
+        CheckBox1.Size = New Size(50, 19)
         CheckBox1.TabIndex = 14
-        CheckBox1.Text = "Modalià notte"
+        CheckBox1.Text = "Dark"
         CheckBox1.UseVisualStyleBackColor = True
         ' 
         ' P_schede
@@ -282,11 +282,11 @@ Partial Class F_main
         ' 
         CheckBox3.Appearance = Appearance.Button
         CheckBox3.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
-        CheckBox3.Location = New Point(11, 211)
+        CheckBox3.Location = New Point(8, 211)
         CheckBox3.Name = "CheckBox3"
-        CheckBox3.Size = New Size(58, 27)
+        CheckBox3.Size = New Size(110, 27)
         CheckBox3.TabIndex = 21
-        CheckBox3.Text = "Setting"
+        CheckBox3.Text = "Impostazioni"
         CheckBox3.TextAlign = ContentAlignment.MiddleCenter
         CheckBox3.UseVisualStyleBackColor = True
         ' 
@@ -298,7 +298,7 @@ Partial Class F_main
         CheckBox4.ImageAlign = ContentAlignment.BottomCenter
         CheckBox4.ImageIndex = 2
         CheckBox4.ImageList = ImageList1
-        CheckBox4.Location = New Point(70, 212)
+        CheckBox4.Location = New Point(65, 251)
         CheckBox4.Name = "CheckBox4"
         CheckBox4.Size = New Size(32, 27)
         CheckBox4.TabIndex = 22
@@ -310,11 +310,12 @@ Partial Class F_main
         PctNotifica.ImageAlign = ContentAlignment.MiddleLeft
         PctNotifica.ImageIndex = 5
         PctNotifica.ImageList = ImageList1
-        PctNotifica.Location = New Point(101, 213)
+        PctNotifica.Location = New Point(96, 252)
         PctNotifica.Name = "PctNotifica"
         PctNotifica.Size = New Size(24, 27)
         PctNotifica.TabIndex = 23
         PctNotifica.Text = "    "
+        TP1.SetToolTip(PctNotifica, "Richiesta di Associazione")
         PctNotifica.Visible = False
         ' 
         ' F_main
@@ -322,7 +323,7 @@ Partial Class F_main
         AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
         CancelButton = Button6
-        ClientSize = New Size(128, 327)
+        ClientSize = New Size(129, 347)
         Controls.Add(PctNotifica)
         Controls.Add(CheckBox4)
         Controls.Add(CheckBox3)

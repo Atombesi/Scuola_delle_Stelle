@@ -61,10 +61,10 @@ Public Class F_main
         End If
 
         ' Prendi il primo dispositivo della coda
-        Dim prossimoDeviceId As String = DispositiviInAttesa(0)
+        Dim prossimoDeviceId = DispositiviInAttesa(0)
 
         ' Apri la maschera che hai preparato
-        Dim frm As New F_Client()
+        Dim frm As New F_Client
         frm.IdDispositivoDaAbilitare = prossimoDeviceId
         frm.T_nomeclient.Text = "Richiesta di connessione in sospeso..."
 

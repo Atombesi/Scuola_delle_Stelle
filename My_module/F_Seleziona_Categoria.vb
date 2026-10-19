@@ -1434,35 +1434,6 @@ Public Class F_Seleziona_Categoria
 
 
 
-        'Gbl_foglio = Carica_foglio(id_foglio, DBbAMBINO)
-        'Label24.Text = "Copiato dal foglio n. " + id_foglio.ToString + " del: " + Gbl_foglio.Data
-        ''Label21.Tag = 0
-        'Gbl_VociDiUnFoglio = Gbl_foglio.VociDiUnFoglio
-
-        '' Carico la griglia con i dati letti 
-        'Carica_dati_foglio_in_DGV1()
-
-
-
-        ''FORZO ID_FOGLIO=0 (IN TUTTE LE VOCI CHE LO COMPONGONO)  PER INDICARE IL FOGLIO NUOVO 
-        'Gbl_foglio.ID_foglio = 0
-        'For Each voce In Gbl_foglio.VociDiUnFoglio : voce.ID_FOGLIO = 0 : Next
-
-
-        'TP1.SetToolTip(Label22, "Voci importate dal foglio n:" + id_foglio.ToString)
-        'Label22.BackColor = MyColor.LightYellow
-        'Label22.Text = "NUOVO FOGLIO"
-
-        ''Trova la data, ovvero il prossimo giorno lavorativo 
-        'Dim nextday = Prossimo_giorno_lavorativo(Now)
-        'Gbl_foglio.Data = nextday
-
-
-        'mostra_info_sul_foglio()
-
-        'Call Imposta_tipo_caricamento_ultimo_foglio(False)
-        'Dim n = Gbl_VociDiUnFoglio.Count
-
 
 
     End Sub

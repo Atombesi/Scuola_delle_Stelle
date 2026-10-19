@@ -4,6 +4,7 @@
     Dim G_DB_Bambino As String
     Dim G_ID_FOGLIO As Integer
     Dim G_NOME_BAMBINO As String
+    Dim G_foglio As New Struct_foglio
     Function Main(J As Integer, Optional SoloDacompilare As Boolean = False, Optional ALL As Boolean = False) As String
 
         'Se j>=0 allora ho passato indicazioni per il foglo di un bambino e quindi preparo la form disabilitando la scelta del bambino
@@ -22,7 +23,7 @@
             ComboBox2.PopolaLeggero(Gbl_miaLista_fogli)
             ComboBox2.Text = G_NOME_BAMBINO : ComboBox2.Enabled = False
             Label6.Text = G_NOME_BAMBINO
-            Label7.Tag = J
+            L_V.Tag = J
             Call Carica_combo_elenco_fogli()
             Noneseguire = False
             Try
@@ -132,9 +133,9 @@
 
     Sub Nessun_foglio_da_mostrare()
         DGV1.Rows.Clear()
-        Label13.Text = "0"
-        Label16.Text = "0"
-        Label10.Text = "0"
+        LabelCP.Text = "0"
+        LabelRT.Text = "0"
+        LabelV.Text = "0"
         Label5.Text = "- -"
         Button6.Enabled = False
         CheckBox1.Enabled = False
@@ -213,8 +214,6 @@
             TextBox7.ReadOnly = True
 
             TextBox8.ReadOnly = True
-            TextBox9.ReadOnly = True
-            TextBox10.ReadOnly = True
         Else
             TextBox1.ReadOnly = False
             TextBox2.ReadOnly = False
@@ -224,25 +223,22 @@
             TextBox7.ReadOnly = False
 
             TextBox8.ReadOnly = False
-            TextBox9.ReadOnly = False
-            TextBox10.ReadOnly = False
         End If
     End Function
     Function IS_foglio_compilato() As Boolean
         Dim iscompilato As Boolean = True
-        For Each voce In Gbl_VociDiUnFoglio
+        For Each voce In G_foglio.VociDiUnFoglio
             If Not voce.COMPILATO Then iscompilato = False
         Next
 
-        If Not iscompilato Then
-            Label5.Text = "Foglio da compilare"
-            Label5.BackColor = Color.Orange
-            Edit_ONOFF(True)
-        Else
-            Label5.Text = "Foglio già compilato"
-            Label5.BackColor = Color.LightGreen
-            Edit_ONOFF()
-        End If
+        For Each voce In G_foglio.RT
+            If Not voce.COMPILATO Then iscompilato = False
+        Next
+
+        For Each voce In G_foglio.CP
+            If Not voce.COMPILATO Then iscompilato = False
+        Next
+
 
         Return iscompilato
     End Function
@@ -250,24 +246,17 @@
     Sub mostra_totale_voci_compilate()
         Dim n = 0, nc = 0
         n = Gbl_VociDiUnFoglio.Count
-        Label10.Text = n.ToString
+        LabelV.Text = n.ToString
 
         For i = 0 To n - 1
             If Gbl_VociDiUnFoglio(i).COMPILATO Then nc = nc + 1
         Next
 
-        Label16.Text = nc.ToString
+        LabelRT.Text = nc.ToString
 
     End Sub
     Sub Mostra_Totali(j)
-        Try
-            Label15.Text = Gbl_VociDiUnFoglio(j).Codice : Label15.Refresh()
-
-        Catch ex As Exception
-            Exit Sub
-        End Try
-        Label15.Text = Gbl_VociDiUnFoglio(j).Codice : Label15.Refresh()
-        Label7.Text = Gbl_VociDiUnFoglio(j).Testo : Label7.Refresh()
+        L_V.Text = Gbl_VociDiUnFoglio(j).Testo : L_V.Refresh()
         TextBox1.Text = Gbl_VociDiUnFoglio(j).TOT1_POS
         TextBox2.Text = Gbl_VociDiUnFoglio(j).TOT1_NEG
         TextBox3.Text = Gbl_VociDiUnFoglio(j).TOT1_PROMPT
@@ -291,87 +280,105 @@
         mostra_totale_voci_compilate()
     End Sub
     Sub Mostra_CP()
-        TP1.SetToolTip(LCP1, "")
-        TP1.SetToolTip(LCP2, "")
-        TP1.SetToolTip(LCP3, "")
-
-        LCP1.Visible = False : TextBox8.Visible = False
-        LCP2.Visible = False : TextBox9.Visible = False
-        LCP3.Visible = False : TextBox10.Visible = False
-
-        If Gbl_foglio.CP.Count = 0 Then
-            LCP0.Visible = True
-            LCP0.Refresh()
-            Exit Sub
-        End If
-        LCP0.Visible = False : LCP0.Refresh()
 
 
 
-
-        If Gbl_foglio.CP.Count > 0 Then
-            TextBox8.Text = Gbl_foglio.CP(0).TOT
-            TextBox8.ReadOnly = False
-            TextBox8.Visible = True
-            LCP1.Visible = True
-            TP1.SetToolTip(LCP1, Gbl_foglio.CP(0).TESTO)
-        End If
-        If Gbl_foglio.CP.Count > 1 Then
-            TextBox9.Text = Gbl_foglio.CP(1).TOT
-            TextBox9.ReadOnly = False
-            LCP2.Visible = True
-            TextBox9.Visible = True
-            TP1.SetToolTip(LCP2, Gbl_foglio.CP(1).TESTO)
-        End If
-        If Gbl_foglio.CP.Count > 2 Then
-            TextBox10.Text = Gbl_foglio.CP(2).TOT
-            TextBox10.ReadOnly = False
-            LCP3.Visible = True
-            TextBox10.Visible = True
-            TP1.SetToolTip(LCP3, Gbl_foglio.CP(2).TESTO)
-        End If
-        LCP1.Refresh()
-        LCP2.Refresh()
-        LCP3.Refresh()
 
     End Sub
     Sub Mostra_Foglio(j)
         Dim ID_foglio = CInt(Gbl_elenco_fogli_bambino(j).ID_Foglio)
         Gbl_VociDiUnFoglio = Gbl_giornaliero.Carica_Foglio(ID_foglio)
-        Dim n = Gbl_VociDiUnFoglio.Count
-        Label13.Text = ID_foglio : Label13.Refresh()
 
-        If n = 0 Then
+        Dim dbBambino = G_DB_Bambino
+        G_foglio = Carica_foglio(ID_foglio, dbBambino, True)
+
+        Dim voci_rt = G_foglio.RT
+        Dim voci_cp = G_foglio.CP
+        Dim voci = G_foglio.VociDiUnFoglio
+
+        Dim nv = voci.Count
+        Dim ncp = voci_cp.Count
+        Dim nrt = voci_rt.Count
+
+        Label19.Text = ID_foglio.ToString + " (" + G_foglio.Data + ")"
+        LabelCP.Text = voci_cp.Count.ToString
+        LabelRT.Text = voci_rt.Count.ToString
+        LabelV.Text = voci.Count.ToString
+
+        If nv + ncp + nrt = 0 Then
             Call MsgBox("Nessuna voce trovata")
             Exit Sub
-        Else
         End If
 
+        Dim iscompilato = IS_foglio_compilato()
+        If Not iscompilato Then
+            Label5.Text = "Foglio da compilare"
+            Label5.BackColor = Color.Orange
+            Edit_ONOFF(True)
+        Else
+            Label5.Text = "Foglio già compilato"
+            Label5.BackColor = Color.LightGreen
+            Edit_ONOFF()
+        End If
+
+        If G_foglio.Valutativo Then
+            Label23.Visible = True
+        Else
+            Label23.Visible = False
+        End If
+
+
+        '-- Carica griglia voci ELCAR
         DGV1.Rows.Clear()
-        For i As Integer = 0 To Gbl_VociDiUnFoglio.Count - 1
+        For i As Integer = 0 To voci.Count - 1
             ' Estrai l'elemento corrente usando l'indice i
-            Dim foglio = Gbl_VociDiUnFoglio(i)
-            DGV1.Rows.Add(foglio.Codice, foglio.Testo, foglio.TOT1, foglio.TOT2, i)
+            Dim voce = voci(i)
+            DGV1.Rows.Add(voce.Codice, voce.Testo, voce.TOT1, voce.TOT2, i)
         Next
         DGV1.Refresh()
         DGV1.CurrentCell = DGV1.Rows(0).Cells(1)
         DGV1.Rows(0).Selected = True
 
+        '-- Carica griglia voci RT
+        DGV2.Rows.Clear()
+        For i As Integer = 0 To voci_rt.Count - 1
+            ' Estrai l'elemento corrente usando l'indice i
+            Dim voce = voci_rt(i)
+            DGV2.Rows.Add(voce.TESTO, voce.TOT, i)
+        Next
+        DGV2.Refresh()
+        DGV2.CurrentCell = DGV2.Rows(0).Cells(1)
+        DGV2.Rows(0).Selected = True
+
+
+        '-- Carica griglia voci CP
+        DGV3.Rows.Clear()
+        For i As Integer = 0 To voci_cp.Count - 1
+            ' Estrai l'elemento corrente usando l'indice i
+            Dim voce = voci_cp(i)
+            DGV3.Rows.Add(voce.TESTO, voce.TOT, i)
+        Next
+        DGV3.Refresh()
+        DGV3.CurrentCell = DGV3.Rows(0).Cells(1)
+        DGV3.Rows(0).Selected = True
+
+
+
         ' 3. SCATENA L'EVENTO: Chiama manualmente la Sub che gestisce il click.
         ' Passiamo come mittente (sender) la cella stessa e un oggetto DataGridViewCellEventArgs vuoto
-        Dim args As New DataGridViewCellEventArgs(0, 0) ' (IndiceColonna, IndiceRiga)
-        Dim mouseArgs As New DataGridViewCellMouseEventArgs(0, 0, 0, 0, New MouseEventArgs(MouseButtons.Left, 1, 0, 0, 0))
-        DGV1_CellMouseClick(DGV1, mouseArgs)
+        'Dim args As New DataGridViewCellEventArgs(0, 0) ' (IndiceColonna, IndiceRiga)
+        'Dim mouseArgs As New DataGridViewCellMouseEventArgs(0, 0, 0, 0, New MouseEventArgs(MouseButtons.Left, 1, 0, 0, 0))
+        'DGV1_CellMouseClick(DGV1, mouseArgs)
 
         CheckBox1.Checked = False
 
-        Call mostra_cp
+        'Call mostra_cp
 
 
     End Sub
 
     Private Sub Button6_Click(sender As Object, e As EventArgs) Handles Button6.Click
-        Dim j = CInt(Label7.Tag)
+        Dim j = CInt(L_V.Tag)
         Dim ID_foglio = CInt(Gbl_elenco_fogli_bambino(j).ID_Foglio)
         Gbl_VociDiUnFoglio = Gbl_giornaliero.Carica_Foglio(ID_foglio)
         F_Seleziona_Categoria.Carica_dati_foglio_in_DGV1()
@@ -394,7 +401,6 @@
             AddHandler txt.Leave, AddressOf TextBox_Leave
         Next
         Noneseguire = False
-        DGV1.Enabled = False
         CheckBox1.Checked = False
 
     End Sub
@@ -435,14 +441,12 @@
 
         ' Verifica se devo saltare la riga (non ho scritto nulla in pos2
         If currentIndex = 3 And TextBox5.Text = "" Then
-            riporta_totali()
-            Button1.Focus()
+            riporta_totali_voci()
             Exit Sub
         End If
 
         If currentIndex = 5 Then
-            riporta_totali()
-            Button1.Focus()
+            riporta_totali_voci()
             Exit Sub
         End If
 
@@ -450,10 +454,39 @@
         If Not textBoxes(nextIndex).ReadOnly Then
             textBoxes(nextIndex).Focus()
         Else
-            Button1.Focus()
         End If
     End Sub
-    Sub riporta_totali()
+    Sub Mostra_totali(Type As String)
+        If Type = "VOCI" Then
+            Dim r = DGV1.CurrentRow
+            Dim j = r.Cells(4).Value
+            L_V.Text = G_foglio.VociDiUnFoglio(j).Testo
+            TextBox1.Text = G_foglio.VociDiUnFoglio(j).TOT1_POS
+            TextBox2.Text = G_foglio.VociDiUnFoglio(j).TOT1_NEG
+            TextBox3.Text = G_foglio.VociDiUnFoglio(j).TOT1_PROMPT
+            Label20.Text = G_foglio.VociDiUnFoglio(j).TOT1.ToString
+            TextBox5.Text = G_foglio.VociDiUnFoglio(j).TOT2_POS
+            TextBox6.Text = G_foglio.VociDiUnFoglio(j).TOT2_NEG
+            TextBox7.Text = G_foglio.VociDiUnFoglio(j).TOT2_PROMPT
+            Label21.Text = G_foglio.VociDiUnFoglio(j).TOT2.ToString
+
+        ElseIf Type = "RT" Then
+            Dim r = DGV2.CurrentRow
+            Dim j = r.Cells(2).Value
+            Dim stato = G_foglio.RT(j).TOT
+            L_RT.Text = G_foglio.RT(j).TESTO
+            If stato = 0 Then
+                CheckBoxRT0.Checked = True
+                CheckBoxRT1.Checked = False
+            Else
+                CheckBoxRT1.Checked = True
+                CheckBoxRT0.Checked = False
+            End If
+        ElseIf Type = "CP" Then
+
+        End If
+    End Sub
+    Sub riporta_totali_voci()
         Dim r = DGV1.CurrentRow.Index, v = 0
         Dim j = CInt(DGV1.Rows(r).Cells(4).Value)
 
@@ -514,10 +547,8 @@
         elemento = CType(ComboBox1.SelectedItem, Class_ElementoCombo)
         If IsNothing(elemento) Then Exit Sub
         G_ID_FOGLIO = CInt(elemento.ID)
-        Gbl_foglio = Carica_foglio(G_ID_FOGLIO, G_DB_Bambino)
         Dim j = ComboBox1.SelectedIndex
-        Carica_foglio_loc(j)
-        Call Mostra_CP()
+        Call Mostra_Foglio(j)
         Me.Tag = G_ID_FOGLIO
 
     End Sub
@@ -529,40 +560,6 @@
 
     End Sub
 
-    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        If DGV1.Rows.Count = 0 Then Exit Sub
-        Dim r = DGV1.CurrentRow.Index
-
-
-        Dim currentIndex = -1
-
-        ' Recupera l'indice della riga attualmente attiva, se esiste
-        If DGV1.CurrentRow IsNot Nothing Then
-            currentIndex = DGV1.CurrentRow.Index
-        End If
-
-        ' Calcola l'indice della riga successiva in modo ciclico
-        Dim nextIndex = (currentIndex + 1) Mod DGV1.Rows.Count
-
-        ' Rimuove le selezioni precedenti per evitare selezioni multiple
-        DGV1.ClearSelection()
-
-        If r >= Gbl_VociDiUnFoglio.Count - 1 Then
-            r = 0
-        Else
-            r = r + 1
-        End If
-        nextIndex = r
-        ' Seleziona la riga intera (evidenziazione blu standard)
-        DGV1.Rows(nextIndex).Selected = True
-
-        ' Sposta la cella attiva sulla prima colonna della nuova riga (sposta il focus e la freccetta laterale)
-        DGV1.CurrentCell = DGV1.Rows(nextIndex).Cells(0)
-        Dim j = CInt(DGV1.Rows(nextIndex).Cells(4).Value)
-        Mostra_Totali(j)
-        If CheckBox1.Checked Then TextBox1.Focus()
-
-    End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs)
     End Sub
@@ -595,7 +592,7 @@
         '2- Salvo il foglio e lo marco come compilato
         If Not salva_foglio() Then
             Dim m = "Ci sono stati dei problemi durante la procedura di salvataggio"
-            Call MsgBox(m, vbOKOnly + vbExclamation)
+            MsgBox(m, vbOKOnly + vbExclamation)
             Exit Sub
         End If
 
@@ -675,13 +672,18 @@
         End If
         G_DB_Bambino = elemento1.Tag
         Gbl_DB_BAMBINO = Costruisci_filenameDB_bambino(G_DB_Bambino)
+
         If Trova_tutti_fogli_Bambino() = 0 Then
             Label18.Visible = True
             GroupBox4.Visible = False
+            GroupBoxCP.Visible = False
+            GroupBoxRT.Visible = False
             GroupBox3.Enabled = False
         Else
             Label18.Visible = False
             GroupBox4.Visible = True
+            GroupBox4.Visible = True
+            GroupBoxCP.Visible = True
             GroupBox3.Enabled = True
         End If
         Carica_combo_elenco_fogli()
@@ -722,15 +724,17 @@
 
     Private Sub CheckBox2_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox2.CheckedChanged
         If Noneseguire Then Exit Sub
-        Carica_combo_elenco_fogli()
+        Carica_combo_elenco_fogli
     End Sub
 
-    Private Sub ComboBox1_Paint(sender As Object, e As PaintEventArgs) Handles ComboBox1.Paint
 
-    End Sub
 
     Private Sub DGV1_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DGV1.CellContentClick
+
+        Mostra_totali("VOCI")
+
         Dim r As Integer = DGV1.CurrentRow.Index
+
         Dim cod = DGV1(0, r).Value
         Call Carica_dati_codice_elcar(cod)
         Dim TESTO = DGV1(1, r).Value
@@ -742,11 +746,7 @@
 
     End Sub
 
-    Private Sub LCP1_Click(sender As Object, e As EventArgs) Handles LCP1.Click
-
-    End Sub
-
-    Private Sub Label27_Click(sender As Object, e As EventArgs) Handles Label27.Click
-
+    Private Sub DGV2_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DGV2.CellContentClick
+        Mostra_totali("RT")
     End Sub
 End Class

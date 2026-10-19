@@ -1,6 +1,8 @@
 ﻿Imports System.Data.SqlTypes
 Imports System.Windows.Forms.VisualStyles
+Imports DocumentFormat.OpenXml.Office2010.Excel
 Imports DocumentFormat.OpenXml.Wordprocessing
+Imports Microsoft.Data
 Imports Microsoft.Data.Sqlite
 
 Public Class Class_TODOLIST
@@ -70,7 +72,7 @@ Public Class Class_TODOLIST
         ' Restituisce la lista (sarà vuota se non trova nessuna corrispondenza)
         Return listaRisultati
     End Function
-    Public Shared Function Load_By_IDT_IDF(Id_tablet As Integer) As Class_TODOLIST
+    Public Shared Function Load_By_ID_tablet(Id_tablet As Integer) As Class_TODOLIST
         ' Inizializza la lista che conterrà i risultati trovati
         Dim listaRisultati As New List(Of Class_TODOLIST)()
         Dim sql_string = ""
@@ -275,8 +277,79 @@ Public Class Class_TODOLIST
             End If
         End Using
     End Sub
+    Public Shared Function Foglio_gia_inserito_nella_lista_OLD(ID_foglio As Integer, id_bambino As Integer) As Boolean
+        ' Inizializza la lista che conterrà i risultati trovati
+        Dim listaRisultati As New List(Of Class_TODOLIST)()
+        Dim sql_string = ""
+        Dim record As New Class_TODOLIST()
 
-    Public Function Delete(ID) As Boolean
+        Using cn = DB.GetConnection_Scuoladellestelle()
+
+
+            sql_string = "SELECT * FROM TODOLIST WHERE ID_FOGLIO = @ID_FOGLIO"
+            If cn.State <> ConnectionState.Open Then
+                cn.Open()
+            End If
+
+            Using cmd As New SqliteCommand(sql_string, cn)
+                cmd.Parameters.AddWithValue("@ID_FOGLIO", ID_foglio)
+
+                ' Il carattere % indica a SQLite di trovare qualsiasi carattere prima e dopo il testo
+                'cmd.Parameters.AddWithValue("@Testo", "%" & testoCercato & "%")
+                Try
+
+                    Using rd As SqliteDataReader = cmd.ExecuteReader()
+
+                        ' Usa While al posto di If perché ci possono essere più record corrispondenti
+                        If rd.Read() Then
+                            ' Crea una nuova istanza della classe per ogni riga trovata
+                            Dim IDd = Convert.ToInt32(rd("ID"))
+                            Return True
+                        End If
+
+                    End Using
+                Catch ex As Exception
+                    Console.WriteLine(ex.ToString)
+                End Try
+
+            End Using
+        End Using
+
+        ' Restituisce la lista (sarà vuota se non trova nessuna corrispondenza)
+        Return False
+    End Function
+
+    Public Shared Function Foglio_gia_inserito_nella_lista(ID_foglio As Integer, id_bambino As Integer) As Boolean
+        If ID_foglio = 0 Then Return False
+        If id_bambino = 0 Then Return False
+        Dim sql As String = "SELECT * FROM TODOLIST WHERE ID_FOGLIO = @ID_FOGLIO AND ID_BAMBINO = @ID_BAMBINO"
+
+        Using cn = DB.GetConnection_Scuoladellestelle()
+            If cn.State <> ConnectionState.Open Then cn.Open()
+
+            Using cmd As New SqliteCommand(sql, cn)
+                cmd.Parameters.AddWithValue("@ID_FOGLIO", ID_foglio)
+                cmd.Parameters.AddWithValue("@ID_BAMBINO", id_bambino)
+
+                Try
+                    ' ExecuteScalar è ideale quando devi verificare l'esistenza o leggere un solo valore
+                    Dim result = cmd.ExecuteScalar()
+
+                    If result IsNot Nothing AndAlso Not IsDBNull(result) Then
+                        Return True
+                    End If
+                Catch ex As Exception
+                    Console.WriteLine(ex.ToString())
+                End Try
+            End Using ' Chiude cmd
+        End Using ' Chiude cn
+
+        Return False
+
+
+    End Function
+
+    Public Shared Function Delete(ID) As Boolean
         ' Controllo di sicurezza: se l'ID è 0, il record non esiste nel database
         If ID = 0 Then Return False
 

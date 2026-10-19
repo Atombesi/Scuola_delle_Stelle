@@ -14,7 +14,6 @@ Public Class Class_ROUTINE
     Public Property IsChecked As Boolean = False
 
     Public Function Save() As Integer
-
         Using cn = DB.GetConnection_Scuoladellestelle()
             If ID = 0 Then
                 Dim sql As String =
@@ -47,6 +46,7 @@ Public Class Class_ROUTINE
 
 
     End Function
+
 
     Public Function Load(id As Integer) As Class_ROUTINE
 

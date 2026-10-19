@@ -22,11 +22,17 @@ Public Class DB
         Return cn
     End Function
 
-    Public Shared Function GetConnection_Bambino() As SqliteConnection
-        Gbl_DB_BAMBINO = Gbl_DB_BAMBINO.ToUpper
-        If InStr(Gbl_DB_BAMBINO, ".DB") = 0 Then Gbl_DB_BAMBINO = Gbl_DB_BAMBINO + ".DB"
-        Dim percorsoFileBambino As String = IO.Path.Combine(ini.DB_Bambini_path, Gbl_DB_BAMBINO).ToUpper
-
+    Public Shared Function GetConnection_Bambino(Optional Db_bambino As String = "") As SqliteConnection
+        Dim percorsoFileBambino = ""
+        If Db_bambino = "" Then
+            Gbl_DB_BAMBINO = Gbl_DB_BAMBINO.ToUpper
+            If InStr(Gbl_DB_BAMBINO, ".DB") = 0 Then Gbl_DB_BAMBINO = Gbl_DB_BAMBINO + ".DB"
+            percorsoFileBambino = IO.Path.Combine(ini.DB_Bambini_path, Gbl_DB_BAMBINO).ToUpper
+        Else
+            Db_bambino = Db_bambino.ToUpper
+            If InStr(Db_bambino, ".DB") = 0 Then Db_bambino = Db_bambino + ".DB"
+            percorsoFileBambino = IO.Path.Combine(ini.DB_Bambini_path, Db_bambino).ToUpper
+        End If
         ' Compone la stringa nel formato corretto per SQLite ("Data Source=...")
         Dim connectionStringDinamica As String = "Data Source=" & percorsoFileBambino
 

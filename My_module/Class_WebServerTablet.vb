@@ -76,6 +76,140 @@ Public Class Class_WebServerTablet
         End While
     End Sub
     Private Async Function GestisciMessaggiTablet(ByVal ws As WebSocket) As Task
+        ' Buffer di transito per i singoli segmenti in arrivo dalla rete
+        Dim buffer(4096) As Byte
+        Console.WriteLine("🔄 Thread di ascolto WebSocket avviato per il dispositivo.")
+
+        While ws.State = WebSocketState.Open
+            Try
+                Dim messaggioRicevuto As String = ""
+
+                ' 🎯 SOLUZIONE OVERFLOW: Usiamo un MemoryStream per accumulare pacchetti di qualsiasi dimensione (anche > 4KB)
+                Using ms As New System.IO.MemoryStream()
+                    Dim result As WebSocketReceiveResult
+
+                    Do
+                        result = Await ws.ReceiveAsync(New ArraySegment(Of Byte)(buffer), CancellationToken.None)
+
+                        ' Se il socket si sta chiudendo, usciamo immediatamente
+                        If result.MessageType = WebSocketMessageType.Close Then
+                            Await ws.CloseAsync(WebSocketCloseStatus.NormalClosure, "Chiusura richiesta", CancellationToken.None)
+                            Console.WriteLine("🔴 CANALE CHIUSO dal tablet.")
+                            Debug.Print("CANALE CHIUSO dal tablet.")
+                            Exit Function
+                        End If
+
+                        ' Accumula i byte letti nel flusso di memoria
+                        ms.Write(buffer, 0, result.Count)
+
+                    Loop While Not result.EndOfMessage ' Continua a pescare finché il tablet non ha finito di inviare l'intero file
+
+                    ' Trasformiamo l'intera sequenza di byte accumulata nella stringa JSON grezza finale
+                    messaggioRicevuto = Encoding.UTF8.GetString(ms.ToArray())
+                    Debug.Print(messaggioRicevuto)
+                End Using
+
+                Console.WriteLine("Messaggio completo ricevuto dal tablet. Lunghezza caratteri: " & messaggioRicevuto.Length)
+
+                ' Spacchettamento preventivo immediato per estrarre tipo comando e device_id
+                Dim msgDecodificato As Struct_Decode_Android_message = Decode_Android_message(messaggioRicevuto)
+                Dim rispostaJson As String = ""
+
+                ' Switch dei comandi basato sulla struttura
+                Select Case msgDecodificato.type
+                                        ' --- 1. GESTIONE PACCHETTO HANDSHAKE ---
+                    Case "HANDSHAKE"
+                        Dim parser As System.Text.Json.JsonDocument = System.Text.Json.JsonDocument.Parse(messaggioRicevuto)
+                        Dim root As System.Text.Json.JsonElement = parser.RootElement
+                        Dim notaUtente As String = root.GetProperty("nota_utente").GetString()
+                        Dim nomeAssegnato As String = ""
+
+                        Dim statoHardware As Integer = Class_DEVICE.Dispositivo_Registrato_Stato(msgDecodificato.deviceId, nomeAssegnato)
+
+                        If statoHardware = 1 Then ' Device gia identificato
+                            ' 🎯 LOGICA PULITA: Inviamo solo l'OK formale. Il tablet userà il nome che ha già sul disco.
+                            rispostaJson = "{""type"":""HANDSHAKE_OK""}"
+                            'Debug.Print(rispostaJson)
+                        ElseIf statoHardware = 0 OrElse statoHardware = -1 Then
+                            If statoHardware = -1 Then
+                                Dim inserimentoOK As Boolean = Class_DEVICE.RegistraNuovoDispositivo(msgDecodificato.deviceId, notaUtente)
+                            End If
+                            AttivaSegnalazioneSulForm(msgDecodificato.deviceId)
+                            rispostaJson = "{""type"":""HANDSHAKE_PENDING"",""messaggio"":""In attesa di abilitazione...""}"
+                            'Debug.Print(rispostaJson)
+                        End If
+
+
+                    ' --- 2. GESTIONE PACCHETTO RICHIESTA ELENCO ---
+                    Case "RICHIEDI_ELENCO"
+                        Dim datiElenco As String = GeneraJsonElencoFogli(msgDecodificato.deviceId)
+                        rispostaJson = "{""type"":""ELENCO_FOGLI_RISPOSTA"", ""dati"":" & datiElenco & "}"
+                        Debug.Print(rispostaJson)
+
+                    ' --- 3. GESTIONE INVIO FOGLIO RICHIESTO ---
+                    Case "RICHIEDI_FOGLIO"
+                        Dim parser As System.Text.Json.JsonDocument = System.Text.Json.JsonDocument.Parse(messaggioRicevuto)
+                        Dim root As System.Text.Json.JsonElement = parser.RootElement
+                        'Debug.Print(rispostaJson)
+
+                        Dim idRichiesto As Integer = root.GetProperty("id_questionario").GetInt32()
+                        Dim jsonFoglioBambino As String = Carica_Foglio_da_inviare_al_Tablet(idRichiesto)
+                        rispostaJson = "{""type"":""FOGLIO_RICEVUTO"", ""dati"":" & jsonFoglioBambino & "}"
+                        'Debug.Print(rispostaJson)
+
+                        If Not String.IsNullOrEmpty(rispostaJson) Then
+                            Dim bufferRisposta() As Byte = Encoding.UTF8.GetBytes(rispostaJson)
+                            Await ws.SendAsync(New ArraySegment(Of Byte)(bufferRisposta), WebSocketMessageType.Text, True, CancellationToken.None)
+                            Console.WriteLine("🟢 SUCCESS: File JSON del foglio spedito al tablet con successo.")
+                        End If
+                        rispostaJson = ""
+
+                    ' --- 4. CONFERMA RICEZIONE FOGLIO ---
+                    Case "CONFERMA_RICEZIONE_FOGLIO"
+                        Call TODOLIST_Aggiorna_Foglio_In_Compilazione(messaggioRicevuto)
+                        Debug.Print(rispostaJson)
+
+                    ' --- 5. PING_VERIFICA ---
+                    Case "PING_VERIFICA"
+                        rispostaJson = "{""type"":""PONG_ATTIVO""}"
+
+                        Debug.Print(rispostaJson)
+                    ' --- 6. SALVA FOGLIO COMPILATO ---
+                    Case "SALVA_FOGLIO_COMPILATO"
+                        ' 1. Esegui la sotto-routine che elabora il JSON per scrivere le risposte finali nel DB SQLite di Windows
+                        Call SalvaFoglioCompilato_Json(messaggioRicevuto)
+                        Debug.Print(rispostaJson)
+
+                        ' 2. 🎯 RISPOSTA DI CONFERMA: Spariamo la parola chiave obbligatoria concordata con il tablet
+                        ' Questo messaggio sbloccherà il tablet, azzerando lo schermo e richiedendo il rinfresco
+                        rispostaJson = "{""type"":""FOGLIO_RICEVUTO"",""dati"":{""stato"":""OK_SALVATO""}}"
+                        Debug.Print(rispostaJson)
+
+                    Case Else
+                        Console.WriteLine("⚠️ Messaggio non riconosciuto dal motore di switch: " & msgDecodificato.type)
+                        Debug.Print(rispostaJson)
+                End Select
+
+                ' Spedisce la risposta automatica cumulativa nel socket verso il tablet
+                If Not String.IsNullOrEmpty(rispostaJson) Then
+                    Dim bufferRisposta() As Byte = Encoding.UTF8.GetBytes(rispostaJson)
+                    Await ws.SendAsync(New ArraySegment(Of Byte)(bufferRisposta), WebSocketMessageType.Text, True, CancellationToken.None)
+                End If
+
+            Catch ex As Exception
+                Console.WriteLine("CRASH DENTRO IL LOOP DEL SOCKET VB: " & ex.Message)
+                Debug.Print("CRASH DENTRO IL LOOP DEL SOCKET VB")
+                Exit While
+            End Try
+        End While
+        ' codice per forzare il cambio nome del device 
+        'Dim comandoCambioNome As String = "{""type"":""AGGIORNA_NOME_TABLET"",""nome_dispositivo"":""NUOVO_NOME_ASSEGNATO""}"
+        'Dim bufferNome() As Byte = Encoding.UTF8.GetBytes(comandoCambioNome)
+        'Await ws.SendAsync(New ArraySegment(Of Byte)(bufferNome), WebSocketMessageType.Text, True, CancellationToken.None)
+        Console.WriteLine("🏁 Thread di ascolto terminator. Il socket non è più monitorato.")
+    End Function
+
+    Private Async Function GestisciMessaggiTablet_old(ByVal ws As WebSocket) As Task
         Dim buffer(4096) As Byte
         Console.WriteLine("🔄 Thread di ascolto WebSocket avviato per il dispositivo.")
 
@@ -144,10 +278,16 @@ Public Class Class_WebServerTablet
                     ' --- 4. CONFERMA RICEZIONE FOGLIO ---
                     Case "CONFERMA_RICEZIONE_FOGLIO"
                         ' Passiamo la stringa alla sotto-routine dedicata come concordato prima
-                        Call AggiornaDatabaseFoglioInCompilazione(messaggioRicevuto)
+                        Call TODOLIST_Aggiorna_Foglio_In_Compilazione(messaggioRicevuto)
                     ' --- 5. PING_VERIFICA ---
                     Case "PING_VERIFICA"
                         rispostaJson = "{""type"":""PONG_ATTIVO""}"
+                    ' --- 6. SALVA FOGLIO COMPILATO
+                    Case "SALVA_FOGLIO_COMPILATO"
+                        Call TODOLIST_Aggiorna_Foglio_In_Compilazione(messaggioRicevuto)
+
+                        rispostaJson = "{""type"":""PONG_ATTIVO""}"
+
                     Case Else
                         Console.WriteLine("⚠️ Messaggio non riconosciuto dal motore di switch: " & msgDecodificato.type)
                 End Select
@@ -193,13 +333,19 @@ Public Class Class_WebServerTablet
 
 
     Public Shared Function GeneraJsonElencoFogli(deviceid As String) As String
+
+        ' Aggiorna la todolist 
+        Call Todolist_Azzera_e_Ricrea(False)
+
         ' leggo il contenuto della tabella todolist
         Dim elenco1 As List(Of Class_TODOLIST) = Class_TODOLIST.LoadAll
         Dim Tablet_id = 0
+        Dim tablet_name = ""
 
         Dim result = Class_DEVICE.Trova_dispositivo(deviceid)
         If result.Esito Then
             Tablet_id = result.Devices.ID
+            tablet_name = result.Devices.NOME
         End If
 
         If elenco1.Count = 0 Then
@@ -209,19 +355,22 @@ Public Class Class_WebServerTablet
 
         Dim voceJson As New Struct_Elencofogli_Json
 
-            Try
-                ' Creiamo la lista vuota basata sulla tua struttura dati
-                Dim elenco As New List(Of Struct_Elencofogli_Json)()
+        Try
+            ' Creiamo la lista vuota basata sulla tua struttura dati
+            Dim elenco As New List(Of Struct_Elencofogli_Json)()
 
-                ' Carico la struttura Elenco fogli json da inviar
-                For Each voce In elenco1
-                    voceJson.ID_Questionario = voce.ID
-                    voceJson.Data_foglio = voce.DATA_FOGLIO
-                    voceJson.ID_foglio = voce.ID_FOGLIO
-                    voceJson.ID_Bambino = voce.ID_BAMBINO
-                    voceJson.Filename = voce.NOMEFILE
-                    voceJson.Bambino = voce.BAMBINO
-                If voce.CLIENT_ID = Tablet_id Or voce.CLIENT_ID = 0 Then
+            ' Carico la struttura Elenco fogli json da inviar
+            For Each voce In elenco1
+                voceJson.ID_Questionario = voce.ID
+                voceJson.Data_foglio = voce.DATA_FOGLIO
+                voceJson.ID_foglio = voce.ID_FOGLIO
+                voceJson.ID_Bambino = voce.ID_BAMBINO
+                voceJson.Filename = voce.NOMEFILE
+                voceJson.Bambino = voce.BAMBINO
+                If voce.CLIENT_ID = Tablet_id Then
+                    voceJson.note = "DISPONIBILE per " + tablet_name.ToString
+                    voceJson.disponibile = 1  ' 1=disponibile
+                ElseIf voce.CLIENT_ID = 0 Then
                     voceJson.note = "DISPONIBILE"
                     voceJson.disponibile = 1  ' 1=disponibile
                 Else
@@ -229,19 +378,19 @@ Public Class Class_WebServerTablet
                     voceJson.note = "IN USO DA: " + voce.CLIENT_NOME
                     voceJson.disponibile = 0  ' 0=NON disponibile
                 End If
-                    elenco.Add(voceJson)
-                Next
+                elenco.Add(voceJson)
+            Next
 
 
-                ' 🎯 CHIAMATA ASSOLUTA: Specifichiamo tutto il percorso per evitare conflitti con System.Text
-                Dim jsonOttenuto As String = System.Text.Json.JsonSerializer.Serialize(elenco)
-                Return jsonOttenuto
+            ' 🎯 CHIAMATA ASSOLUTA: Specifichiamo tutto il percorso per evitare conflitti con System.Text
+            Dim jsonOttenuto As String = System.Text.Json.JsonSerializer.Serialize(elenco)
+            Return jsonOttenuto
 
 
-            Catch ex As Exception
-                ' In caso di errore restituiamo un array vuoto per non bloccare l'app
-                Return "[]"
-            End Try
+        Catch ex As Exception
+            ' In caso di errore restituiamo un array vuoto per non bloccare l'app
+            Return "[]"
+        End Try
     End Function
 
     Public Shared Function OttieniIPRealiAttivi() As List(Of String)

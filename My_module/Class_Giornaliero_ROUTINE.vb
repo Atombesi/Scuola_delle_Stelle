@@ -108,4 +108,33 @@ Public Class Class_Giornaliero_ROUTINE
 
     End Function
 
+    Public Function Salva_totali(dbbambino) As Boolean
+        Using cn = DB.GetConnection_Bambino(dbbambino)
+            cn.Open()
+            Dim sql As String = ""
+
+            ' Determina se inserire un nuovo record o aggiornare quello esistente
+            If Me.ID = 0 Then Return False
+            sql = "UPDATE GIORNALIERO_ROUTINE SET " &
+                      "TOT = @TOT, COMPILATO = @COMPILATO WHERE ID = @ID;"
+
+            Using cmd As New SqliteCommand(sql, cn)
+                Try
+                    ' Assegnazione dei parametri comuni a entrambe le query
+                    cmd.Parameters.AddWithValue("@TOT", Me.TOT)
+                    cmd.Parameters.AddWithValue("@COMPILATO", Me.COMPILATO)
+
+                Catch ex As Exception
+                    Return False
+                End Try
+                ' Aggiunge il parametro ID ed esegue l'aggiornamento
+                cmd.Parameters.AddWithValue("@ID", Me.ID)
+                cmd.ExecuteNonQuery()
+            End Using
+        End Using
+        Return Me.ID
+
+
+    End Function
+
 End Class

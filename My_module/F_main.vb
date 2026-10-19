@@ -10,6 +10,8 @@ Public Class F_main
 
     Private Sub F_main_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
+        Me.Width = 145
+
         Class_WebServerTablet.FormPrincipaleRiferimento = Me
         P_liste.Visible = False
         P_Setting.Visible = False
@@ -20,6 +22,7 @@ Public Class F_main
 
         Call Read_ini()
         Carica_elenco_CODICI_ELCAR()
+        Gbl_Elenco_bambini = Carica_bambini()
         'Carico elenco comportamenti
         If Gbl_Elenco_CP Is Nothing Then
             Gbl_Elenco_CP = Carica_Comportamenti()
@@ -235,5 +238,8 @@ Public Class F_main
         End If
     End Sub
 
+    Private Sub Button7_Click(sender As Object, e As EventArgs) Handles Button7.Click
+        Call Todolist_Azzera_e_Ricrea()
 
+    End Sub
 End Class

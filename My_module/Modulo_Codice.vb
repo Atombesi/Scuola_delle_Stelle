@@ -5,9 +5,11 @@ Imports System.IO
 Imports System.Math
 Imports System.Reflection.Emit
 Imports System.Runtime.InteropServices
+Imports System.Text.Json
 Imports System.Text.RegularExpressions
 Imports System.Windows.Documents.DocumentStructures
 Imports DocumentFormat.OpenXml.Bibliography
+Imports DocumentFormat.OpenXml.Office2010.Excel
 Imports DocumentFormat.OpenXml.Office2013.Drawing.Chart
 Imports DocumentFormat.OpenXml.Packaging
 Imports DocumentFormat.OpenXml.Wordprocessing
@@ -16,7 +18,6 @@ Imports Microsoft.Data.Sqlite
 Imports OpenTK.Graphics.OpenGL
 Imports QRCoder
 Imports MyColor = System.Drawing.Color
-Imports System.Text.Json
 
 Module Modulo_Codice
     Public Structure DatiGrafico
@@ -306,6 +307,9 @@ Module Modulo_Codice
 
         Return True
     End Function
+
+
+
     Function ToDoList_Pulisci_Compilati() As Integer
         ' Carico tutti i record di todolist
         Dim voci_todolist As List(Of Class_TODOLIST) = Class_TODOLIST.LoadAll()
@@ -350,9 +354,10 @@ Module Modulo_Codice
 
     End Function
 
-    Function Todolist_Azzera_e_Ricrea()
-        '1) Elimina tutti i record che non sono uso da client Tablet
-        '2) Ricarica tutti i record con i fogli da compilare trovati 
+    Function Todolist_Azzera_e_Ricrea(Optional Completa As Boolean = True)
+        '1) Elimino tutti i record presenti in todolist che sono compilati
+        '2) se completa=true allora Elimina tutti i record che non sono uso da client Tablet
+        '3) Ricarica tutti i record con i fogli da compilare trovati 
 
         '1 Elimino tutti i record presenti in todolist che sono compilati
         ToDoList_Pulisci_Compilati()
@@ -360,17 +365,20 @@ Module Modulo_Codice
         '-- Rileggo la tabella TODOLIST 
         Dim voci_todolist As List(Of Class_TODOLIST) = Class_TODOLIST.LoadAll()
 
-
-        Dim voce As New Class_TODOLIST
-        For Each voce In voci_todolist
-            'Tengo  i record in uso dal tablet e non riconsegnati compilati
-            If voce.CLIENT_ID > 0 And Not voce.COMPILATO Then Continue For
-            voce.Delete(voce.ID)
-        Next
+        If Completa Then
+            '-- Elimina tutti i record che non sono uso da client Tablet --
+            Dim voce As New Class_TODOLIST
+            For Each voce In voci_todolist
+                'Tengo  i record in uso dal tablet e non riconsegnati compilati
+                If voce.CLIENT_ID > 0 And Not voce.COMPILATO Then Continue For
+                voce.Delete(voce.ID)
+            Next
+        End If
 
         '-- Cerco e ricarico tutti i fogli ancora da compilare 
         For Each bambino In Gbl_Elenco_bambini
             Gbl_DB_BAMBINO = bambino.DBname
+            Dim id_bambino = bambino.ID
             If Not Exist_DB_Bambino(Gbl_DB_BAMBINO) Then Continue For
             ' cerco i fogli non compilati 
             Dim dt As DataTable = Class_GIORNALIERO.OttieniRecordOrderbydata(True)
@@ -378,8 +386,10 @@ Module Modulo_Codice
             For Each riga As DataRow In dt.Rows
                 ' 1. Lettura del campo codiceùdim id_foglio?
                 Dim idf = Convert.ToInt32(riga("id_foglio"))
-                Dim foglio = Carica_foglio(idf, Gbl_DB_BAMBINO)
-                ToDoList_Aggiungi_voce_foglio(foglio)
+                If Not Class_TODOLIST.Foglio_gia_inserito_nella_lista(idf, id_bambino) Then
+                    Dim foglio = Carica_foglio(idf, Gbl_DB_BAMBINO)
+                    ToDoList_Aggiungi_voce_foglio(foglio)
+                End If
             Next
         Next
 
@@ -1402,7 +1412,7 @@ Module Modulo_Codice
 
 
     End Function
-    Public Sub AggiornaDatabaseFoglioInCompilazione(ByVal jsonGrezzo As String)
+    Public Sub TODOLIST_Aggiorna_Foglio_In_Compilazione(ByVal jsonGrezzo As String)
         Try
             ' Il parsing avviene qui dentro in modo isolato e pulito
             Dim parser As System.Text.Json.JsonDocument = System.Text.Json.JsonDocument.Parse(jsonGrezzo)
@@ -1419,7 +1429,7 @@ Module Modulo_Codice
             If result.Esito Then
                 'Aggiorno e salv
                 Dim id = result.Devices.ID
-                Dim todolist = Class_TODOLIST.Load_By_IDT_IDF(id)
+                Dim todolist = Class_TODOLIST.Load_By_ID_tablet(id)
                 todolist.CLIENT_ID = id
                 todolist.CLIENT_NOME = result.Devices.NOME
                 todolist.CLIENT_DATAINVIO = Now.ToString
@@ -1431,6 +1441,20 @@ Module Modulo_Codice
             Console.WriteLine("ERRORE NEL PARSING DELLA CONFERMA DB: " & ex.Message)
         End Try
     End Sub
+    Public Function TODOLIST_Aggiorna_Foglio_Compilato(ID_TODOLIST As Integer) As Boolean
+        Try
+
+            If Not Class_TODOLIST.Delete(ID_TODOLIST) Then
+                Dim m = "TODOLIST Errore cancellazione record " + ID_TODOLIST.ToString
+                APPEND_LOG(m, ini.File_Log, True)
+                Return False
+            End If
+
+        Catch ex As Exception
+            Return False
+        End Try
+        Return True
+    End Function
     Public Function Verifica_ID_messaggio(ByVal ID_Messaggio As String) As Boolean
         ' Se la stringa è vuota o composta solo da spazi, non è valida
         If String.IsNullOrWhiteSpace(ID_Messaggio) Then Return False
@@ -1474,4 +1498,131 @@ Module Modulo_Codice
 
         Return info
     End Function
+
+    Public Function SalvaFoglioCompilato_Json(ByVal messaggioRicevuto As String) As Boolean
+        If String.IsNullOrWhiteSpace(messaggioRicevuto) Then Return False
+
+        Try
+            ' 1. Parsing dell'involucro esterno inviato dal tablet
+            Using parser As System.Text.Json.JsonDocument = System.Text.Json.JsonDocument.Parse(messaggioRicevuto)
+                Dim root As System.Text.Json.JsonElement = parser.RootElement
+
+                ' 2. Estraiamo la proprietà "dati" che contiene il vero e proprio foglio compilato
+                If Not root.TryGetProperty("dati", Nothing) Then
+                    Console.WriteLine("⚠️ Errore: Proprietà 'dati' non trovata nel JSON del tablet.")
+                    Return False
+                End If
+
+                Dim foglioElement As System.Text.Json.JsonElement = root.GetProperty("dati")
+                Dim foglioGrezzoJson As String = foglioElement.GetRawText()
+
+                ' 3. Deserializzazione speculare nella tua struttura Struct_foglio_Json
+                Dim opzioni As New System.Text.Json.JsonSerializerOptions()
+                opzioni.PropertyNameCaseInsensitive = True ' 🎯 Garanzia totale contro problemi di maiuscole/minuscole
+
+                Dim foglioCompilato As Struct_foglio_Json = System.Text.Json.JsonSerializer.Deserialize(Of Struct_foglio_Json)(foglioGrezzoJson, opzioni)
+
+                ' 4. Recupero dei puntatori anagrafici dal foglio riesumato
+                Dim idTodoList As Integer = foglioCompilato.ID_Questionario
+                Dim idFoglio As Integer = foglioCompilato.ID_foglio
+                Dim idbambino As Integer = foglioCompilato.ID_Bambino
+
+
+                ' Sicurezza: verifichiamo la stabilità dei parametri chiave prima di toccare il database
+                If idTodoList = 0 OrElse idFoglio = 0 Then
+                    Console.WriteLine("⚠️ Errore: ID_Questionario o ID_foglio pari a zero. Salvataggio abortito.")
+                    Return False
+                End If
+
+                ' 5. SALVATAGGIO REALE NEL DATABASE SQLITE DI WINDOWS
+                ' Qui invochiamo la tua routine industriale per sovrascrivere il foglio già esistente.
+                ' Passiamo gli array compilati (VociDiUnFoglio, RT, CP) per salvarli nel DB.
+
+
+                Dim dbBambino = Class_ANAGRAFICA.Load(idbambino).DBname
+                Dim foglio = Carica_foglio(idFoglio, dbBambino)
+
+                foglio.CP = foglioCompilato.CP
+                foglio.RT = foglioCompilato.RT
+                foglio.VociDiUnFoglio = foglioCompilato.VociDiUnFoglio
+                foglio.Compilato = 1
+                Dim salvato = Foglio_Esistente_Aggiorna(foglio, dbBambino)
+                ' return (1) Nessun record salvato
+                ' return >1 Salvataggio parziale record
+                Dim salvataggiook = False
+                If salvato = 0 Then       ' Salvataggio completo
+                    ' Aggiorna anche lo stato del record generale nella tabella TODOLIST del PC Windows
+                    Dim passato = TODOLIST_Aggiorna_Foglio_Compilato(idTodoList)
+                    salvataggiook = True
+                ElseIf salvato = -1 Then   ' nessun record salvato
+                    salvataggiook = False
+                Else                      ' Salvataggio parziale record
+                    salvataggiook = False
+                End If
+
+
+
+                If salvataggioOK Then
+                    Console.WriteLine("✅ SUCCESS: Foglio ID " & idTodoList & " del bambino " & foglio.Bambino & " aggiornato nel DB di Windows.")
+                    Return True
+                Else
+                    Console.WriteLine("❌ Errore durante la query di aggiornamento SQLite su Windows.")
+                    Return False
+                End If
+            End Using
+
+        Catch ex As Exception
+            Console.WriteLine("CRASH DURANTE IL SALVATAGGIO DEL JSON COMPILATO IN VB: " & ex.Message)
+            Return False
+        End Try
+    End Function
+    Function Foglio_Esistente_Aggiorna(foglio As Struct_foglio, dbbambino As String) As Integer
+        '-- Se sono qui devo essere sicuro che il foglio esista gia --
+        ' return (0) Salvataggio completo
+        ' return (-1) Nessun record salvato
+        ' return >0  Salvataggio parziale record
+
+        Dim CPcnt = 0, RTcnt = 0, ELCARcnt = 0, m = ""
+        Dim salvare_cp = True, salvare_rt = True, salvato = 0
+        Try
+            CPcnt = foglio.CP.Count
+            RTcnt = foglio.RT.Count
+            ELCARcnt = foglio.VociDiUnFoglio.Count
+        Catch ex As Exception
+            Return -1
+        End Try
+
+        '-- Registro nel GIORNALIERO del DB BAMBINO tutte le righe presenti -- 
+        For j = 0 To ELCARcnt - 1
+            If Not foglio.VociDiUnFoglio(j).Salva_totali(dbbambino) Then
+                m = "Problemi salvataggio codice (" + foglio.VociDiUnFoglio(j).Codice + ") id_foglio:" + foglio.VociDiUnFoglio(j).ID_FOGLIO.ToString + " DB:" + Gbl_DB_BAMBINO
+                APPEND_LOG(m, GbL_Logfile, True)
+                salvato = salvato + 1
+            End If
+        Next
+
+        For j = 0 To CPcnt - 1
+            If Not foglio.CP(j).Salva_Totali(dbbambino) Then
+                m = "Problemi salvataggio CP (" + foglio.CP(j).TESTO + ") id_foglio:" + foglio.CP(j).ID_FOGLIO.ToString + " DB:" + foglio.DB_Bambino
+                APPEND_LOG(m, GbL_Logfile, True)
+                salvato = salvato + 1
+            End If
+        Next
+
+
+        '-- Registro nel GIORNALIERO_ROUTINE del DB BAMBINO tutte le righe della routine presenti -- 
+        For j = 0 To RTcnt - 1
+            If Not foglio.RT(j).Salva_totali(dbbambino) Then
+                m = "Problemi salvataggio RT (" + foglio.RT(j).TESTO + ") id_foglio:" + foglio.RT(j).ID_FOGLIO.ToString + " DB:" + foglio.DB_Bambino
+                APPEND_LOG(m, GbL_Logfile, True)
+                salvato = salvato + 1
+            End If
+        Next
+        Return salvato
+
+
+
+    End Function
+
+
 End Module

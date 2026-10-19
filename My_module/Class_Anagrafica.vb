@@ -242,4 +242,33 @@ Public Class Class_ANAGRAFICA
 
         ' Restituisce la lista (sarà vuota se non trova nessuna corrispondenza)
     End Function
+    Public Shared Function Return_DBNAME(ID_bambino As Integer) As String
+        ' Inizializza la lista che conterrà i risultati trovati
+
+        Using cn = DB.GetConnection_Scuoladellestelle()
+
+            ' Usa l'operatore LIKE per cercare corrispondenze parziali
+            Dim sql As String =
+                "SELECT ID,  DBnameFROM ANAGRAFICA WHERE ID = @ID"
+            Using cmd As New SqliteCommand(sql, cn)
+
+                ' Il carattere % indica a SQLite di trovare qualsiasi carattere prima e dopo il testo
+                cmd.Parameters.AddWithValue("@ID", "%" & ID_bambino)
+
+                Using rd = cmd.ExecuteReader()
+
+                    ' Usa While al posto di If perché ci possono essere più record corrispondenti
+                    While rd.Read()
+                        ' Crea una nuova istanza della classe per ogni riga trovata
+                        Dim name = ""
+                        name = Convert.ToString(rd("DBname"))
+                        Return name
+                    End While
+
+                End Using
+            End Using
+        End Using
+
+        Return ""
+    End Function
 End Class

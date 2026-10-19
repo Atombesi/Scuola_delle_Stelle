@@ -832,6 +832,7 @@ Public Class F_Seleziona_Categoria
             Gbl_RT_selezionate(j).DATA = Gbl_foglio.Data
             Gbl_RT_selezionate(j).COMPILATO = False
             Gbl_RT_selezionate(j).TOT = 0
+            Gbl_RT_selezionate(j).ID = 0
         Next
 
         If Gbl_RT_selezionate.Count > 0 Then
@@ -846,7 +847,7 @@ Public Class F_Seleziona_Categoria
                 Gbl_CP_selezionate(j).DATA = Gbl_foglio.Data
                 Gbl_CP_selezionate(j).TOT = 0
                 Gbl_CP_selezionate(j).COMPILATO = False
-
+                Gbl_CP_selezionate(j).ID = 0
             End If
         Next
         If Gbl_CP_selezionate.Count > 0 Then
@@ -1001,7 +1002,7 @@ Public Class F_Seleziona_Categoria
         Dim elenco_fogli As New Class_Elenco_fogli()
         Dim trovato = elenco_fogli.Foglio_esistente(Gbl_foglio.Data)
         If trovato Then
-            m = "E' stato trovato un foglio con la stesso stessa data e stesso ID_FOGLIO"
+            m = "E' stato trovato un foglio con la stesso stessa Data"
             Call MsgBox(m, vbCritical + vbOKOnly)
             Return False
         End If

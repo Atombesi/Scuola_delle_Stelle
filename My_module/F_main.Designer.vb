@@ -298,7 +298,7 @@ Partial Class F_main
         CheckBox4.ImageAlign = ContentAlignment.BottomCenter
         CheckBox4.ImageIndex = 2
         CheckBox4.ImageList = ImageList1
-        CheckBox4.Location = New Point(65, 251)
+        CheckBox4.Location = New Point(34, 251)
         CheckBox4.Name = "CheckBox4"
         CheckBox4.Size = New Size(32, 27)
         CheckBox4.TabIndex = 22
@@ -310,7 +310,7 @@ Partial Class F_main
         PctNotifica.ImageAlign = ContentAlignment.MiddleLeft
         PctNotifica.ImageIndex = 5
         PctNotifica.ImageList = ImageList1
-        PctNotifica.Location = New Point(96, 252)
+        PctNotifica.Location = New Point(69, 252)
         PctNotifica.Name = "PctNotifica"
         PctNotifica.Size = New Size(24, 27)
         PctNotifica.TabIndex = 23
@@ -323,7 +323,7 @@ Partial Class F_main
         AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
         CancelButton = Button6
-        ClientSize = New Size(129, 347)
+        ClientSize = New Size(130, 347)
         Controls.Add(PctNotifica)
         Controls.Add(CheckBox4)
         Controls.Add(CheckBox3)

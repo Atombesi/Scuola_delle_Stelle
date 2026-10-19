@@ -188,7 +188,41 @@ Public Class Class_GIORNALIERO
         End Using
         Return Me.ID
     End Function
+    Public Function Salva_totali(db_bambino) As Boolean
+        Using cn = DB.GetConnection_Bambino(db_bambino)
+            cn.Open()
+            Dim sql As String = ""
 
+            ' Determina se inserire un nuovo record o aggiornare quello esistente
+            If Me.ID = 0 Then Return False
+            sql = "UPDATE GIORNALIERO SET " &
+                      "TOT1_POS = @TOT1_POS, TOT1_NEG = @TOT1_NEG, TOT1_PROMPT = @TOT1_PROMPT,TOT1 = @TOT1, " &
+                      "TOT2_POS = @TOT2_POS, TOT2_NEG = @TOT2_NEG, TOT2_PROMPT = @TOT2_PROMPT,TOT2 = @TOT2, " &
+                      "COMPILATO = @COMPILATO WHERE ID = @ID;"
+
+            Using cmd As New SqliteCommand(sql, cn)
+                Try
+                    ' Assegnazione dei parametri comuni a entrambe le query
+                    cmd.Parameters.AddWithValue("@TOT1_POS", Me.TOT1_POS)
+                    cmd.Parameters.AddWithValue("@TOT1_NEG", Me.TOT1_NEG)
+                    cmd.Parameters.AddWithValue("@TOT1_PROMPT", Me.TOT1_PROMPT)
+                    cmd.Parameters.AddWithValue("@TOT1", Me.TOT1)
+                    cmd.Parameters.AddWithValue("@TOT2_POS", Me.TOT2_POS)
+                    cmd.Parameters.AddWithValue("@TOT2_NEG", Me.TOT2_NEG)
+                    cmd.Parameters.AddWithValue("@TOT2_PROMPT", Me.TOT2_PROMPT)
+                    cmd.Parameters.AddWithValue("@TOT2", Me.TOT2)
+                    cmd.Parameters.AddWithValue("@COMPILATO", If(Me.COMPILATO, 1, 0))
+
+                Catch ex As Exception
+                    Return -1
+                End Try
+                ' Aggiunge il parametro ID ed esegue l'aggiornamento
+                cmd.Parameters.AddWithValue("@ID", Me.ID)
+                cmd.ExecuteNonQuery()
+            End Using
+        End Using
+        Return Me.ID
+    End Function
 
     Public Function Carica_Foglio(idFoglio As Integer) As List(Of Class_GIORNALIERO)
 

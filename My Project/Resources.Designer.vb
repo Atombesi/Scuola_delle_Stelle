@@ -63,9 +63,40 @@ Namespace My.Resources
         '''<summary>
         '''  Looks up a localized resource of type System.Drawing.Bitmap.
         '''</summary>
+        Friend ReadOnly Property Emoji_Objects_117() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("Emoji Objects-117", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Bitmap.
+        '''</summary>
         Friend ReadOnly Property Emoji_Smiley_72() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("Emoji Smiley-72", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property icons8_segno_di_spunta_96() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("icons8-segno-di-spunta-96", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property warning_sign_by_kg_just_another_warning_sigh_with_exclamation_mark_UFwEFR_clipart() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("warning-sign-by-kg-just-another-warning-sigh-with-exclamation-mark-UFwEFR-clipart"& _ 
+                        "", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property

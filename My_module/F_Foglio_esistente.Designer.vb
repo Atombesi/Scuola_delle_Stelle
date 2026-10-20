@@ -43,7 +43,8 @@ Partial Class F_Foglio_esistente
         Label11 = New Label()
         Dtp1 = New DateTimePicker()
         Button5 = New Button()
-        GroupBox1 = New GroupBox()
+        GroupBox_VOCI = New GroupBox()
+        Button_voci = New Button()
         Label21 = New Label()
         Label20 = New Label()
         Label12 = New Label()
@@ -63,21 +64,16 @@ Partial Class F_Foglio_esistente
         LCP1 = New Label()
         Label5 = New Label()
         Label6 = New Label()
-        CheckBox1 = New CheckBox()
         ImageList1 = New ImageList(components)
         CMenuStrip1 = New ContextMenuStrip(components)
-        MODIFICA = New ToolStripMenuItem()
-        ToolStripMenuItem4 = New ToolStripMenuItem()
-        ToolStripMenuItem5 = New ToolStripMenuItem()
-        ToolStripMenuItem6 = New ToolStripMenuItem()
+        ToolStrip_modifica = New ToolStripMenuItem()
         ToolStripSeparator2 = New ToolStripSeparator()
-        ToolStripMenuItem2 = New ToolStripMenuItem()
-        ToolStripMenuItem3 = New ToolStripMenuItem()
-        SegnaComeDaCompilareToolStripMenuItem = New ToolStripMenuItem()
-        ToolStripSeparator1 = New ToolStripSeparator()
+        ToolStrip_more = New ToolStripMenuItem()
         ToolStripMenuItem1 = New ToolStripMenuItem()
+        ToolStripSeparator1 = New ToolStripSeparator()
+        ToolStripMenuItem2 = New ToolStripMenuItem()
         ToolStripSeparator3 = New ToolStripSeparator()
-        ToolStripMenuItem7 = New ToolStripMenuItem()
+        ToolStripMenuItem3 = New ToolStripMenuItem()
         Label29 = New Label()
         Label28 = New Label()
         CheckBox3 = New CheckBox()
@@ -87,20 +83,20 @@ Partial Class F_Foglio_esistente
         Label24 = New Label()
         Button4 = New Button()
         Label26 = New Label()
-        Label27 = New Label()
         GroupBox3 = New GroupBox()
         Label19 = New Label()
-        CheckBox2 = New CheckBox()
+        CheckBox1 = New CheckBox()
         TP1 = New ToolTip(components)
         Label18 = New Label()
-        TabControl1 = New TabControl()
+        Tab_option = New TabControl()
         TabPage1 = New TabPage()
         TabPage2 = New TabPage()
-        GroupBox2 = New GroupBox()
+        GroupBox_CP = New GroupBox()
+        Button_CP = New Button()
         L_CP = New Label()
         DGV2 = New DataGridView()
         DataGridViewTextBoxColumn2 = New DataGridViewTextBoxColumn()
-        DataGridViewTextBoxColumn3 = New DataGridViewTextBoxColumn()
+        DataGridViewTextBoxColumn3 = New DataGridViewImageColumn()
         DataGridViewTextBoxColumn5 = New DataGridViewTextBoxColumn()
         GroupBoxRT = New GroupBox()
         LabelRT = New Label()
@@ -110,24 +106,35 @@ Partial Class F_Foglio_esistente
         DataGridViewTextBoxColumn1 = New DataGridViewTextBoxColumn()
         DataGridViewTextBoxColumn4 = New DataGridViewTextBoxColumn()
         DataGridViewTextBoxColumn6 = New DataGridViewTextBoxColumn()
-        GroupBox7 = New GroupBox()
+        GroupBox_RT = New GroupBox()
+        Button_RT = New Button()
+        PictureBox0 = New PictureBox()
+        PictureBox1 = New PictureBox()
         CheckBoxRT0 = New CheckBox()
         CheckBoxRT1 = New CheckBox()
         L_RT = New Label()
+        Panel_risposte = New Panel()
+        Label7 = New Label()
+        Button1 = New Button()
+        ToolStripMenuItem5 = New ToolStripMenuItem()
+        ToolStripMenuItem6 = New ToolStripMenuItem()
         GroupBox4.SuspendLayout()
         CType(DGV1, ComponentModel.ISupportInitialize).BeginInit()
-        GroupBox1.SuspendLayout()
+        GroupBox_VOCI.SuspendLayout()
         CMenuStrip1.SuspendLayout()
         GroupBox3.SuspendLayout()
-        TabControl1.SuspendLayout()
+        Tab_option.SuspendLayout()
         TabPage1.SuspendLayout()
         TabPage2.SuspendLayout()
-        GroupBox2.SuspendLayout()
+        GroupBox_CP.SuspendLayout()
         CType(DGV2, ComponentModel.ISupportInitialize).BeginInit()
         GroupBoxRT.SuspendLayout()
         GroupBoxCP.SuspendLayout()
         CType(DGV3, ComponentModel.ISupportInitialize).BeginInit()
-        GroupBox7.SuspendLayout()
+        GroupBox_RT.SuspendLayout()
+        CType(PictureBox0, ComponentModel.ISupportInitialize).BeginInit()
+        CType(PictureBox1, ComponentModel.ISupportInitialize).BeginInit()
+        Panel_risposte.SuspendLayout()
         SuspendLayout()
         ' 
         ' GroupBox4
@@ -215,7 +222,7 @@ Partial Class F_Foglio_esistente
         ' CheckBox4
         ' 
         CheckBox4.AutoSize = True
-        CheckBox4.Location = New Point(543, 515)
+        CheckBox4.Location = New Point(363, 37)
         CheckBox4.Name = "CheckBox4"
         CheckBox4.Size = New Size(96, 19)
         CheckBox4.TabIndex = 38
@@ -235,25 +242,25 @@ Partial Class F_Foglio_esistente
         ' 
         Button6.Font = New Font("Segoe UI", 9F)
         Button6.ForeColor = SystemColors.ControlText
-        Button6.Location = New Point(15, 572)
+        Button6.Location = New Point(527, 527)
         Button6.Name = "Button6"
-        Button6.Size = New Size(138, 27)
+        Button6.Size = New Size(137, 30)
         Button6.TabIndex = 20
-        Button6.Text = "Importa Esercizio"
+        Button6.Text = "Esercizio IMPORTA"
         Button6.UseVisualStyleBackColor = True
         ' 
         ' ComboBox1
         ' 
         ComboBox1.FormattingEnabled = True
-        ComboBox1.Location = New Point(54, 17)
+        ComboBox1.Location = New Point(54, 23)
         ComboBox1.Name = "ComboBox1"
-        ComboBox1.Size = New Size(177, 23)
+        ComboBox1.Size = New Size(171, 23)
         ComboBox1.TabIndex = 28
         ' 
         ' Label11
         ' 
         Label11.AutoSize = True
-        Label11.Location = New Point(8, 20)
+        Label11.Location = New Point(8, 26)
         Label11.Name = "Label11"
         Label11.Size = New Size(41, 15)
         Label11.TabIndex = 22
@@ -272,42 +279,55 @@ Partial Class F_Foglio_esistente
         ' 
         Button5.Font = New Font("Segoe UI", 9F)
         Button5.ForeColor = SystemColors.ControlText
-        Button5.Location = New Point(715, 541)
+        Button5.Location = New Point(10, 39)
         Button5.Name = "Button5"
-        Button5.Size = New Size(57, 25)
+        Button5.Size = New Size(100, 25)
         Button5.TabIndex = 19
-        Button5.Text = "Salva"
+        Button5.Text = "Salva Modifiche"
         Button5.UseVisualStyleBackColor = True
         ' 
-        ' GroupBox1
+        ' GroupBox_VOCI
         ' 
-        GroupBox1.Controls.Add(Label21)
-        GroupBox1.Controls.Add(Label20)
-        GroupBox1.Controls.Add(Label12)
-        GroupBox1.Controls.Add(TextBox5)
-        GroupBox1.Controls.Add(TextBox6)
-        GroupBox1.Controls.Add(TextBox7)
-        GroupBox1.Controls.Add(Label9)
-        GroupBox1.Controls.Add(L_V)
-        GroupBox1.Controls.Add(Label4)
-        GroupBox1.Controls.Add(TextBox3)
-        GroupBox1.Controls.Add(Label3)
-        GroupBox1.Controls.Add(TextBox2)
-        GroupBox1.Controls.Add(Label2)
-        GroupBox1.Controls.Add(TextBox1)
-        GroupBox1.Controls.Add(Label1)
-        GroupBox1.Location = New Point(524, 106)
-        GroupBox1.Name = "GroupBox1"
-        GroupBox1.Size = New Size(248, 142)
-        GroupBox1.TabIndex = 26
-        GroupBox1.TabStop = False
-        GroupBox1.Text = "Voci elcar"
+        GroupBox_VOCI.Controls.Add(Button_voci)
+        GroupBox_VOCI.Controls.Add(Label21)
+        GroupBox_VOCI.Controls.Add(Label20)
+        GroupBox_VOCI.Controls.Add(Label12)
+        GroupBox_VOCI.Controls.Add(TextBox5)
+        GroupBox_VOCI.Controls.Add(TextBox6)
+        GroupBox_VOCI.Controls.Add(TextBox7)
+        GroupBox_VOCI.Controls.Add(Label9)
+        GroupBox_VOCI.Controls.Add(L_V)
+        GroupBox_VOCI.Controls.Add(Label4)
+        GroupBox_VOCI.Controls.Add(TextBox3)
+        GroupBox_VOCI.Controls.Add(Label3)
+        GroupBox_VOCI.Controls.Add(TextBox2)
+        GroupBox_VOCI.Controls.Add(Label2)
+        GroupBox_VOCI.Controls.Add(TextBox1)
+        GroupBox_VOCI.Controls.Add(Label1)
+        GroupBox_VOCI.Location = New Point(524, 94)
+        GroupBox_VOCI.Name = "GroupBox_VOCI"
+        GroupBox_VOCI.Size = New Size(248, 166)
+        GroupBox_VOCI.TabIndex = 26
+        GroupBox_VOCI.TabStop = False
+        GroupBox_VOCI.Text = "Voci elcar"
+        ' 
+        ' Button_voci
+        ' 
+        Button_voci.BackColor = SystemColors.Control
+        Button_voci.Font = New Font("Segoe UI", 9F)
+        Button_voci.ForeColor = SystemColors.ControlText
+        Button_voci.Location = New Point(173, 138)
+        Button_voci.Name = "Button_voci"
+        Button_voci.Size = New Size(58, 22)
+        Button_voci.TabIndex = 41
+        Button_voci.Text = "Accetta"
+        Button_voci.UseVisualStyleBackColor = False
         ' 
         ' Label21
         ' 
         Label21.AutoSize = True
         Label21.Font = New Font("Segoe UI", 9F)
-        Label21.Location = New Point(181, 101)
+        Label21.Location = New Point(184, 108)
         Label21.Name = "Label21"
         Label21.Size = New Size(41, 15)
         Label21.TabIndex = 35
@@ -316,7 +336,7 @@ Partial Class F_Foglio_esistente
         ' Label20
         ' 
         Label20.Font = New Font("Segoe UI", 9F)
-        Label20.Location = New Point(181, 69)
+        Label20.Location = New Point(184, 78)
         Label20.Name = "Label20"
         Label20.Size = New Size(41, 15)
         Label20.TabIndex = 34
@@ -325,7 +345,7 @@ Partial Class F_Foglio_esistente
         ' Label12
         ' 
         Label12.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
-        Label12.Location = New Point(4, 97)
+        Label12.Location = New Point(7, 104)
         Label12.Name = "Label12"
         Label12.Size = New Size(15, 17)
         Label12.TabIndex = 27
@@ -333,7 +353,7 @@ Partial Class F_Foglio_esistente
         ' 
         ' TextBox5
         ' 
-        TextBox5.Location = New Point(26, 96)
+        TextBox5.Location = New Point(29, 103)
         TextBox5.Name = "TextBox5"
         TextBox5.ReadOnly = True
         TextBox5.Size = New Size(44, 23)
@@ -341,7 +361,7 @@ Partial Class F_Foglio_esistente
         ' 
         ' TextBox6
         ' 
-        TextBox6.Location = New Point(76, 96)
+        TextBox6.Location = New Point(79, 103)
         TextBox6.Name = "TextBox6"
         TextBox6.ReadOnly = True
         TextBox6.Size = New Size(44, 23)
@@ -349,7 +369,7 @@ Partial Class F_Foglio_esistente
         ' 
         ' TextBox7
         ' 
-        TextBox7.Location = New Point(128, 96)
+        TextBox7.Location = New Point(131, 103)
         TextBox7.Name = "TextBox7"
         TextBox7.ReadOnly = True
         TextBox7.Size = New Size(44, 23)
@@ -358,7 +378,7 @@ Partial Class F_Foglio_esistente
         ' Label9
         ' 
         Label9.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
-        Label9.Location = New Point(5, 66)
+        Label9.Location = New Point(8, 75)
         Label9.Name = "Label9"
         Label9.Size = New Size(15, 17)
         Label9.TabIndex = 22
@@ -366,16 +386,19 @@ Partial Class F_Foglio_esistente
         ' 
         ' L_V
         ' 
+        L_V.BorderStyle = BorderStyle.Fixed3D
         L_V.Font = New Font("Segoe UI", 8F)
-        L_V.Location = New Point(8, 18)
+        L_V.ForeColor = Color.Navy
+        L_V.Location = New Point(6, 18)
         L_V.Name = "L_V"
-        L_V.Size = New Size(213, 28)
+        L_V.Size = New Size(240, 30)
         L_V.TabIndex = 8
         L_V.Text = "Descizione del codice"
+        L_V.TextAlign = ContentAlignment.TopCenter
         ' 
         ' Label4
         ' 
-        Label4.Location = New Point(178, 45)
+        Label4.Location = New Point(181, 54)
         Label4.Name = "Label4"
         Label4.Size = New Size(51, 17)
         Label4.TabIndex = 6
@@ -383,7 +406,7 @@ Partial Class F_Foglio_esistente
         ' 
         ' TextBox3
         ' 
-        TextBox3.Location = New Point(130, 65)
+        TextBox3.Location = New Point(133, 74)
         TextBox3.Name = "TextBox3"
         TextBox3.ReadOnly = True
         TextBox3.Size = New Size(44, 23)
@@ -391,7 +414,7 @@ Partial Class F_Foglio_esistente
         ' 
         ' Label3
         ' 
-        Label3.Location = New Point(130, 45)
+        Label3.Location = New Point(133, 54)
         Label3.Name = "Label3"
         Label3.Size = New Size(51, 17)
         Label3.TabIndex = 4
@@ -399,7 +422,7 @@ Partial Class F_Foglio_esistente
         ' 
         ' TextBox2
         ' 
-        TextBox2.Location = New Point(77, 65)
+        TextBox2.Location = New Point(80, 74)
         TextBox2.Name = "TextBox2"
         TextBox2.ReadOnly = True
         TextBox2.Size = New Size(44, 23)
@@ -407,7 +430,7 @@ Partial Class F_Foglio_esistente
         ' 
         ' Label2
         ' 
-        Label2.Location = New Point(76, 45)
+        Label2.Location = New Point(79, 54)
         Label2.Name = "Label2"
         Label2.Size = New Size(56, 17)
         Label2.TabIndex = 2
@@ -415,7 +438,7 @@ Partial Class F_Foglio_esistente
         ' 
         ' TextBox1
         ' 
-        TextBox1.Location = New Point(26, 65)
+        TextBox1.Location = New Point(29, 74)
         TextBox1.Name = "TextBox1"
         TextBox1.ReadOnly = True
         TextBox1.Size = New Size(44, 23)
@@ -423,7 +446,7 @@ Partial Class F_Foglio_esistente
         ' 
         ' Label1
         ' 
-        Label1.Location = New Point(24, 45)
+        Label1.Location = New Point(27, 54)
         Label1.Name = "Label1"
         Label1.Size = New Size(50, 17)
         Label1.TabIndex = 0
@@ -431,7 +454,7 @@ Partial Class F_Foglio_esistente
         ' 
         ' TextBox8
         ' 
-        TextBox8.Location = New Point(77, 48)
+        TextBox8.Location = New Point(77, 56)
         TextBox8.Name = "TextBox8"
         TextBox8.ReadOnly = True
         TextBox8.Size = New Size(30, 23)
@@ -442,7 +465,7 @@ Partial Class F_Foglio_esistente
         ' 
         LCP1.AutoSize = True
         LCP1.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
-        LCP1.Location = New Point(19, 53)
+        LCP1.Location = New Point(19, 61)
         LCP1.Name = "LCP1"
         LCP1.Size = New Size(40, 15)
         LCP1.TabIndex = 37
@@ -471,18 +494,6 @@ Partial Class F_Foglio_esistente
         Label6.Text = "Pinco Pallino giuseppe"
         Label6.TextAlign = ContentAlignment.MiddleCenter
         ' 
-        ' CheckBox1
-        ' 
-        CheckBox1.Appearance = Appearance.Button
-        CheckBox1.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
-        CheckBox1.Location = New Point(167, 571)
-        CheckBox1.Name = "CheckBox1"
-        CheckBox1.Size = New Size(107, 30)
-        CheckBox1.TabIndex = 30
-        CheckBox1.Text = "Modifica"
-        CheckBox1.TextAlign = ContentAlignment.MiddleCenter
-        CheckBox1.UseVisualStyleBackColor = True
-        ' 
         ' ImageList1
         ' 
         ImageList1.ColorDepth = ColorDepth.Depth32Bit
@@ -501,80 +512,60 @@ Partial Class F_Foglio_esistente
         ' CMenuStrip1
         ' 
         CMenuStrip1.ImageScalingSize = New Size(24, 24)
-        CMenuStrip1.Items.AddRange(New ToolStripItem() {MODIFICA})
+        CMenuStrip1.Items.AddRange(New ToolStripItem() {ToolStrip_modifica, ToolStripSeparator2, ToolStrip_more})
         CMenuStrip1.Name = "CMenuStrip1"
-        CMenuStrip1.Size = New Size(131, 26)
+        CMenuStrip1.Size = New Size(158, 70)
         ' 
-        ' MODIFICA
+        ' ToolStrip_modifica
         ' 
-        MODIFICA.DropDownItems.AddRange(New ToolStripItem() {ToolStripMenuItem4, ToolStripSeparator2, ToolStripMenuItem2, ToolStripMenuItem3, SegnaComeDaCompilareToolStripMenuItem, ToolStripSeparator1, ToolStripMenuItem1, ToolStripSeparator3, ToolStripMenuItem7})
-        MODIFICA.Name = "MODIFICA"
-        MODIFICA.Size = New Size(130, 22)
-        MODIFICA.Text = "MODIFICA"
-        ' 
-        ' ToolStripMenuItem4
-        ' 
-        ToolStripMenuItem4.DropDownItems.AddRange(New ToolStripItem() {ToolStripMenuItem5, ToolStripMenuItem6})
-        ToolStripMenuItem4.Name = "ToolStripMenuItem4"
-        ToolStripMenuItem4.Size = New Size(222, 22)
-        ToolStripMenuItem4.Text = "Tipologia di foglio"
-        ' 
-        ' ToolStripMenuItem5
-        ' 
-        ToolStripMenuItem5.Name = "ToolStripMenuItem5"
-        ToolStripMenuItem5.Size = New Size(136, 22)
-        ToolStripMenuItem5.Text = "Standard"
-        ' 
-        ' ToolStripMenuItem6
-        ' 
-        ToolStripMenuItem6.Name = "ToolStripMenuItem6"
-        ToolStripMenuItem6.Size = New Size(136, 22)
-        ToolStripMenuItem6.Text = "Admittance"
+        ToolStrip_modifica.Image = My.Resources.Resources.Emoji_Objects_117
+        ToolStrip_modifica.Name = "ToolStrip_modifica"
+        ToolStrip_modifica.Size = New Size(157, 30)
+        ToolStrip_modifica.Text = "Edit (ON/OFF)"
         ' 
         ' ToolStripSeparator2
         ' 
         ToolStripSeparator2.Name = "ToolStripSeparator2"
-        ToolStripSeparator2.Size = New Size(219, 6)
+        ToolStripSeparator2.Size = New Size(154, 6)
         ' 
-        ' ToolStripMenuItem2
+        ' ToolStrip_more
         ' 
-        ToolStripMenuItem2.Name = "ToolStripMenuItem2"
-        ToolStripMenuItem2.Size = New Size(222, 22)
-        ToolStripMenuItem2.Text = "Abilita Modifiche"
+        ToolStrip_more.DropDownItems.AddRange(New ToolStripItem() {ToolStripMenuItem1, ToolStripSeparator1, ToolStripMenuItem2, ToolStripSeparator3, ToolStripMenuItem3})
+        ToolStrip_more.Name = "ToolStrip_more"
+        ToolStrip_more.Size = New Size(157, 30)
+        ToolStrip_more.Text = "More..."
         ' 
-        ' ToolStripMenuItem3
+        ' ToolStripMenuItem1
         ' 
-        ToolStripMenuItem3.Name = "ToolStripMenuItem3"
-        ToolStripMenuItem3.Size = New Size(222, 22)
-        ToolStripMenuItem3.Text = "Modifica Titolo foglio"
-        ' 
-        ' SegnaComeDaCompilareToolStripMenuItem
-        ' 
-        SegnaComeDaCompilareToolStripMenuItem.Name = "SegnaComeDaCompilareToolStripMenuItem"
-        SegnaComeDaCompilareToolStripMenuItem.Size = New Size(222, 22)
-        SegnaComeDaCompilareToolStripMenuItem.Text = "Segna come ""Da compilare"""
+        ToolStripMenuItem1.ForeColor = Color.OrangeRed
+        ToolStripMenuItem1.Name = "ToolStripMenuItem1"
+        ToolStripMenuItem1.Size = New Size(211, 22)
+        ToolStripMenuItem1.Text = "Azzera tutti i totali"
         ' 
         ' ToolStripSeparator1
         ' 
         ToolStripSeparator1.Name = "ToolStripSeparator1"
-        ToolStripSeparator1.Size = New Size(219, 6)
+        ToolStripSeparator1.Size = New Size(208, 6)
         ' 
-        ' ToolStripMenuItem1
+        ' ToolStripMenuItem2
         ' 
-        ToolStripMenuItem1.Name = "ToolStripMenuItem1"
-        ToolStripMenuItem1.Size = New Size(222, 22)
-        ToolStripMenuItem1.Text = "Azzera Esiti Risposte"
+        ToolStripMenuItem2.ForeColor = Color.OrangeRed
+        ToolStripMenuItem2.Name = "ToolStripMenuItem2"
+        ToolStripMenuItem2.Size = New Size(211, 22)
+        ToolStripMenuItem2.Text = "Segna come da compilare"
         ' 
         ' ToolStripSeparator3
         ' 
         ToolStripSeparator3.Name = "ToolStripSeparator3"
-        ToolStripSeparator3.Size = New Size(219, 6)
+        ToolStripSeparator3.Size = New Size(208, 6)
         ' 
-        ' ToolStripMenuItem7
+        ' ToolStripMenuItem3
         ' 
-        ToolStripMenuItem7.Name = "ToolStripMenuItem7"
-        ToolStripMenuItem7.Size = New Size(222, 22)
-        ToolStripMenuItem7.Text = "Elimina il foglio"
+        ToolStripMenuItem3.ForeColor = Color.Red
+        ToolStripMenuItem3.Image = My.Resources.Resources.warning_sign_by_kg_just_another_warning_sigh_with_exclamation_mark_UFwEFR_clipart
+        ToolStripMenuItem3.Name = "ToolStripMenuItem3"
+        ToolStripMenuItem3.Size = New Size(211, 22)
+        ToolStripMenuItem3.Text = "Elimina foglio"
         ' 
         ' Label29
         ' 
@@ -588,7 +579,7 @@ Partial Class F_Foglio_esistente
         ' Label28
         ' 
         Label28.AutoSize = True
-        Label28.Location = New Point(3, 7)
+        Label28.Location = New Point(11, 7)
         Label28.Name = "Label28"
         Label28.Size = New Size(51, 15)
         Label28.TabIndex = 35
@@ -597,7 +588,9 @@ Partial Class F_Foglio_esistente
         ' CheckBox3
         ' 
         CheckBox3.AutoSize = True
-        CheckBox3.Location = New Point(59, 8)
+        CheckBox3.Checked = True
+        CheckBox3.CheckState = CheckState.Checked
+        CheckBox3.Location = New Point(67, 7)
         CheckBox3.Name = "CheckBox3"
         CheckBox3.Size = New Size(80, 19)
         CheckBox3.TabIndex = 34
@@ -646,7 +639,7 @@ Partial Class F_Foglio_esistente
         Button4.BackColor = Color.DimGray
         Button4.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
         Button4.ForeColor = Color.Snow
-        Button4.Location = New Point(706, 587)
+        Button4.Location = New Point(701, 524)
         Button4.Name = "Button4"
         Button4.Size = New Size(66, 35)
         Button4.TabIndex = 34
@@ -658,33 +651,22 @@ Partial Class F_Foglio_esistente
         Label26.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
         Label26.ImageIndex = 5
         Label26.ImageList = ImageList1
-        Label26.Location = New Point(468, 17)
+        Label26.Location = New Point(468, 30)
         Label26.Name = "Label26"
         Label26.Size = New Size(33, 23)
         Label26.TabIndex = 35
-        ' 
-        ' Label27
-        ' 
-        Label27.BackColor = Color.White
-        Label27.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
-        Label27.Location = New Point(239, 604)
-        Label27.Name = "Label27"
-        Label27.Size = New Size(162, 17)
-        Label27.TabIndex = 36
-        Label27.Text = "Force Editing ON"
-        Label27.TextAlign = ContentAlignment.MiddleCenter
-        Label27.Visible = False
         ' 
         ' GroupBox3
         ' 
         GroupBox3.Controls.Add(Label19)
         GroupBox3.Controls.Add(ComboBox1)
-        GroupBox3.Controls.Add(CheckBox2)
+        GroupBox3.Controls.Add(CheckBox1)
         GroupBox3.Controls.Add(Label11)
+        GroupBox3.Controls.Add(CheckBox4)
         GroupBox3.Controls.Add(Label26)
         GroupBox3.Location = New Point(8, 23)
         GroupBox3.Name = "GroupBox3"
-        GroupBox3.Size = New Size(502, 61)
+        GroupBox3.Size = New Size(502, 62)
         GroupBox3.TabIndex = 37
         GroupBox3.TabStop = False
         GroupBox3.Text = "elenco fogli"
@@ -692,22 +674,22 @@ Partial Class F_Foglio_esistente
         ' Label19
         ' 
         Label19.BorderStyle = BorderStyle.Fixed3D
-        Label19.Location = New Point(240, 19)
+        Label19.Location = New Point(230, 25)
         Label19.Name = "Label19"
         Label19.Size = New Size(118, 21)
         Label19.TabIndex = 29
         Label19.Text = "n. 23 del 12-12-2026"
         Label19.TextAlign = ContentAlignment.MiddleCenter
         ' 
-        ' CheckBox2
+        ' CheckBox1
         ' 
-        CheckBox2.AutoSize = True
-        CheckBox2.Location = New Point(364, 19)
-        CheckBox2.Name = "CheckBox2"
-        CheckBox2.Size = New Size(102, 19)
-        CheckBox2.TabIndex = 29
-        CheckBox2.Text = "Non compilati"
-        CheckBox2.UseVisualStyleBackColor = True
+        CheckBox1.AutoSize = True
+        CheckBox1.Location = New Point(363, 17)
+        CheckBox1.Name = "CheckBox1"
+        CheckBox1.Size = New Size(108, 19)
+        CheckBox1.TabIndex = 29
+        CheckBox1.Text = "NON Compilati"
+        CheckBox1.UseVisualStyleBackColor = True
         ' 
         ' Label18
         ' 
@@ -721,15 +703,15 @@ Partial Class F_Foglio_esistente
         Label18.Text = "Nessun Foglio Trovato"
         Label18.Visible = False
         ' 
-        ' TabControl1
+        ' Tab_option
         ' 
-        TabControl1.Controls.Add(TabPage1)
-        TabControl1.Controls.Add(TabPage2)
-        TabControl1.Location = New Point(516, 2)
-        TabControl1.Name = "TabControl1"
-        TabControl1.SelectedIndex = 0
-        TabControl1.Size = New Size(261, 85)
-        TabControl1.TabIndex = 39
+        Tab_option.Controls.Add(TabPage1)
+        Tab_option.Controls.Add(TabPage2)
+        Tab_option.Location = New Point(516, 2)
+        Tab_option.Name = "Tab_option"
+        Tab_option.SelectedIndex = 0
+        Tab_option.Size = New Size(261, 85)
+        Tab_option.TabIndex = 39
         ' 
         ' TabPage1
         ' 
@@ -759,26 +741,41 @@ Partial Class F_Foglio_esistente
         TabPage2.Text = "More..."
         TabPage2.UseVisualStyleBackColor = True
         ' 
-        ' GroupBox2
+        ' GroupBox_CP
         ' 
-        GroupBox2.Controls.Add(L_CP)
-        GroupBox2.Controls.Add(TextBox8)
-        GroupBox2.Controls.Add(LCP1)
-        GroupBox2.Location = New Point(524, 271)
-        GroupBox2.Name = "GroupBox2"
-        GroupBox2.Size = New Size(251, 85)
-        GroupBox2.TabIndex = 40
-        GroupBox2.TabStop = False
-        GroupBox2.Text = "Voci Comportamentali (CP)"
+        GroupBox_CP.Controls.Add(Button_CP)
+        GroupBox_CP.Controls.Add(L_CP)
+        GroupBox_CP.Controls.Add(TextBox8)
+        GroupBox_CP.Controls.Add(LCP1)
+        GroupBox_CP.Location = New Point(524, 271)
+        GroupBox_CP.Name = "GroupBox_CP"
+        GroupBox_CP.Size = New Size(251, 85)
+        GroupBox_CP.TabIndex = 40
+        GroupBox_CP.TabStop = False
+        GroupBox_CP.Text = "Voci Comportamentali (CP)"
+        ' 
+        ' Button_CP
+        ' 
+        Button_CP.Font = New Font("Segoe UI", 9F)
+        Button_CP.ForeColor = SystemColors.ControlText
+        Button_CP.Location = New Point(173, 56)
+        Button_CP.Name = "Button_CP"
+        Button_CP.Size = New Size(58, 22)
+        Button_CP.TabIndex = 40
+        Button_CP.Text = "Accetta"
+        Button_CP.UseVisualStyleBackColor = True
         ' 
         ' L_CP
         ' 
+        L_CP.BorderStyle = BorderStyle.Fixed3D
         L_CP.Font = New Font("Segoe UI", 8F)
-        L_CP.Location = New Point(13, 21)
+        L_CP.ForeColor = Color.Navy
+        L_CP.Location = New Point(6, 21)
         L_CP.Name = "L_CP"
-        L_CP.Size = New Size(226, 28)
+        L_CP.Size = New Size(240, 30)
         L_CP.TabIndex = 39
         L_CP.Text = "Descizione del codice"
+        L_CP.TextAlign = ContentAlignment.TopCenter
         ' 
         ' DGV2
         ' 
@@ -807,6 +804,8 @@ Partial Class F_Foglio_esistente
         DataGridViewTextBoxColumn3.HeaderText = "Stato"
         DataGridViewTextBoxColumn3.MinimumWidth = 8
         DataGridViewTextBoxColumn3.Name = "DataGridViewTextBoxColumn3"
+        DataGridViewTextBoxColumn3.Resizable = DataGridViewTriState.True
+        DataGridViewTextBoxColumn3.SortMode = DataGridViewColumnSortMode.Automatic
         DataGridViewTextBoxColumn3.Width = 40
         ' 
         ' DataGridViewTextBoxColumn5
@@ -896,72 +895,152 @@ Partial Class F_Foglio_esistente
         DataGridViewTextBoxColumn6.Visible = False
         DataGridViewTextBoxColumn6.Width = 150
         ' 
-        ' GroupBox7
+        ' GroupBox_RT
         ' 
-        GroupBox7.Controls.Add(CheckBoxRT0)
-        GroupBox7.Controls.Add(CheckBoxRT1)
-        GroupBox7.Controls.Add(L_RT)
-        GroupBox7.Location = New Point(524, 396)
-        GroupBox7.Name = "GroupBox7"
-        GroupBox7.Size = New Size(251, 91)
-        GroupBox7.TabIndex = 43
-        GroupBox7.TabStop = False
-        GroupBox7.Text = "Voci Routine"
+        GroupBox_RT.BackColor = Color.LightYellow
+        GroupBox_RT.Controls.Add(Button_RT)
+        GroupBox_RT.Controls.Add(PictureBox0)
+        GroupBox_RT.Controls.Add(PictureBox1)
+        GroupBox_RT.Controls.Add(CheckBoxRT0)
+        GroupBox_RT.Controls.Add(CheckBoxRT1)
+        GroupBox_RT.Controls.Add(L_RT)
+        GroupBox_RT.Location = New Point(524, 396)
+        GroupBox_RT.Name = "GroupBox_RT"
+        GroupBox_RT.Size = New Size(251, 91)
+        GroupBox_RT.TabIndex = 43
+        GroupBox_RT.TabStop = False
+        GroupBox_RT.Text = "Voci Routine"
+        ' 
+        ' Button_RT
+        ' 
+        Button_RT.Font = New Font("Segoe UI", 9F)
+        Button_RT.ForeColor = SystemColors.ControlText
+        Button_RT.Location = New Point(173, 59)
+        Button_RT.Name = "Button_RT"
+        Button_RT.Size = New Size(58, 22)
+        Button_RT.TabIndex = 48
+        Button_RT.Text = "Accetta"
+        Button_RT.UseVisualStyleBackColor = True
+        ' 
+        ' PictureBox0
+        ' 
+        PictureBox0.Image = CType(resources.GetObject("PictureBox0.Image"), Image)
+        PictureBox0.InitialImage = CType(resources.GetObject("PictureBox0.InitialImage"), Image)
+        PictureBox0.Location = New Point(82, 59)
+        PictureBox0.Name = "PictureBox0"
+        PictureBox0.Size = New Size(26, 24)
+        PictureBox0.SizeMode = PictureBoxSizeMode.StretchImage
+        PictureBox0.TabIndex = 47
+        PictureBox0.TabStop = False
+        ' 
+        ' PictureBox1
+        ' 
+        PictureBox1.Image = My.Resources.Resources.icons8_segno_di_spunta_96
+        PictureBox1.InitialImage = CType(resources.GetObject("PictureBox1.InitialImage"), Image)
+        PictureBox1.Location = New Point(20, 59)
+        PictureBox1.Name = "PictureBox1"
+        PictureBox1.Size = New Size(26, 24)
+        PictureBox1.SizeMode = PictureBoxSizeMode.StretchImage
+        PictureBox1.TabIndex = 46
+        PictureBox1.TabStop = False
         ' 
         ' CheckBoxRT0
         ' 
-        CheckBoxRT0.Appearance = Appearance.Button
         CheckBoxRT0.ImageKey = "icons8-eliminare-96.png"
-        CheckBoxRT0.ImageList = ImageList1
-        CheckBoxRT0.Location = New Point(131, 51)
+        CheckBoxRT0.Location = New Point(117, 61)
         CheckBoxRT0.Name = "CheckBoxRT0"
-        CheckBoxRT0.Size = New Size(66, 26)
+        CheckBoxRT0.Size = New Size(15, 20)
         CheckBoxRT0.TabIndex = 45
         CheckBoxRT0.TextAlign = ContentAlignment.MiddleCenter
         CheckBoxRT0.UseVisualStyleBackColor = True
         ' 
         ' CheckBoxRT1
         ' 
-        CheckBoxRT1.Appearance = Appearance.Button
         CheckBoxRT1.ImageIndex = 8
-        CheckBoxRT1.ImageList = ImageList1
-        CheckBoxRT1.Location = New Point(24, 51)
+        CheckBoxRT1.Location = New Point(54, 61)
         CheckBoxRT1.Name = "CheckBoxRT1"
-        CheckBoxRT1.Size = New Size(66, 27)
+        CheckBoxRT1.Size = New Size(15, 21)
         CheckBoxRT1.TabIndex = 44
         CheckBoxRT1.TextAlign = ContentAlignment.MiddleCenter
         CheckBoxRT1.UseVisualStyleBackColor = True
         ' 
         ' L_RT
         ' 
+        L_RT.BorderStyle = BorderStyle.Fixed3D
         L_RT.Font = New Font("Segoe UI", 8F)
-        L_RT.Location = New Point(18, 19)
+        L_RT.ForeColor = Color.Navy
+        L_RT.Location = New Point(6, 19)
         L_RT.Name = "L_RT"
-        L_RT.Size = New Size(213, 28)
+        L_RT.Size = New Size(240, 30)
         L_RT.TabIndex = 43
         L_RT.Text = "Descizione del codice"
+        L_RT.TextAlign = ContentAlignment.TopCenter
+        ' 
+        ' Panel_risposte
+        ' 
+        Panel_risposte.BackColor = Color.PaleTurquoise
+        Panel_risposte.Controls.Add(Label7)
+        Panel_risposte.Controls.Add(Button1)
+        Panel_risposte.Controls.Add(Button5)
+        Panel_risposte.Location = New Point(75, 565)
+        Panel_risposte.Name = "Panel_risposte"
+        Panel_risposte.Size = New Size(253, 73)
+        Panel_risposte.TabIndex = 44
+        ' 
+        ' Label7
+        ' 
+        Label7.BackColor = Color.Transparent
+        Label7.BorderStyle = BorderStyle.Fixed3D
+        Label7.Font = New Font("Segoe UI", 8F, FontStyle.Bold)
+        Label7.ForeColor = Color.Black
+        Label7.Location = New Point(10, 7)
+        Label7.Name = "Label7"
+        Label7.Size = New Size(235, 18)
+        Label7.TabIndex = 40
+        Label7.Text = "Modifiche Risposte Abilitate"
+        Label7.TextAlign = ContentAlignment.TopCenter
+        ' 
+        ' Button1
+        ' 
+        Button1.Font = New Font("Segoe UI", 9F)
+        Button1.ForeColor = SystemColors.ControlText
+        Button1.Location = New Point(186, 39)
+        Button1.Name = "Button1"
+        Button1.Size = New Size(54, 25)
+        Button1.TabIndex = 31
+        Button1.Text = "Esci"
+        Button1.UseVisualStyleBackColor = True
+        ' 
+        ' ToolStripMenuItem5
+        ' 
+        ToolStripMenuItem5.Name = "ToolStripMenuItem5"
+        ToolStripMenuItem5.Size = New Size(136, 22)
+        ToolStripMenuItem5.Text = "Standard"
+        ' 
+        ' ToolStripMenuItem6
+        ' 
+        ToolStripMenuItem6.Name = "ToolStripMenuItem6"
+        ToolStripMenuItem6.Size = New Size(136, 22)
+        ToolStripMenuItem6.Text = "Admittance"
         ' 
         ' F_Foglio_esistente
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
-        ClientSize = New Size(785, 634)
+        ClientSize = New Size(785, 563)
+        Controls.Add(Panel_risposte)
         Controls.Add(Label23)
-        Controls.Add(GroupBox7)
+        Controls.Add(GroupBox_RT)
         Controls.Add(GroupBoxCP)
-        Controls.Add(CheckBox4)
         Controls.Add(Label5)
         Controls.Add(Label6)
         Controls.Add(GroupBoxRT)
-        Controls.Add(GroupBox2)
-        Controls.Add(Button5)
-        Controls.Add(TabControl1)
+        Controls.Add(GroupBox_CP)
+        Controls.Add(Tab_option)
         Controls.Add(Button6)
         Controls.Add(GroupBox3)
-        Controls.Add(Label27)
         Controls.Add(Button4)
-        Controls.Add(CheckBox1)
-        Controls.Add(GroupBox1)
+        Controls.Add(GroupBox_VOCI)
         Controls.Add(GroupBox4)
         Controls.Add(Label18)
         Name = "F_Foglio_esistente"
@@ -969,25 +1048,28 @@ Partial Class F_Foglio_esistente
         GroupBox4.ResumeLayout(False)
         GroupBox4.PerformLayout()
         CType(DGV1, ComponentModel.ISupportInitialize).EndInit()
-        GroupBox1.ResumeLayout(False)
-        GroupBox1.PerformLayout()
+        GroupBox_VOCI.ResumeLayout(False)
+        GroupBox_VOCI.PerformLayout()
         CMenuStrip1.ResumeLayout(False)
         GroupBox3.ResumeLayout(False)
         GroupBox3.PerformLayout()
-        TabControl1.ResumeLayout(False)
+        Tab_option.ResumeLayout(False)
         TabPage1.ResumeLayout(False)
         TabPage1.PerformLayout()
         TabPage2.ResumeLayout(False)
         TabPage2.PerformLayout()
-        GroupBox2.ResumeLayout(False)
-        GroupBox2.PerformLayout()
+        GroupBox_CP.ResumeLayout(False)
+        GroupBox_CP.PerformLayout()
         CType(DGV2, ComponentModel.ISupportInitialize).EndInit()
         GroupBoxRT.ResumeLayout(False)
         GroupBoxRT.PerformLayout()
         GroupBoxCP.ResumeLayout(False)
         GroupBoxCP.PerformLayout()
         CType(DGV3, ComponentModel.ISupportInitialize).EndInit()
-        GroupBox7.ResumeLayout(False)
+        GroupBox_RT.ResumeLayout(False)
+        CType(PictureBox0, ComponentModel.ISupportInitialize).EndInit()
+        CType(PictureBox1, ComponentModel.ISupportInitialize).EndInit()
+        Panel_risposte.ResumeLayout(False)
         ResumeLayout(False)
         PerformLayout()
     End Sub
@@ -1000,7 +1082,7 @@ Partial Class F_Foglio_esistente
     Friend WithEvents Button5 As Button
     Friend WithEvents LabelV As Label
     Friend WithEvents DGV1 As DataGridView
-    Friend WithEvents GroupBox1 As GroupBox
+    Friend WithEvents GroupBox_VOCI As GroupBox
     Friend WithEvents Label4 As Label
     Friend WithEvents TextBox3 As TextBox
     Friend WithEvents Label3 As Label
@@ -1016,34 +1098,21 @@ Partial Class F_Foglio_esistente
     Friend WithEvents TextBox6 As TextBox
     Friend WithEvents TextBox7 As TextBox
     Friend WithEvents Label9 As Label
-    Friend WithEvents CheckBox1 As CheckBox
     Friend WithEvents Label21 As Label
     Friend WithEvents Label20 As Label
     Friend WithEvents ImageList1 As ImageList
     Friend WithEvents Label23 As Label
     Friend WithEvents CMenuStrip1 As ContextMenuStrip
-    Friend WithEvents MODIFICA As ToolStripMenuItem
-    Friend WithEvents ToolStripMenuItem4 As ToolStripMenuItem
-    Friend WithEvents ToolStripMenuItem5 As ToolStripMenuItem
-    Friend WithEvents ToolStripMenuItem6 As ToolStripMenuItem
-    Friend WithEvents ToolStripMenuItem1 As ToolStripMenuItem
-    Friend WithEvents ToolStripMenuItem2 As ToolStripMenuItem
-    Friend WithEvents ToolStripMenuItem3 As ToolStripMenuItem
-    Friend WithEvents ToolStripSeparator1 As ToolStripSeparator
-    Friend WithEvents ToolStripMenuItem7 As ToolStripMenuItem
+    Friend WithEvents ToolStrip_modifica As ToolStripMenuItem
     Friend WithEvents ComboBox2 As ComboBox
     Friend WithEvents Label24 As Label
     Friend WithEvents Button4 As Button
     Friend WithEvents Label26 As Label
-    Friend WithEvents Label27 As Label
-    Friend WithEvents ToolStripSeparator2 As ToolStripSeparator
-    Friend WithEvents SegnaComeDaCompilareToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents ToolStripSeparator3 As ToolStripSeparator
     Friend WithEvents GroupBox3 As GroupBox
     Friend WithEvents CheckBox3 As CheckBox
     Friend WithEvents DateTimePicker1 As DateTimePicker
     Friend WithEvents Label14 As Label
-    Friend WithEvents CheckBox2 As CheckBox
+    Friend WithEvents CheckBox1 As CheckBox
     Friend WithEvents Label29 As Label
     Friend WithEvents Label28 As Label
     Friend WithEvents TextBox8 As TextBox
@@ -1051,10 +1120,10 @@ Partial Class F_Foglio_esistente
     Friend WithEvents TP1 As ToolTip
     Friend WithEvents CheckBox4 As CheckBox
     Friend WithEvents Label18 As Label
-    Friend WithEvents TabControl1 As TabControl
+    Friend WithEvents Tab_option As TabControl
     Friend WithEvents TabPage1 As TabPage
     Friend WithEvents TabPage2 As TabPage
-    Friend WithEvents GroupBox2 As GroupBox
+    Friend WithEvents GroupBox_CP As GroupBox
     Friend WithEvents DGV2 As DataGridView
     Friend WithEvents Label19 As Label
     Friend WithEvents GroupBoxRT As GroupBox
@@ -1062,7 +1131,7 @@ Partial Class F_Foglio_esistente
     Friend WithEvents GroupBoxCP As GroupBox
     Friend WithEvents LabelCP As Label
     Friend WithEvents DGV3 As DataGridView
-    Friend WithEvents GroupBox7 As GroupBox
+    Friend WithEvents GroupBox_RT As GroupBox
     Friend WithEvents L_RT As Label
     Friend WithEvents CheckBoxRT0 As CheckBox
     Friend WithEvents CheckBoxRT1 As CheckBox
@@ -1073,10 +1142,27 @@ Partial Class F_Foglio_esistente
     Friend WithEvents Column5 As DataGridViewTextBoxColumn
     Friend WithEvents j As DataGridViewTextBoxColumn
     Friend WithEvents stato As DataGridViewImageColumn
-    Friend WithEvents DataGridViewTextBoxColumn2 As DataGridViewTextBoxColumn
-    Friend WithEvents DataGridViewTextBoxColumn3 As DataGridViewTextBoxColumn
-    Friend WithEvents DataGridViewTextBoxColumn5 As DataGridViewTextBoxColumn
     Friend WithEvents DataGridViewTextBoxColumn1 As DataGridViewTextBoxColumn
     Friend WithEvents DataGridViewTextBoxColumn4 As DataGridViewTextBoxColumn
     Friend WithEvents DataGridViewTextBoxColumn6 As DataGridViewTextBoxColumn
+    Friend WithEvents PictureBox0 As PictureBox
+    Friend WithEvents PictureBox1 As PictureBox
+    Friend WithEvents DataGridViewTextBoxColumn2 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn3 As DataGridViewImageColumn
+    Friend WithEvents DataGridViewTextBoxColumn5 As DataGridViewTextBoxColumn
+    Friend WithEvents Panel_risposte As Panel
+    Friend WithEvents Button1 As Button
+    Friend WithEvents Label7 As Label
+    Friend WithEvents Button_voci As Button
+    Friend WithEvents Button_CP As Button
+    Friend WithEvents Button_RT As Button
+    Friend WithEvents ToolStripSeparator2 As ToolStripSeparator
+    Friend WithEvents ToolStrip_more As ToolStripMenuItem
+    Friend WithEvents ToolStripMenuItem5 As ToolStripMenuItem
+    Friend WithEvents ToolStripMenuItem6 As ToolStripMenuItem
+    Friend WithEvents ToolStripMenuItem1 As ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator1 As ToolStripSeparator
+    Friend WithEvents ToolStripMenuItem2 As ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator3 As ToolStripSeparator
+    Friend WithEvents ToolStripMenuItem3 As ToolStripMenuItem
 End Class

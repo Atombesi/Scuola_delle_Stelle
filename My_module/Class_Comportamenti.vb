@@ -46,14 +46,12 @@ Public Class Class_COMPORTAMENTI
 
     End Sub
 
-    Public Function Load(id As Integer) As Class_COMPORTAMENTI
+    Public Shared Function Load(id As Integer) As Class_COMPORTAMENTI
 
         Using cn = DB.GetConnection_Scuoladellestelle()
 
             Dim sql As String =
-                "SELECT ID, TESTO,ID_SUB,ATTIVA,Deleted
-                 FROM COMPORTAMENTI
-                 WHERE ID = @ID"
+                "SELECT * FROM COMPORTAMENTI WHERE ID = @ID"
 
             Using cmd As New SqliteCommand(sql, cn)
 
@@ -62,10 +60,11 @@ Public Class Class_COMPORTAMENTI
                 Using rd = cmd.ExecuteReader()
 
                     If rd.Read() Then
-                        id = Convert.ToInt32(rd("ID"))
-                        TESTO = Convert.ToString(rd("TESTO"))
-                        ATTIVA = Convert.ToInt32(rd("ATTIVA"))
-
+                        Dim cp As New Class_COMPORTAMENTI
+                        cp.ID = Convert.ToInt32(rd("ID"))
+                        cp.TESTO = Convert.ToString(rd("TESTO"))
+                        cp.ATTIVA = Convert.ToInt32(rd("ATTIVA"))
+                        Return cp
                     Else
 
                         Return Nothing

@@ -17,7 +17,7 @@ Public Class F_MyGraph
 
     Function Mostra(Optional TESTO As String = "") As Boolean
         YMax = 25
-        If Carica_dati() = 0 Then Return False
+        If Carica_dati_ELCAR() = 0 Then Return False
 
 
         Me.SetStyle(ControlStyles.ResizeRedraw, True)
@@ -54,7 +54,7 @@ Public Class F_MyGraph
 
     End Sub
 
-    Function Carica_dati() As Integer
+    Function Carica_dati_ELCAR() As Integer
         Dim N = UBound(Gbl_Graph.Data)
         N = Gbl_Graph.Data.Length
         Dim cod = Gbl_Graph.Cod_ELCAR
@@ -365,6 +365,39 @@ Public Class F_MyGraph
         'Me.Invalidate()
 
     End Sub
+    Function Carica_dati_totale_giornaliero(dbbambino As String) As Integer
+        Dim Totale_voci As New List(Of Dati_Totali_Giornaliero)
+
+        'ritorna tutti i totali delle voci ELCAR
+        Totale_voci = Class_GIORNALIERO.totali_giornalieri(dbbambino)
+
+        'ritorna tutti il numero delle voci RT
+        Dim totale_Rt = Class_Giornaliero_ROUTINE.totali_RT_giornalieri
+
+        ' unisco i due risultati nel totale_voce
+        'NB di RT utilizzo solo il numero di eventi flaggati (tot=1)
+        Dim idf = 0
+        Dim s1 As New DatiGrafico
+        Dim COL0 = 0
+        ListaDati.Clear()
+
+        For Each voce In Totale_voci
+            idf = voce.id_foglio
+            For Each vocert In totale_Rt
+                If idf = vocert.id_foglio Then
+                    voce.tot_RT = vocert.tot_RT
+                    voce.tot = vocert.tot_RT + voce.tot_voci
+                    s1.Data = Date.ParseExact(voce.Data, "dd/MM/yyyy", Nothing)
+                    s1.ValoriY = New List(Of Integer)({voce.tot, voce.tot_POS_voci})
+                    s1.Color = New List(Of Integer)({COL0, COL0})
+                    ListaDati.Add(s1)
+                    Exit For
+                End If
+            Next
+        Next
+        Gbl_datigrafico = ListaDati
+
+    End Function
 
 
 End Class

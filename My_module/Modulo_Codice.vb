@@ -8,6 +8,7 @@ Imports System.Runtime.InteropServices
 Imports System.Text.Json
 Imports System.Text.RegularExpressions
 Imports System.Windows.Documents.DocumentStructures
+Imports System.Windows.Forms.AxHost
 Imports DocumentFormat.OpenXml.Bibliography
 Imports DocumentFormat.OpenXml.Office2010.Excel
 Imports DocumentFormat.OpenXml.Office2013.Drawing.Chart
@@ -19,13 +20,69 @@ Imports OpenTK.Graphics.OpenGL
 Imports QRCoder
 Imports MyColor = System.Drawing.Color
 
-Module Modulo_Codice
+
+Public Structure Esportazione_dati_ELCAR
+    Public Codice As String
+    Public Descrizione As String
+    Public Data As DateTime
+    Public Tot1 As Integer
+    Public Tot1_Pos As Integer
+    Public Tot1_Neg As Integer
+    Public Tot1_prompt As Integer
+    Public Tot1_perc As Integer
+    Public Tot2 As Integer
+    Public Tot2_Pos As Integer
+    Public Tot2_Neg As Integer
+    Public Tot2_prompt As Integer
+    Public Tot2_perc As Integer
+End Structure
+Public Structure Esportazione_dati_CTRT
+    Public Descrizione As String
+    Public Data As DateTime
+    Public Tot As Double
+End Structure
+
+
+Public Module Modulo_Codice
+
+    Public Structure ElementoGrafico   ' Server per i grafici su word 
+        Public X As String   ' L'etichetta sull'asse delle X (es. "Gennaio" o "Cat1")
+        Public Y1 As Integer ' Il valore % della prima barra (Serie 1)
+        Public Y2 As Integer ' Il valore % della seconda barra (Serie 2)
+        Public Y1abs As Integer ' Il valore assoluto della prima barra (Serie 1)
+        Public Y2abs As Integer ' Il valore assoluto della seconda barra (Serie 2)
+    End Structure
+    Public Gbl_elementoGrafico() As ElementoGrafico
+
     Public Structure DatiGrafico
         Public Data As String
         Public ValoriY As List(Of Integer) ' Può contenere 1 o 2 valori
         Public Color As List(Of Integer) ' Può contenere 1 o 2 valori
+
     End Structure
     Public Gbl_datigrafico As New List(Of DatiGrafico)()
+
+    Public Structure Elenco_checklist
+        Public voce As String
+        Public TAG As String
+        Public Stato As Boolean
+        Public j As Integer
+        Public Overrides Function ToString() As String
+            Return Me.voce
+        End Function
+    End Structure
+    Public Gbl_elenco_checklist As New List(Of Elenco_checklist)
+
+
+    Public Structure Dati_Totali_Giornaliero
+        Public Data As String
+        Public tot As Integer
+        Public tot_voci As Integer
+        Public tot_POS_voci As Integer
+        Public id_foglio As Integer
+        Public tot_RT As Integer
+        Public n_record As Integer
+    End Structure
 
     Public Structure Struct_Size_Offset
         Public xOffset As Integer
@@ -70,10 +127,13 @@ Module Modulo_Codice
         Public ELCAR_LETTERE() As String
         Public Modello_Schede1 As String ' Full_path_Modello Foglio schede
         Public Modello_Schede1_condizioni As String ' tipo NmaxELCAR,Nmax_RT
-
         Public Modello_Schede2 As String ' Full_path_Modello Foglio schede
         Public Modello_Schede2_condizioni As String ' tipo NmaxELCAR,Nmax_RT
-        Public Modello_Grafico_codici As String ' Full_path_Modello Foglio grafici
+        Public Modello_Grafico_codici2 As String ' Full_path_Modello Foglio grafici
+        Public Modello_Grafico_codici6 As String ' Full_path_Modello Foglio grafici
+        Public Modello_Grafico_codici12 As String ' Full_path_Modello Foglio grafici
+        Public Modello_Grafico_TotaleGiornaliero As String ' Full_path_Modello Foglio grafici
+        Public Modello_Excel_esportazione_dati As String
         Public Path_SCHEDE_DaStampare As String
         Public Path_GRAFICI_DaStampare As String
         Public File_Log As String
@@ -183,6 +243,7 @@ Module Modulo_Codice
     End Structure
 
 
+    Public Gbl_datigrafico_totalegiornaliero As New List(Of Dati_Totali_Giornaliero)()
 
     Public Gbl_Elenco_fogli_stampa() As Struct_FogliDaStampare
 
@@ -314,10 +375,13 @@ Module Modulo_Codice
         ' Carico tutti i record di todolist
         Dim voci_todolist As List(Of Class_TODOLIST) = Class_TODOLIST.LoadAll()
 
-        'rimuovo quelli gia compilati 
-        Dim cnt = 0, ok As Boolean, errori = ""
+        'rimuovo quelli gia compilat
+        Dim cnt = 0, ok As Boolean, errori = "", todo As Boolean = True
         For Each voce In voci_todolist
-            If Not CBool(voce.COMPILATO) Then Continue For
+            todo = False
+            If voce.COMPILATO <> 0 Then todo = True
+
+            If Not todo Then Continue For
             ok = Class_TODOLIST.EliminaRecordPerID(voce.ID)
             If ok Then
                 cnt = cnt + 1
@@ -386,7 +450,7 @@ Module Modulo_Codice
             For Each riga As DataRow In dt.Rows
                 ' 1. Lettura del campo codiceùdim id_foglio?
                 Dim idf = Convert.ToInt32(riga("id_foglio"))
-                If Not Class_TODOLIST.Foglio_gia_inserito_nella_lista(idf, id_bambino) Then
+                If Not Class_TODOLIST.Trova_By_IDfoglio_IDbambino(idf, id_bambino).Esito Then
                     Dim foglio = Carica_foglio(idf, Gbl_DB_BAMBINO)
                     ToDoList_Aggiungi_voce_foglio(foglio)
                 End If
@@ -441,6 +505,16 @@ Module Modulo_Codice
         Dim cp As New Class_Giornaliero_CP
         foglio.CP = cp.Carica_per_Foglio(ID_FOGLIO)
 
+        '-- Controlo che il testo delle note sia scritto --
+        For Each voce In foglio.CP
+            Dim x = voce.TESTO.ToUpper
+            If x = "TRUE" Or x = "" Then
+                'trova il testo della voce CP
+                Dim cp1 = Class_COMPORTAMENTI.Load(voce.ID_VOCE)
+                voce.TESTO = cp1.TESTO
+            End If
+        Next
+
         ' Carico le coci RT (Routine)
         Dim rt As New Class_Giornaliero_ROUTINE
         foglio.RT = rt.Carica_per_Foglio(ID_FOGLIO)
@@ -466,7 +540,7 @@ Module Modulo_Codice
     End Class
 
     Function Costruisci_nome_foglio(ID_foglio, data, BAMBINO) As String
-        Dim nomefoglio = data + "." + BAMBINO + "." + ID_foglio.ToString + ".DOCX"
+        Dim nomefoglio = data.ToString + "." + BAMBINO + "." + ID_foglio.ToString + ".DOCX"
         Return nomefoglio
 
     End Function
@@ -506,7 +580,7 @@ Module Modulo_Codice
         Gbl_app_path = AppContext.BaseDirectory.ToUpper()
         If InStr(Gbl_app_path, "BIN") > 0 Then
             Dim io = InStr(Gbl_app_path, "BIN")
-            Gbl_app_path = Left(Gbl_app_path, io - 2)
+            Gbl_app_path = Strings.Left(Gbl_app_path, io - 2)
         End If
 
 
@@ -587,9 +661,21 @@ Module Modulo_Codice
         x = "10;45"
         ini.Modello_Schede1_condizioni = ReadINIString(fileini, K, "Schede Condizioni utilizzo Modello 2 (Elcar;RT)", x)
 
-        x = dir_bar(y) + "Modello_Grafico_codici.docx"
-        ini.Modello_Grafico_codici = ReadINIString(fileini, K, "Grafici Modello1 ", x)
+        x = dir_bar(y) + "Modello_Grafico_Elcar 2.xlsx"
+        ini.Modello_Grafico_codici2 = ReadINIString(fileini, K, "Grafici Modello2", x)
 
+        x = dir_bar(y) + "Modello_Grafico_Elcar 6.xlsx"
+        ini.Modello_Grafico_codici6 = ReadINIString(fileini, K, "Grafici Modello6 ", x)
+
+        x = dir_bar(y) + "Modello_Grafico_Elcar 12.xlsx"
+
+        ini.Modello_Grafico_codici12 = ReadINIString(fileini, K, "Grafici Modello12 ", x)
+
+        x = dir_bar(y) + "Modello_Grafico_Totali_Giornaliero.xslx"
+        ini.Modello_Grafico_TotaleGiornaliero = ReadINIString(fileini, K, "Modello Grafico Totale Giornaliero", x)
+
+        x = dir_bar(y) + "Modello_Esportazione_dati.xslx"
+        ini.Modello_Excel_esportazione_dati = ReadINIString(fileini, K, "Modello esportazione dati", x)
 
 
         '------------------------------------------
@@ -854,9 +940,6 @@ Module Modulo_Codice
             Gbl_Graph1(J).Data(i).tuttelerisposte = Convert.ToBoolean(riga("tuttelerisposte"))
             Gbl_Graph1(J).Data(i).Compilato = Convert.ToBoolean(riga("compilato"))
         Next
-
-    End Function
-    Function Return_descrizione_codice(cod As String) As String
 
     End Function
     Public Function Carica_dati_codice_elcar(cod As String, Optional mostragrafico As Boolean = False) As Integer
@@ -1159,7 +1242,19 @@ Module Modulo_Codice
         Dim i = POS * 100 / 20
         Return i
     End Function
+    'Function Calcola_totali_giornaliero(dbbambino) As List(Of DatiGraficoGiornaliero)
+    '    'devo sommare:
+    '    'tutti i totale delle voci elcar
+    '    'tutte le voci RT
+    '    'NO voci CP
+    '    '1) trovo elenco fogli di un bambino
+    '    '2) per ogni foglio estraggo: 
+    '    '   a) Totali delle voci elcar Tot1+tot2
+    '    '   b) Totali delle voci positive elcar Tot1_pos+tot2_pos
+    '    '   c) N. delle voci RT  
 
+
+    'End Function
     Function soglia_Esercizio_Raggiunta() As Boolean
 
         Dim SUPERATO = 0, v = 0, tot = 0
@@ -1441,11 +1536,13 @@ Module Modulo_Codice
             Console.WriteLine("ERRORE NEL PARSING DELLA CONFERMA DB: " & ex.Message)
         End Try
     End Sub
-    Public Function TODOLIST_Aggiorna_Foglio_Compilato(ID_TODOLIST As Integer) As Boolean
+
+    Public Function TODOLIST_rimuovi_Foglio_Compilato(ID_TODOLIST As Integer) As Boolean
+        'Elimina il record dalla todolist
         Try
 
             If Not Class_TODOLIST.Delete(ID_TODOLIST) Then
-                Dim m = "TODOLIST Errore cancellazione record " + ID_TODOLIST.ToString
+                Dim m = "[Errore 009] TODOLIST Errore cancellazione record " + ID_TODOLIST.ToString
                 APPEND_LOG(m, ini.File_Log, True)
                 Return False
             End If
@@ -1550,19 +1647,17 @@ Module Modulo_Codice
                 ' return (1) Nessun record salvato
                 ' return >1 Salvataggio parziale record
                 Dim salvataggiook = False
-                If salvato = 0 Then       ' Salvataggio completo
+                If salvato.OK Then       ' Salvataggio completo
                     ' Aggiorna anche lo stato del record generale nella tabella TODOLIST del PC Windows
-                    Dim passato = TODOLIST_Aggiorna_Foglio_Compilato(idTodoList)
+                    Dim passato = TODOLIST_rimuovi_Foglio_Compilato(idTodoList)
                     salvataggiook = True
-                ElseIf salvato = -1 Then   ' nessun record salvato
-                    salvataggiook = False
-                Else                      ' Salvataggio parziale record
+                Else
+                    Dim m = "[Errore 005] " + salvato.Err + "(" + foglio.ID_foglio.ToString + ") di: " + foglio.Bambino
+                    APPEND_LOG(m, ini.File_Log, True)
                     salvataggiook = False
                 End If
 
-
-
-                If salvataggioOK Then
+                If salvataggiook Then
                     Console.WriteLine("✅ SUCCESS: Foglio ID " & idTodoList & " del bambino " & foglio.Bambino & " aggiornato nel DB di Windows.")
                     Return True
                 Else
@@ -1576,7 +1671,8 @@ Module Modulo_Codice
             Return False
         End Try
     End Function
-    Function Foglio_Esistente_Aggiorna(foglio As Struct_foglio, dbbambino As String) As Integer
+    Function Foglio_Esistente_Aggiorna(foglio As Struct_foglio, dbbambino As String) As (OK As Boolean, Err As String)
+        '-- SALVO SOLO I TOTALI --
         '-- Se sono qui devo essere sicuro che il foglio esista gia --
         ' return (0) Salvataggio completo
         ' return (-1) Nessun record salvato
@@ -1589,23 +1685,20 @@ Module Modulo_Codice
             RTcnt = foglio.RT.Count
             ELCARcnt = foglio.VociDiUnFoglio.Count
         Catch ex As Exception
-            Return -1
+            Return (False, "NESSUN RECORD SALVATO")
         End Try
+        Dim ok_voci = True, ok_rt = True, Ok_CP = True, ok = True
 
         '-- Registro nel GIORNALIERO del DB BAMBINO tutte le righe presenti -- 
         For j = 0 To ELCARcnt - 1
             If Not foglio.VociDiUnFoglio(j).Salva_totali(dbbambino) Then
-                m = "Problemi salvataggio codice (" + foglio.VociDiUnFoglio(j).Codice + ") id_foglio:" + foglio.VociDiUnFoglio(j).ID_FOGLIO.ToString + " DB:" + Gbl_DB_BAMBINO
-                APPEND_LOG(m, GbL_Logfile, True)
-                salvato = salvato + 1
+                ok_voci = False : ok = False
             End If
         Next
 
         For j = 0 To CPcnt - 1
             If Not foglio.CP(j).Salva_Totali(dbbambino) Then
-                m = "Problemi salvataggio CP (" + foglio.CP(j).TESTO + ") id_foglio:" + foglio.CP(j).ID_FOGLIO.ToString + " DB:" + foglio.DB_Bambino
-                APPEND_LOG(m, GbL_Logfile, True)
-                salvato = salvato + 1
+                Ok_CP = False : ok = False
             End If
         Next
 
@@ -1613,16 +1706,62 @@ Module Modulo_Codice
         '-- Registro nel GIORNALIERO_ROUTINE del DB BAMBINO tutte le righe della routine presenti -- 
         For j = 0 To RTcnt - 1
             If Not foglio.RT(j).Salva_totali(dbbambino) Then
-                m = "Problemi salvataggio RT (" + foglio.RT(j).TESTO + ") id_foglio:" + foglio.RT(j).ID_FOGLIO.ToString + " DB:" + foglio.DB_Bambino
-                APPEND_LOG(m, GbL_Logfile, True)
-                salvato = salvato + 1
+                ok_rt = False : ok = False
             End If
         Next
-        Return salvato
+
+        If ok Then Return (True, "SALVATAGGIO OK")
+
+        Dim x = ""
+        If Not ok_voci Then x = x + " [VOCI ELCAR]"
+        If Not ok_rt Then x = x + " [VOCI RT]"
+        If Not Ok_CP Then x = x + " [VOCI CP]"
+        x = "Problemi salvataggio di:" + x
+        Return (False, x)
 
 
 
     End Function
 
+    Public Function Esportazione_ottieni_tutti_elcar(dbBambino) As List(Of Esportazione_dati_ELCAR)
+        Dim dt As DataTable = Class_GIORNALIERO.OttieniTuttiIRecordGiornalieri(dbBambino)
+        Dim elenco_ELCAR_Esportazione As New List(Of Esportazione_dati_ELCAR)
+        For Each riga As DataRow In dt.Rows
+            Dim voce As New Esportazione_dati_ELCAR
+            voce.Codice = riga("Codice").ToString()
+            voce.Descrizione = riga("testo").ToString()
+            voce.Data = riga("data").ToString()
+            voce.Tot1 = riga("tot1").ToString()
+            voce.Tot1_Pos = riga("tot1_pos").ToString()
+            voce.Tot2 = riga("tot2").ToString()
+            voce.Tot2_Pos = riga("tot2_pos").ToString()
+            elenco_ELCAR_Esportazione.Add(voce)
+        Next
+        Return elenco_ELCAR_Esportazione
+    End Function
+    Public Function Esportazione_ottieni_tutti_RT(dbBambino) As List(Of Esportazione_dati_CTRT)
+        Dim dt As DataTable = Class_Giornaliero_ROUTINE.OttieniTuttiIRecordGiornalieri(dbBambino)
+        Dim elenco_CTRT_Esportazione As New List(Of Esportazione_dati_CTRT)
+        For Each riga As DataRow In dt.Rows
+            Dim voce As New Esportazione_dati_CTRT
+            voce.Descrizione = riga("testo").ToString()
+            voce.Data = riga("data").ToString()
+            voce.Tot = riga("tot").ToString()
+            elenco_CTRT_Esportazione.Add(voce)
+        Next
+        Return elenco_CTRT_Esportazione
+    End Function
+    Public Function Esportazione_ottieni_tutti_CP(dbBambino) As List(Of Esportazione_dati_CTRT)
+        Dim dt As DataTable = Class_Giornaliero_CP.OttieniTuttiIRecordGiornalieri(dbBambino)
+        Dim elenco_CTRT_Esportazione As New List(Of Esportazione_dati_CTRT)
+        For Each riga As DataRow In dt.Rows
+            Dim voce As New Esportazione_dati_CTRT
+            voce.Descrizione = riga("testo").ToString()
+            voce.Data = riga("data").ToString()
+            voce.Tot = riga("tot").ToString()
+            elenco_CTRT_Esportazione.Add(voce)
+        Next
+        Return elenco_CTRT_Esportazione
+    End Function
 
 End Module

@@ -33,6 +33,8 @@ Partial Class F_main
         Label1 = New Label()
         CheckBox1 = New CheckBox()
         P_schede = New Panel()
+        Button5 = New Button()
+        Label2 = New Label()
         P_Stampe = New Panel()
         Button7 = New Button()
         P_liste = New Panel()
@@ -49,6 +51,7 @@ Partial Class F_main
         CheckBox4 = New CheckBox()
         TP1 = New ToolTip(components)
         PctNotifica = New Label()
+        TransparentskControl1 = New ScottPlot.WinForms.TransparentSKControl()
         P_schede.SuspendLayout()
         P_Stampe.SuspendLayout()
         P_liste.SuspendLayout()
@@ -58,27 +61,27 @@ Partial Class F_main
         ' Button1
         ' 
         Button1.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
-        Button1.Location = New Point(5, 48)
+        Button1.Location = New Point(5, 57)
         Button1.Name = "Button1"
-        Button1.Size = New Size(108, 41)
+        Button1.Size = New Size(108, 25)
         Button1.TabIndex = 0
-        Button1.Text = "Compilazione Schede"
+        Button1.Text = "Compilazione"
         Button1.UseVisualStyleBackColor = True
         ' 
         ' Button2
         ' 
         Button2.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
-        Button2.Location = New Point(5, 3)
+        Button2.Location = New Point(5, 29)
         Button2.Name = "Button2"
-        Button2.Size = New Size(109, 41)
+        Button2.Size = New Size(109, 25)
         Button2.TabIndex = 1
-        Button2.Text = "Schede Giornaliere"
+        Button2.Text = "Giornaliere"
         Button2.UseVisualStyleBackColor = True
         ' 
         ' Button3
         ' 
         Button3.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
-        Button3.Location = New Point(5, 32)
+        Button3.Location = New Point(3, 32)
         Button3.Name = "Button3"
         Button3.Size = New Size(109, 25)
         Button3.TabIndex = 9
@@ -145,19 +148,42 @@ Partial Class F_main
         ' 
         ' P_schede
         ' 
+        P_schede.Controls.Add(Button5)
+        P_schede.Controls.Add(Label2)
         P_schede.Controls.Add(Button2)
         P_schede.Controls.Add(Button1)
         P_schede.Location = New Point(4, 7)
         P_schede.Name = "P_schede"
-        P_schede.Size = New Size(120, 92)
+        P_schede.Size = New Size(120, 113)
         P_schede.TabIndex = 16
+        ' 
+        ' Button5
+        ' 
+        Button5.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
+        Button5.Location = New Point(6, 85)
+        Button5.Name = "Button5"
+        Button5.Size = New Size(108, 25)
+        Button5.TabIndex = 3
+        Button5.Text = "Editing"
+        Button5.UseVisualStyleBackColor = True
+        ' 
+        ' Label2
+        ' 
+        Label2.BorderStyle = BorderStyle.Fixed3D
+        Label2.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
+        Label2.Location = New Point(4, 4)
+        Label2.Name = "Label2"
+        Label2.Size = New Size(111, 18)
+        Label2.TabIndex = 2
+        Label2.Text = "Schede"
+        Label2.TextAlign = ContentAlignment.MiddleCenter
         ' 
         ' P_Stampe
         ' 
         P_Stampe.BackColor = Color.DeepSkyBlue
         P_Stampe.Controls.Add(Button7)
         P_Stampe.Controls.Add(Button4)
-        P_Stampe.Location = New Point(4, 105)
+        P_Stampe.Location = New Point(4, 126)
         P_Stampe.Name = "P_Stampe"
         P_Stampe.Size = New Size(120, 64)
         P_Stampe.TabIndex = 17
@@ -181,13 +207,13 @@ Partial Class F_main
         P_liste.Controls.Add(Button3)
         P_liste.Location = New Point(130, 6)
         P_liste.Name = "P_liste"
-        P_liste.Size = New Size(120, 161)
+        P_liste.Size = New Size(120, 185)
         P_liste.TabIndex = 18
         ' 
         ' Button10
         ' 
         Button10.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
-        Button10.Location = New Point(6, 91)
+        Button10.Location = New Point(4, 91)
         Button10.Name = "Button10"
         Button10.Size = New Size(109, 25)
         Button10.TabIndex = 12
@@ -197,7 +223,7 @@ Partial Class F_main
         ' Button9
         ' 
         Button9.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
-        Button9.Location = New Point(6, 62)
+        Button9.Location = New Point(4, 62)
         Button9.Name = "Button9"
         Button9.Size = New Size(109, 25)
         Button9.TabIndex = 11
@@ -207,7 +233,7 @@ Partial Class F_main
         ' Button8
         ' 
         Button8.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
-        Button8.Location = New Point(5, 2)
+        Button8.Location = New Point(3, 2)
         Button8.Name = "Button8"
         Button8.Size = New Size(109, 25)
         Button8.TabIndex = 10
@@ -218,9 +244,9 @@ Partial Class F_main
         ' 
         CheckBox2.Appearance = Appearance.Button
         CheckBox2.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
-        CheckBox2.Location = New Point(9, 177)
+        CheckBox2.Location = New Point(9, 197)
         CheckBox2.Name = "CheckBox2"
-        CheckBox2.Size = New Size(112, 27)
+        CheckBox2.Size = New Size(112, 22)
         CheckBox2.TabIndex = 19
         CheckBox2.Text = "Gestione Liste"
         CheckBox2.TextAlign = ContentAlignment.MiddleCenter
@@ -233,9 +259,9 @@ Partial Class F_main
         P_Setting.Controls.Add(Button12)
         P_Setting.Controls.Add(Button13)
         P_Setting.Controls.Add(Button14)
-        P_Setting.Location = New Point(246, 7)
+        P_Setting.Location = New Point(247, 7)
         P_Setting.Name = "P_Setting"
-        P_Setting.Size = New Size(120, 161)
+        P_Setting.Size = New Size(120, 185)
         P_Setting.TabIndex = 20
         ' 
         ' Button11
@@ -282,9 +308,9 @@ Partial Class F_main
         ' 
         CheckBox3.Appearance = Appearance.Button
         CheckBox3.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
-        CheckBox3.Location = New Point(8, 211)
+        CheckBox3.Location = New Point(8, 220)
         CheckBox3.Name = "CheckBox3"
-        CheckBox3.Size = New Size(110, 27)
+        CheckBox3.Size = New Size(110, 23)
         CheckBox3.TabIndex = 21
         CheckBox3.Text = "Impostazioni"
         CheckBox3.TextAlign = ContentAlignment.MiddleCenter
@@ -318,12 +344,21 @@ Partial Class F_main
         TP1.SetToolTip(PctNotifica, "Richiesta di Associazione")
         PctNotifica.Visible = False
         ' 
+        ' TransparentskControl1
+        ' 
+        TransparentskControl1.Location = New Point(228, 244)
+        TransparentskControl1.Name = "TransparentskControl1"
+        TransparentskControl1.Size = New Size(75, 23)
+        TransparentskControl1.TabIndex = 24
+        TransparentskControl1.Text = "TransparentskControl1"
+        ' 
         ' F_main
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
         CancelButton = Button6
-        ClientSize = New Size(130, 347)
+        ClientSize = New Size(129, 347)
+        Controls.Add(TransparentskControl1)
         Controls.Add(PctNotifica)
         Controls.Add(CheckBox4)
         Controls.Add(CheckBox3)
@@ -372,5 +407,8 @@ Partial Class F_main
     Friend WithEvents CheckBox4 As CheckBox
     Friend WithEvents TP1 As ToolTip
     Friend WithEvents PctNotifica As Label
+    Friend WithEvents Label2 As Label
+    Friend WithEvents Button5 As Button
+    Friend WithEvents TransparentskControl1 As ScottPlot.WinForms.TransparentSKControl
 
 End Class

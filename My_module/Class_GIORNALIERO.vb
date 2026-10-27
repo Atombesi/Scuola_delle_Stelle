@@ -1,5 +1,6 @@
 ﻿Imports DocumentFormat.OpenXml.Spreadsheet
 Imports Microsoft.Data.Sqlite
+Imports System.Collections.Generic
 Public Class Class_GIORNALIERO
     Public Property ID As Integer
     Public Property ID_FOGLIO As Integer
@@ -224,7 +225,7 @@ Public Class Class_GIORNALIERO
         Return Me.ID
     End Function
 
-    Public Function Carica_Foglio(idFoglio As Integer) As List(Of Class_GIORNALIERO)
+    Public Shared Function Carica_Foglio(idFoglio As Integer) As List(Of Class_GIORNALIERO)
 
         Dim lista As New List(Of Class_GIORNALIERO)
 
@@ -330,6 +331,25 @@ Public Class Class_GIORNALIERO
 
         Return dt
     End Function
+    Public Shared Function OttieniTuttiIRecordGiornalieri(Optional dbBambino = "") As DataTable
+        Dim dt As New DataTable()
+
+        ' Rimuoviamo la clausola WHERE e ordiniamo prima per CODICE, poi per DATA (convertita in formato YYYY-MM-DD)
+        Dim query As String = "SELECT * FROM Giornaliero " &
+                          "ORDER BY CODICE ASC, " &
+                          "SUBSTR(DATA, 7, 4) || '-' || SUBSTR(DATA, 4, 2) || '-' || SUBSTR(DATA, 1, 2) ASC"
+
+        Using cn = DB.GetConnection_Bambino(dbBambino)
+            Using cmd As New SqliteCommand(query, cn)
+                Using reader As SqliteDataReader = cmd.ExecuteReader()
+                    ' Carica tutti i record estratti all'interno della DataTable
+                    dt.Load(reader)
+                End Using
+            End Using
+        End Using
+
+        Return dt
+    End Function
     Public Shared Function OttieniRecordOrderbydata(Optional soloNoncompilati As Boolean = False) As DataTable
 
         Dim dt As New DataTable()
@@ -382,8 +402,14 @@ Public Class Class_GIORNALIERO
         Return dt
     End Function
 
+
+    Public Shared Function Elenco_fogli_compilati() As List(Of Class_GIORNALIERO)
+        ' Trova_elenco_fogli_da_compilare tutti i fogli non compilati di un bambino
+        Return Elenco_fogli(1)
+    End Function
     Public Shared Function Elenco_fogli_non_compilati() As List(Of Class_GIORNALIERO)
         ' Trova_elenco_fogli_da_compilare tutti i fogli non compilati di un bambino
+        Return Elenco_fogli(0)
 
         Dim listaGiornalieri As New List(Of Class_GIORNALIERO)()
 
@@ -411,5 +437,103 @@ Public Class Class_GIORNALIERO
         Return listaGiornalieri
     End Function
 
+    Public Shared Function Elenco_fogli(Optional compilati As Integer = 0) As List(Of Class_GIORNALIERO)
+        ' Trova_elenco_fogli_da_compilare tutti i fogli non compilati di un bambino
+
+        Dim listaGiornalieri As New List(Of Class_GIORNALIERO)()
+        Dim query As String = ""
+        If compilati = 0 Then
+            query = "SELECT MIN(ID) AS ID, ID_FOGLIO, " &
+                      "substr(MIN(DATA), 7, 4) || '-' || substr(MIN(DATA), 4, 2) || '-' || substr(MIN(DATA), 1, 2) AS DATA " &
+                      "FROM GIORNALIERO " &
+                      "WHERE COMPILATO = 0 " &
+                      "GROUP BY ID_FOGLIO " &
+                      "ORDER BY ID_FOGLIO DESC;"
+        Else
+            query = "SELECT MIN(ID) AS ID, ID_FOGLIO, " &
+                      "substr(MIN(DATA), 7, 4) || '-' || substr(MIN(DATA), 4, 2) || '-' || substr(MIN(DATA), 1, 2) AS DATA " &
+                      "FROM GIORNALIERO " &
+                      "WHERE COMPILATO = 1 " &
+                      "GROUP BY ID_FOGLIO " &
+                      "ORDER BY ID_FOGLIO DESC;"
+
+        End If
+
+        Using cn = DB.GetConnection_Bambino()
+            Using cmd As New SqliteCommand(query, cn)
+                ' Esegui il comando SQLite...
+                Using reader As SqliteDataReader = cmd.ExecuteReader()
+                    While reader.Read()
+                        Dim elemento As New Class_GIORNALIERO() With {
+                            .ID = Convert.ToInt32(reader("ID")),
+                            .ID_FOGLIO = Convert.ToInt32(reader("ID_FOGLIO")),
+                            .DATA = reader("DATA").ToString()
+                        }
+                        listaGiornalieri.Add(elemento)
+                    End While
+                End Using
+            End Using
+        End Using
+        Return listaGiornalieri
+    End Function
+
+    Public Shared Function totali_giornalieri(Optional DBBAMNINO As String = "") As List(Of Dati_Totali_Giornaliero)
+
+        Dim lista_Totali_Giornalieri As New List(Of Dati_Totali_Giornaliero)
+
+        Dim query As String = "SELECT " &
+                      "  ID_foglio, " &
+                      "  Data, " &
+                      "  (SUM(tot1) + SUM(tot2)) AS tot, " &
+                      "  (SUM(tot1_pos) + SUM(tot2_pos)) AS tot_pos, " &
+                      "  COUNT(*) AS n_record " &
+                      "FROM GIORNALIERO " &
+                      "GROUP BY ID_foglio"
+
+        Using cn = DB.GetConnection_Bambino(DBBAMNINO)
+            Using cmd As New SqliteCommand(query, cn)
+                ' Esegui il comando SQLite...
+                Using reader As SqliteDataReader = cmd.ExecuteReader()
+                    While reader.Read()
+                        Dim elemento As New Dati_Totali_Giornaliero
+                        elemento.id_foglio = Convert.ToInt32(reader("ID_FOGLIO"))
+                        elemento.Data = reader("DATA").ToString()
+                        elemento.tot_voci = reader("TOT")
+                        elemento.tot_POS_voci = reader("TOT_pos")
+                        elemento.n_record = reader("n_record")
+                        lista_Totali_Giornalieri.Add(elemento)
+                    End While
+                End Using
+            End Using
+        End Using
+        Return lista_Totali_Giornalieri
+
+    End Function
+
+    Public Shared Function Voci_Utilizzate(Optional DBBAMNINO As String = "") As List(Of Elenco_checklist)
+
+        Dim lista_Elenco As New List(Of Elenco_checklist)
+
+        Dim query As String = "SELECT CODICE, TESTO FROM GIORNALIERO GROUP BY CODICE"
+        Dim j = -1
+        Using cn = DB.GetConnection_Bambino(DBBAMNINO)
+            Using cmd As New SqliteCommand(query, cn)
+                ' Esegui il comando SQLite...
+                Using reader As SqliteDataReader = cmd.ExecuteReader()
+                    While reader.Read()
+                        Dim elemento As New Elenco_checklist
+                        elemento.voce = reader("testo")
+                        elemento.TAG = reader("CODICE")
+                        elemento.Stato = False
+                        j = j + 1
+                        elemento.j = j
+                        lista_Elenco.Add(elemento)
+                    End While
+                End Using
+            End Using
+        End Using
+        Return lista_Elenco
+
+    End Function
 
 End Class

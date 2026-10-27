@@ -1,6 +1,8 @@
 ﻿Imports System.Windows
 Imports System.Windows.Documents
 Imports System.Windows.Media
+Imports DocumentFormat.OpenXml.Office2010.Excel
+Imports Microsoft.IdentityModel.Tokens
 
 Public Class F_Compilazione
 
@@ -25,8 +27,17 @@ Public Class F_Compilazione
     Dim gb_top_CP_ROUTINE_on
     Dim PANEL_HIGHT_ON = 288
     Dim gb_DGV_Rindex = -1
+    Dim Noneseguire As Boolean = False
+    Dim CP_COMPILATE_OK As Boolean
+    Dim RT_COMPILATE_OK As Boolean
+    Dim VOCI_COMPILATE_OK As Boolean
 
     Sub init_panel()
+
+        GroupBox_CP.Visible = False
+        GroupBox_ELCAR.Visible = False
+        GroupBox_Routine.Visible = False
+
         Dim top = 55, left = 13
         top = Panel_ELCAR.Top
         left = Panel_ELCAR.Left
@@ -47,15 +58,15 @@ Public Class F_Compilazione
         GroupBox_CP.Left = GroupBox_ELCAR.Left
         GroupBox_Routine.Left = GroupBox_ELCAR.Left
 
-        GroupBox_CP.Visible = False
-        GroupBox_ELCAR.Visible = False
-        GroupBox_Routine.Visible = False
 
 
         gb_top_Routine_ELCAR_on = 350
         gb_top_Routine_elcar_off = 86
         gb_top_CP_ROUTINE_on = 380
         gb_top_cp_ROUTINE_off = 118
+
+        B_edit.Top = B_salva.Top
+        B_edit.Left = B_salva.Left
 
         'GroupBox_CP.Top = 147
         'GroupBox_Routine.Top = top
@@ -95,11 +106,11 @@ Public Class F_Compilazione
         Panel_CP.Top = TOP
 
         If Gb_Stato_compilazione.Salvabile Then
-            Button5.Enabled = True
-            Button5.BackColor = MyColor.LightGreen
+            B_salva.Enabled = True
+            B_salva.BackColor = MyColor.DodgerBlue
         Else
-            Button5.Enabled = False
-            Button5.BackColor = Button3.Backcolor
+            B_salva.Enabled = False
+            B_salva.BackColor = Button3.Backcolor
         End If
 
 
@@ -147,23 +158,32 @@ Public Class F_Compilazione
             AddHandler txt.KeyDown, AddressOf TextBox_KeyDown
             AddHandler txt.Enter, AddressOf TextBox_Enter
             AddHandler txt.Leave, AddressOf TextBox_Leave
+            AddHandler txt.MouseUp, AddressOf Textbox_mouseup
         Next
-
         Gbl_VociDiTodolist = Class_TODOLIST.LoadAll()
         Carica_combo_fogli_da_compilare()
-
-        Dim x = 0
+        Call Edit_ONOFF(False)
     End Sub
+    Sub Edit_onoff(edit As Boolean)
+        B_edit.Enabled = True
+        B_edit.Enabled = True
+        Panel1.Enabled = Not edit   ' pANNELLO LISTA FOGLI DA COMPILARE E REFRESH
+        Dim noedit = Not edit
+        B_annulla.Visible = edit
+        B_salva.Visible = edit
+        B_edit.Visible = noedit
+        GroupBox_CP.Enabled = edit
+        GroupBox_ELCAR.Enabled = edit
+        GroupBox_Routine.Enabled = edit
 
+    End Sub
     Sub Carica_combo_fogli_da_compilare()
 
 
-
-
         Gbl_VociDiTodolist = Class_TODOLIST.LoadAll()
-
-
         ComboBox1.DataSource = Nothing
+        ComboBox1.DisplayMember = Nothing
+        ComboBox1.Items.Clear() ' Pulisce eventuali residui visivi
 
         ' 2. Imposta il DisplayMember
         ComboBox1.DisplayMember = "NOMEFILE"
@@ -172,7 +192,11 @@ Public Class F_Compilazione
         ComboBox1.DataSource = Gbl_VociDiTodolist
 
 
-        ComboBox1.SelectedIndex = 0
+        ' 4. Seleziona il primo elemento solo se la lista contiene dati per evitare crash
+        If ComboBox1.Items.Count > 0 Then
+            ComboBox1.SelectedIndex = 0
+        End If
+
     End Sub
     Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
         Hide()
@@ -206,13 +230,18 @@ Public Class F_Compilazione
         If CNT = n_voci Then
             Label6.ImageIndex = 8
             Successo = True
+            Button1.Visible = False
         Else
             Label6.ImageIndex = 7
             Successo = False
+            Button1.Visible = True
+
         End If
 
         Gb_Stato_compilazione.ELCAR_compilato = Successo
         Gb_Stato_compilazione.Salvabile = Gb_Stato_compilazione.ELCAR_compilato And Gb_Stato_compilazione.RT_compilato And Gb_Stato_compilazione.CP_compilato
+
+
         controlla_se_da_salvare()
         Return (Successo, CNT)
 
@@ -232,9 +261,11 @@ Public Class F_Compilazione
         If CNT = n_voci Then
             Label9.ImageIndex = 8
             Successo = True
+            Button3.Visible = False
         Else
             Label9.ImageIndex = 7
             Successo = False
+            Button3.Visible = True
         End If
 
         Gb_Stato_compilazione.RT_compilato = Successo
@@ -247,20 +278,23 @@ Public Class F_Compilazione
         Dim n_voci = Gbl_foglio.CP.Count
         Dim CNT = 0
         For Each voce In Gbl_foglio.CP
-            If voce.COMPILATO Then
+            If voce.COMPILATO = 1 Then
                 CNT += 1
             End If
         Next
         Label10.Text = CNT & "/" & n_voci
         Label38.Text = Label10.Text
-
+        Label38.Refresh() :
+        Label10.Refresh()
 
         Dim successo = False
         If CNT = n_voci Then
             Label17.ImageIndex = 8
             successo = True
+            Button2.Visible = False
         Else
             Label17.ImageIndex = 7
+            Button2.Visible = True
         End If
 
         Gb_Stato_compilazione.CP_compilato = successo
@@ -297,8 +331,12 @@ Public Class F_Compilazione
             Dim ii = DGV_ELCAR.CurrentRow.Index
             SET_DGV_ELCAR_STATO(i)
         Next
-        DGV_ELCAR.CurrentCell = DGV_ELCAR.Rows(i0).Cells(0)
-        DGV_ELCAR.Rows(i0).Selected = True
+        Try
+            DGV_ELCAR.CurrentCell = DGV_ELCAR.Rows(i0).Cells(0)
+            DGV_ELCAR.Rows(i0).Selected = True
+        Catch ex As Exception
+
+        End Try
     End Sub
     Sub SET_DGV_ELCAR_STATO(i)
         Dim compilato = CInt(DGV_ELCAR.Rows(i).Cells(8).Value)
@@ -310,7 +348,7 @@ Public Class F_Compilazione
         If tot = 0 Then
             DGV_ELCAR.Rows(i).Cells(0).Value = ImageList1.Images(2) ' pallino rosso
             Exit Sub
-        ElseIf tot = 20 Then
+        ElseIf tot = 20 Or tot = 40 Then
             DGV_ELCAR.Rows(i).Cells(0).Value = ImageList1.Images(8) ' Ok
         Else
             DGV_ELCAR.Rows(i).Cells(0).Value = ImageList1.Images(5) ' pallino giallo
@@ -377,22 +415,35 @@ Public Class F_Compilazione
             Panel2.BackColor = MyColor.Yellow
             Exit Sub
         End If
+
         Dim img_Index = 7, CNT = 0, R = 0
         Dim i0 = -1
+        Noneseguire = True
         For i As Integer = 0 To Gbl_foglio.RT.Count - 1
             CNT = CNT + 1
             If Gbl_foglio.RT(i).COMPILATO Then
                 img_Index = 8
+                If Gbl_foglio.RT(i).TOT = 0 Then
+                    DGV_ROUTINE.Rows.Add(ImageList1.Images(img_Index), CNT, Gbl_foglio.RT(i).TESTO, Gbl_foglio.RT(i).TOT, i, Gbl_foglio.RT(i).COMPILATO, ImageList1.Images(6))
+                    R = 1
+                Else
+                    DGV_ROUTINE.Rows.Add(ImageList1.Images(img_Index), CNT, Gbl_foglio.RT(i).TESTO, Gbl_foglio.RT(i).TOT, i, Gbl_foglio.RT(i).COMPILATO, ImageList1.Images(8))
+                    R = 0
+                End If
             Else
                 img_Index = 7
                 If i0 = -1 Then i0 = i
+                'DGV_ROUTINE.Rows.Add(ImageList1.Images(img_Index), CNT, Gbl_foglio.RT(i).TESTO, 0, i, Gbl_foglio.RT(i).COMPILATO, ImageList1.Images(6))
+                DGV_ROUTINE.Rows.Add(ImageList1.Images(img_Index), CNT, Gbl_foglio.RT(i).TESTO, -1, i, Gbl_foglio.RT(i).COMPILATO)
+                R = 2
             End If
-            DGV_ROUTINE.Rows.Add(ImageList1.Images(img_Index), CNT, Gbl_foglio.RT(i).TESTO, Gbl_foglio.RT(i).TOT, i)
+
         Next
+        Noneseguire = False
 
         ' mi posiziono sul primo non compilato
-        DGV_ROUTINE.CurrentCell = DGV_ROUTINE.Rows(i0).Cells(0)
-        DGV_ROUTINE.Rows(i0).Selected = True
+        DGV_ROUTINE.CurrentCell = DGV_ROUTINE.Rows(0).Cells(0)
+        DGV_ROUTINE.Rows(0).Selected = True
     End Sub
 
     Sub Mostra(Optional modo = "*")
@@ -436,7 +487,13 @@ Public Class F_Compilazione
     Private Sub TextBox_Enter(sender As Object, e As EventArgs)
         Dim currentTextBox As TextBox = CType(sender, TextBox)
         currentTextBox.BackColor = MyColor.LightYellow
-        'If currentTextBox.Text = 0 Then TextBox1.SelectAll()
+        currentTextBox.SelectAll()
+    End Sub
+    Private Sub Textbox_mouseup(sender As Object, e As EventArgs)
+        Dim currentTextBox As TextBox = CType(sender, TextBox)
+        currentTextBox.BackColor = MyColor.LightYellow
+        currentTextBox.SelectAll()
+
     End Sub
 
     ' Ripristina lo sfondo originale (bianco) quando il TextBox perde il fuoco
@@ -479,8 +536,12 @@ Public Class F_Compilazione
 
         If currentIndex = 5 Then
             Dim Completata = Riporta_totali_ELCAR()
-            If Completata Then Panel_setting("ROUTINE")
-            Focus_to_next_empy_elcar_row()
+            If Completata Then
+                If Gb_Stato_compilazione.Salvabile Then Return
+                Panel_setting("ROUTINE")
+            Else
+                Focus_to_next_empy_elcar_row()
+            End If
             Exit Sub
         End If
 
@@ -493,6 +554,8 @@ Public Class F_Compilazione
     End Sub
 
     Function Focus_to_next_empy_elcar_row() As Integer
+        If Gb_Stato_compilazione.Salvabile Then Return DGV_ELCAR.CurrentRow.Index
+
         Dim n As Integer = DGV_ELCAR.Rows.Count, V = 0
 
         ' Se la griglia è vuota, ritorna -1
@@ -506,7 +569,13 @@ Public Class F_Compilazione
             V = DGV_ELCAR.Rows(checkIndex).Cells(8).Value
             ' Evita l'errore se la cella o il valore sono nulli
             If V = 0 Then
-                DGV_ELCAR.CurrentCell = DGV_ELCAR.Rows(checkIndex).Cells(0)
+
+                Try
+                    DGV_ELCAR.CurrentCell = DGV_ELCAR.Rows(checkIndex).Cells(0)
+
+                Catch ex As Exception
+                    Dim x = 1
+                End Try
                 Return i
             End If
         Next
@@ -514,24 +583,33 @@ Public Class F_Compilazione
         ' Se nessuna riga contiene "X", ritorna -1
         Return -1
 
+
     End Function
 
     Function Focus_to_next_empy_routine_row() As Integer
+        If Gb_Stato_compilazione.Salvabile Then Return -1
+
+
         Dim n As Integer = DGV_ROUTINE.Rows.Count, Compilato = 0
 
         ' Se la griglia è vuota, ritorna -1
         If n = 0 Then Return -1
         Dim currentRowIndex As Integer = DGV_ROUTINE.CurrentRow.Index
         ' Il ciclo gira esattamente N volte per controllare tutte le righe
-        For i As Integer = 1 To n
+        Noneseguire = True
+        For i As Integer = 1 To n - 1
             ' Calcola l'indice da controllare partendo dalla riga successiva (currentRowIndex + i)
             ' L'operatore Mod riporta l'indice a 0 quando si supera la fine della griglia
             Dim checkIndex As Integer = (currentRowIndex + 1) Mod n
             Compilato = DGV_ROUTINE.Rows(checkIndex).Cells(5).Value  ' compilato
             ' Evita l'errore se la cella o il valore sono nulli
             If Compilato = 0 Then
+                Noneseguire = True
                 DGV_ROUTINE.CurrentCell = DGV_ROUTINE.Rows(checkIndex).Cells(0)
-                Return i
+                RadioButton1.Checked = False : RadioButton2.Checked = False
+                Dim i0 = DGV_ROUTINE.Rows(checkIndex).Cells(4).Value
+                Label12.Tag = i0
+                Return i0
             End If
         Next
 
@@ -540,39 +618,66 @@ Public Class F_Compilazione
 
     End Function
 
-    Function Focus_to_next_empy_CP() As Integer
-
+    Sub Focus_to_next_empy_CP()
+        If Gb_Stato_compilazione.Salvabile Then Return
         Dim n As Integer = Gbl_foglio.CP.Count, compilato = 0
-
+        Conta_voci_compilate_CP()
         ' Se la griglia è vuota, ritorna -1
-        If n = 0 Then Return -1
-        Dim currentRowIndex As Integer = CInt(Val(GroupBox_CP.Tag))
+        If n = 0 Then Return
 
-        ' Il ciclo gira esattamente N volte per controllare tutte le righe
-        For i As Integer = 1 To n
-            ' Calcola l'indice da controllare partendo dalla riga successiva (currentRowIndex + i)
-            ' L'operatore Mod riporta l'indice a 0 quando si supera la fine della griglia
-            Dim checkIndex As Integer = (currentRowIndex + 1) Mod n
-            compilato = Gbl_foglio.CP(checkIndex).COMPILATO  ' compilato
-            ' Evita l'errore se la cella o il valore sono nulli
-            If compilato = 0 Then
-                If i = 0 Then
+        compilato = Gbl_foglio.CP(0).COMPILATO  ' compilato
+        If compilato = 0 And T_CP1.Visible Then
+            T_CP1.Focus()
+            Return
+        End If
+
+        If n < 2 Then Return
+        compilato = Gbl_foglio.CP(1).COMPILATO  ' compilato
+        If compilato = 0 And T_CP2.Visible Then
+            T_CP2.Focus()
+            Return
+        End If
+
+        If n < 3 Then Return
+        compilato = Gbl_foglio.CP(2).COMPILATO  ' compilato
+        If compilato = 0 And T_CP3.Visible Then
+            T_CP3.Focus()
+            Return
+        End If
+
+        controlla_se_da_salvare()
+        Return
+
+
+        For i = 0 To 2
+            compilato = Gbl_foglio.CP(i).COMPILATO  ' compilato
+            If compilato Then Continue For
+            If i = 0 Then
+                If T_CP1.Visible Then
                     T_CP1.Focus()
-                ElseIf i = 1 Then
-                    T_CP2.Focus()
-                ElseIf i = 2 Then
-                    T_CP3.Focus()
+                    Return
                 End If
-                Return i
+            End If
+            If i = 1 Then
+                If T_CP2.Visible Then
+                    T_CP2.Focus()
+                    Return
+                End If
+            End If
+            If i = 2 Then
+                If T_CP3.Visible Then
+                    T_CP3.Focus()
+                    Return
+                End If
             End If
         Next
-
-        ' Se nessuna riga contiene "X", ritorna -1
-        Return -1
-
+        controlla_se_da_salvare()
+        Return
 
 
-    End Function
+
+
+    End Sub
 
     Function Riporta_totali_ELCAR() As Boolean
         ' carica i valori inseriti nel foglio
@@ -605,13 +710,23 @@ Public Class F_Compilazione
     Function Riporta_totali_ROUTINE() As Boolean
         ' carica i valori inseriti nel foglio
         ' ritorna true se tutte le voci ELCAR sono state compilate
-        Dim i = TextBox1.Tag
+        Dim i = Label12.Tag
         Dim TOT = 0, TOTTOT = 0
-        Gbl_foglio.RT(i).TOT = CInt(Val(TextBox1.Text))
+        Gbl_foglio.RT(i).TOT = 0
+        If RadioButton1.Checked Then Gbl_foglio.RT(i).TOT = 1
         Gbl_foglio.RT(i).COMPILATO = 1
+
         'aggiorna la DGV e prepara per i successivi
         DGV_ROUTINE.Rows(i).Cells(3).Value = Gbl_foglio.RT(i).TOT
         DGV_ROUTINE.Rows(i).Cells(5).Value = 1 ' compilato
+        If Gbl_foglio.RT(i).TOT = 0 Then
+            DGV_ROUTINE.Rows(i).Cells(6).Value = ImageList1.Images(6)
+        Else
+            DGV_ROUTINE.Rows(i).Cells(6).Value = ImageList1.Images(8)
+        End If
+
+        Button3.Focus()
+
         SET_DGV_ROUTINE_STATO(i)
         Dim result = Conta_voci_compilate_ROUTINE()
         Return result.Successo
@@ -644,6 +759,17 @@ Public Class F_Compilazione
         Return result.Successo
 
     End Function
+    Function Controlla_totali_voci_elcar() As Integer
+        ' se il foglio è valutativo si accettano tutti i totali
+        If Gbl_foglio.Valutativo Then Return 0
+        Dim cnt = 0
+        For Each voce In Gbl_foglio.VociDiUnFoglio
+            If voce.TOT1 <> 0 Or voce.TOT1 <> 20 Then cnt = cnt + 1
+            If voce.TOT2 <> 0 Or voce.TOT2 <> 20 Then cnt = cnt + 1
+        Next
+        Return cnt
+
+    End Function
 
     Sub Carica_totali_elcar(i, n)
         If i >= Gbl_foglio.VociDiUnFoglio.Count Then
@@ -671,21 +797,28 @@ Public Class F_Compilazione
         T_pos1.Focus()
     End Sub
     Sub Carica_totali_routine(i, n)
+
         If i >= Gbl_foglio.RT.Count Then
             i = 0
             n = DGV_ROUTINE.Rows(0).Cells(1).Value
         End If
-        If Gbl_foglio.RT(i).COMPILATO Then
-            TextBox1.Text = Gbl_foglio.RT(i).TOT
+
+        Noneseguire = True
+        If Gbl_foglio.RT(i).TOT = 1 Then
+            Label12.Text = "     Cheked" : Label12.ImageIndex = 8
+            RadioButton1.Checked = True
         Else
-            TextBox1.Text = ""
+            Label12.Text = "     Uncheked" : Label12.ImageIndex = 6
+            RadioButton2.Checked = True
         End If
-        TextBox1.Refresh()
+        Noneseguire = False
+
         Label30.Text = Gbl_foglio.RT(i).TESTO
         Label31.Text = "Voce n. " + n.ToString
-        TextBox1.Tag = i
-        TextBox1.Focus()
+        Label12.Tag = i
+        Label13.Text = "i:" + i.ToString + " Tot " + Gbl_foglio.RT(i).TOT.ToString
     End Sub
+
     Sub Carica_totali_CP(i)
         Dim l = "", t = 0
         l = Gbl_foglio.CP(i).TESTO
@@ -722,53 +855,35 @@ Public Class F_Compilazione
     End Sub
 
     Private Sub DGV_ROUTINE_RowEnter(sender As Object, e As DataGridViewCellEventArgs) Handles DGV_ROUTINE.RowEnter
+        If Noneseguire Then Exit Sub
         Dim i = e.RowIndex
-        If i >= Gbl_foglio.RT.Count Then
-            i = Focus_to_next_empy_routine_row()
-        End If
+        'If i >= Gbl_foglio.RT.Count Then
+        '    i = Focus_to_next_empy_routine_row()
+        'End If
         Dim n = DGV_ROUTINE.Rows(i).Cells(1).Value
         Carica_totali_routine(i, n)
 
     End Sub
 
-    Private Sub TextBox1_Enter(sender As Object, e As EventArgs) Handles TextBox1.Enter
-        Dim currentTextBox As TextBox = CType(sender, TextBox)
+    Private Sub TextBox1_Enter(sender As Object, e As EventArgs)
+        Dim currentTextBox = CType(sender, TextBox)
         currentTextBox.BackColor = MyColor.LightYellow
 
     End Sub
 
-    Private Sub TextBox1_Leave(sender As Object, e As EventArgs) Handles TextBox1.Leave
-        Dim currentTextBox As TextBox = CType(sender, TextBox)
+    Private Sub TextBox1_Leave(sender As Object, e As EventArgs)
+        Dim currentTextBox = CType(sender, TextBox)
         currentTextBox.BackColor = System.Drawing.SystemColors.Window
 
 
     End Sub
 
-    Private Sub TextBox1_KeyDown(sender As Object, e As KeyEventArgs) Handles TextBox1.KeyDown
-        If e.KeyCode <> Keys.Enter Then Exit Sub
-        Dim tot = 0
-        ' Impedisce il "bip" acustico predefinito di Windows alla pressione di Invio
-        e.SuppressKeyPress = True
-
-        Dim currentTextBox As TextBox = CType(sender, TextBox)
-
-        Dim Completata = Riporta_totali_ROUTINE()
-        If Completata Then
-            Panel_setting("CP")
-            Focus_to_next_empy_CP()
-            Exit Sub
-
-        End If
-        Focus_to_next_empy_routine_row()
-
-
-    End Sub
     Function controlla_se_da_salvare() As Boolean
         If Gb_Stato_compilazione.Salvabile Then
-            Button5.Enabled = True
-            Button5.BackColor = MyColor.LightGreen
+            B_salva.Enabled = True
+            B_salva.BackColor = MyColor.DodgerBlue
         Else
-            Button5.Enabled = False
+            B_salva.Enabled = False
         End If
         Return Gb_Stato_compilazione.Salvabile
     End Function
@@ -790,6 +905,7 @@ Public Class F_Compilazione
     Private Sub T_CP_KeyDown(sender As Object, e As KeyEventArgs) Handles T_CP1.KeyDown, T_CP2.KeyDown, T_CP3.KeyDown
 
         If e.KeyCode <> Keys.Enter Then Exit Sub
+
         Dim tot = 0
         ' Impedisce il "bip" acustico predefinito di Windows alla pressione di Invio
         e.SuppressKeyPress = True
@@ -798,6 +914,7 @@ Public Class F_Compilazione
         Dim i = Val(currentTextBox.Tag)
         GroupBox_CP.Tag = i
         Dim Completata = Riporta_totali_CP(i)
+
         If Completata Then
             controlla_se_da_salvare()
             Exit Sub
@@ -807,9 +924,56 @@ Public Class F_Compilazione
 
     End Sub
 
-    Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
+    Private Sub Button5_Click(sender As Object, e As EventArgs) Handles B_salva.Click
+        Dim m = "Vuoi Salvare il Foglio compilato?"
+        If MsgBox(m, vbInformation + vbYesNo, "Salvataggio foglio compilato") <> vbYes Then Exit Sub
+
+
+        'Verifico che i totali delle voci elcas sia congruenti 
+        Dim cnt = Controlla_totali_voci_elcar()
+        If cnt > 0 Then
+            ' Alcuni totali non sono corretti 
+            m = "Sono presenti " + cnt.ToString + " Totali che non chiudono a 20!"
+            If MsgBox(m, vbCritical + vbYesNo + vbDefaultButton2, "Totali non corretti") <> vbYes Then Exit Sub
+            m = "SEi sicuro di voler proseguire ugualmente anche se ci sono dei totali che non chiudono a 20? "
+            If MsgBox(m, vbCritical + vbYesNo + vbDefaultButton2, "Totali non corretti") <> vbYes Then Exit Sub
+            m = "[WARNING 01] Compilazione, salvataggio con (" + cnt.ToString + ") totali Errati"
+            APPEND_LOG(m, ini.File_Log, True)
+        End If
+
+        ' Forza il Flag compilato =1
+        Gbl_foglio.Compilato = 1
+        For Each voce In Gbl_foglio.VociDiUnFoglio : voce.COMPILATO = 1 : Next
+        For Each voce In Gbl_foglio.RT : voce.COMPILATO = 1 : Next
+        For Each voce In Gbl_foglio.CP : voce.COMPILATO = 1 : Next
+
+        Dim dbbambino = Gbl_foglio.DB_Bambino
+        Dim stato = Foglio_Esistente_Aggiorna(Gbl_foglio, dbbambino)
+        Dim m1 = ""
+        If stato.OK Then
+            m = "Il foglio Compilato è stato salvato correttamente" + vbCrLf + vbCrLf + "Foglio: " + Gbl_foglio.ID_foglio.ToString + ") di: " + Gbl_foglio.Bambino
+            Call MsgBox(m, vbOKOnly + vbInformation)
+        Else
+            m = "[Errore 001] " + stato.Err + "(" + Gbl_foglio.ID_foglio.ToString + ") di: " + Gbl_foglio.Bambino
+            APPEND_LOG(m, ini.File_Log, True)
+
+            m = "Errore durante il salvataggio del Foglio: " + Gbl_foglio.ID_foglio.ToString + ") di: " + Gbl_foglio.Bambino
+            Call MsgBox(m, vbOKOnly + vbCritical)
+        End If
+
+        Dim idt = Val(B_edit.Tag)
+        TODOLIST_rimuovi_Foglio_Compilato(idt)
+        B_edit.Tag = ""
+
+        Call Edit_onoff(False)
+        Call Todolist_Azzera_e_Ricrea()
+        Gbl_VociDiTodolist = Class_TODOLIST.LoadAll()
+        Carica_combo_fogli_da_compilare()
+
+
 
     End Sub
+
 
     Private Sub Button6_Click(sender As Object, e As EventArgs) Handles Button6.Click
 
@@ -820,4 +984,90 @@ Public Class F_Compilazione
         Carica_combo_fogli_da_compilare()
 
     End Sub
+
+    Private Sub B_edit_Click(sender As Object, e As EventArgs) Handles B_edit.Click
+
+        '1- Verifico che sia disponibile 
+        Dim result = Class_TODOLIST.Trova_By_IDfoglio_IDbambino(Gbl_foglio.ID_foglio, Gbl_foglio.ID_Bambino)
+        If result.todolist.CLIENT_ID > 0 Then
+            Dim m = "Il foglio (" + result.todolist.ID_FOGLIO.ToString + ") di " + result.todolist.BAMBINO + vbCrLf
+            m = m + "é gia in compilazione da: " + result.todolist.CLIENT_NOME
+            Call MsgBox(m, vbInformation + vbOKOnly, "Foglio gia in uso")
+            Exit Sub
+        End If
+
+        '2- è disponibile quindi registro che lo prendo in carico
+        result.todolist.CLIENT_ID = 9999
+        result.todolist.CLIENT_NOME = "MASTER"
+        result.todolist.CLIENT_DATAINVIO = Now.ToString
+        result.todolist.CLIENT_DATARICONSEGNA = "INVIATO PER LA COMPILAZIONE IL " + result.todolist.CLIENT_DATAINVIO
+        result.todolist.Save()
+        B_edit.Tag = result.todolist.ID
+
+        '3-Abilito per la compilazione 
+        Call Edit_onoff(True)
+        Panel_setting("ELCAR")
+        T_pos1.Focus()
+    End Sub
+
+    Private Sub RadioButton1_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton1.CheckedChanged, RadioButton2.CheckedChanged
+        If Noneseguire Then Exit Sub
+        ' 2. Capisci quale dei due RadioButton ha scatenato l'evento
+        Dim rb As RadioButton = DirectCast(sender, RadioButton)
+
+        ' ⭐ IL TRUCCO È QUI: Se il pulsante si sta SPEGNENDO, esci subito!
+        ' In questo modo il codice sotto viene eseguito SOLO UNA VOLTA (per il pulsante che si accende)
+        If Not rb.Checked Then Exit Sub
+
+        If RadioButton1.Checked Then
+            RadioButton2.Checked = False
+            Label12.Text = "     Cheked" : Label12.ImageIndex = 8
+        Else
+            RadioButton1.Checked = False
+            Label12.Text = "     UnCheked"
+            Label12.ImageIndex = 6
+        End If
+
+        Dim Completata = Riporta_totali_ROUTINE()
+
+        If Completata Then
+            If Gb_Stato_compilazione.Salvabile Then Exit Sub
+            Panel_setting("CP")
+            Focus_to_next_empy_CP()
+            Exit Sub
+        Else
+            Noneseguire = True
+            Focus_to_next_empy_routine_row()
+            Noneseguire = False
+            Dim x = 1
+        End If
+
+
+    End Sub
+
+    Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
+        Noneseguire = True
+        Focus_to_next_empy_routine_row()
+        Noneseguire = False
+
+
+    End Sub
+
+    Private Sub GroupBox_ELCAR_Enter(sender As Object, e As EventArgs) Handles GroupBox_ELCAR.Enter
+
+    End Sub
+
+    Private Sub B_annulla_Click(sender As Object, e As EventArgs) Handles B_annulla.Click
+        Dim m = "Vuoi uscire dalla modalità compilazione?"
+        If MsgBox(m, vbYesNo + vbQuestion) <> vbYes Then Exit Sub
+        Dim idt = Val(B_edit.Tag)
+        TODOLIST_rimuovi_Foglio_Compilato(idt)
+        Call Todolist_Azzera_e_Ricrea()
+        Gbl_VociDiTodolist = Class_TODOLIST.LoadAll()
+        Carica_combo_fogli_da_compilare()
+        B_edit.Tag = ""
+        Edit_onoff(False)
+    End Sub
+
+
 End Class

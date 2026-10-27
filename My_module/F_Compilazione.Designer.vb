@@ -66,6 +66,7 @@ Partial Class F_Compilazione
         DataGridViewTextBoxColumn4 = New DataGridViewTextBoxColumn()
         DataGridViewTextBoxColumn6 = New DataGridViewTextBoxColumn()
         Column6 = New DataGridViewTextBoxColumn()
+        Column7 = New DataGridViewImageColumn()
         Label9 = New Label()
         Panel_CP = New Panel()
         Label10 = New Label()
@@ -105,9 +106,13 @@ Partial Class F_Compilazione
         Label25 = New Label()
         T_PROMPT1 = New TextBox()
         GroupBox_Routine = New GroupBox()
+        Label13 = New Label()
+        Label12 = New Label()
+        RadioButton2 = New RadioButton()
+        ImageList2 = New ImageList(components)
+        RadioButton1 = New RadioButton()
         Button3 = New Button()
         Label18 = New Label()
-        TextBox1 = New TextBox()
         Label30 = New Label()
         Label31 = New Label()
         Button4 = New Button()
@@ -153,8 +158,11 @@ Partial Class F_Compilazione
         DataGridViewTextBoxColumn28 = New DataGridViewTextBoxColumn()
         Label38 = New Label()
         Label39 = New Label()
-        Button5 = New Button()
+        B_salva = New Button()
         Button6 = New Button()
+        B_edit = New Button()
+        Panel1 = New Panel()
+        B_annulla = New Button()
         CType(DGV_ELCAR, ComponentModel.ISupportInitialize).BeginInit()
         Panel_ELCAR.SuspendLayout()
         Panel_ROUTINE.SuspendLayout()
@@ -172,12 +180,13 @@ Partial Class F_Compilazione
         CType(DataGridView2, ComponentModel.ISupportInitialize).BeginInit()
         Panel3.SuspendLayout()
         CType(DataGridView3, ComponentModel.ISupportInitialize).BeginInit()
+        Panel1.SuspendLayout()
         SuspendLayout()
         ' 
         ' ComboBox1
         ' 
         ComboBox1.FormattingEnabled = True
-        ComboBox1.Location = New Point(40, 16)
+        ComboBox1.Location = New Point(39, 8)
         ComboBox1.Name = "ComboBox1"
         ComboBox1.Size = New Size(277, 23)
         ComboBox1.TabIndex = 34
@@ -186,7 +195,7 @@ Partial Class F_Compilazione
         ' 
         Label1.AutoSize = True
         Label1.Font = New Font("Calibri", 9F)
-        Label1.Location = New Point(331, 20)
+        Label1.Location = New Point(327, 12)
         Label1.Name = "Label1"
         Label1.Size = New Size(54, 14)
         Label1.TabIndex = 36
@@ -195,7 +204,7 @@ Partial Class F_Compilazione
         ' Label2
         ' 
         Label2.Font = New Font("Calibri", 9F, FontStyle.Bold)
-        Label2.Location = New Point(387, 20)
+        Label2.Location = New Point(383, 12)
         Label2.Name = "Label2"
         Label2.Size = New Size(31, 14)
         Label2.TabIndex = 37
@@ -204,9 +213,9 @@ Partial Class F_Compilazione
         ' Label3
         ' 
         Label3.Font = New Font("Calibri", 9F, FontStyle.Bold)
-        Label3.Location = New Point(461, 20)
+        Label3.Location = New Point(452, 12)
         Label3.Name = "Label3"
-        Label3.Size = New Size(138, 14)
+        Label3.Size = New Size(117, 14)
         Label3.TabIndex = 39
         Label3.Text = "000"
         ' 
@@ -214,7 +223,7 @@ Partial Class F_Compilazione
         ' 
         Label4.AutoSize = True
         Label4.Font = New Font("Calibri", 9F)
-        Label4.Location = New Point(424, 20)
+        Label4.Location = New Point(420, 12)
         Label4.Name = "Label4"
         Label4.Size = New Size(28, 14)
         Label4.TabIndex = 38
@@ -262,6 +271,7 @@ Partial Class F_Compilazione
         DGV_ELCAR.Location = New Point(7, 28)
         DGV_ELCAR.MultiSelect = False
         DGV_ELCAR.Name = "DGV_ELCAR"
+        DGV_ELCAR.ReadOnly = True
         DGV_ELCAR.RowHeadersVisible = False
         DGV_ELCAR.RowHeadersWidth = 62
         DGV_ELCAR.SelectionMode = DataGridViewSelectionMode.FullRowSelect
@@ -273,6 +283,7 @@ Partial Class F_Compilazione
         stato.HeaderText = ""
         stato.MinimumWidth = 8
         stato.Name = "stato"
+        stato.ReadOnly = True
         stato.Resizable = DataGridViewTriState.True
         stato.Width = 30
         ' 
@@ -281,6 +292,7 @@ Partial Class F_Compilazione
         Column1.HeaderText = "N."
         Column1.MinimumWidth = 8
         Column1.Name = "Column1"
+        Column1.ReadOnly = True
         Column1.SortMode = DataGridViewColumnSortMode.NotSortable
         Column1.Width = 30
         ' 
@@ -291,6 +303,7 @@ Partial Class F_Compilazione
         Col2.HeaderText = "Testo inserito"
         Col2.MinimumWidth = 8
         Col2.Name = "Col2"
+        Col2.ReadOnly = True
         Col2.SortMode = DataGridViewColumnSortMode.NotSortable
         Col2.Width = 400
         ' 
@@ -299,6 +312,7 @@ Partial Class F_Compilazione
         Column4.HeaderText = "Tot1"
         Column4.MinimumWidth = 8
         Column4.Name = "Column4"
+        Column4.ReadOnly = True
         Column4.SortMode = DataGridViewColumnSortMode.NotSortable
         Column4.Width = 40
         ' 
@@ -316,6 +330,7 @@ Partial Class F_Compilazione
         j.HeaderText = "index"
         j.MinimumWidth = 8
         j.Name = "j"
+        j.ReadOnly = True
         j.Visible = False
         j.Width = 150
         ' 
@@ -324,6 +339,7 @@ Partial Class F_Compilazione
         col1.HeaderText = "Codice"
         col1.MinimumWidth = 8
         col1.Name = "col1"
+        col1.ReadOnly = True
         col1.Visible = False
         col1.Width = 90
         ' 
@@ -332,6 +348,7 @@ Partial Class F_Compilazione
         Column2.HeaderText = "tottot"
         Column2.MinimumWidth = 8
         Column2.Name = "Column2"
+        Column2.ReadOnly = True
         Column2.Visible = False
         Column2.Width = 150
         ' 
@@ -340,6 +357,7 @@ Partial Class F_Compilazione
         Column3.HeaderText = "Compilato"
         Column3.MinimumWidth = 8
         Column3.Name = "Column3"
+        Column3.ReadOnly = True
         Column3.Visible = False
         Column3.Width = 150
         ' 
@@ -363,9 +381,9 @@ Partial Class F_Compilazione
         Panel_ELCAR.Controls.Add(DGV_ELCAR)
         Panel_ELCAR.Controls.Add(Label16)
         Panel_ELCAR.Controls.Add(Label5)
-        Panel_ELCAR.Location = New Point(6, 80)
+        Panel_ELCAR.Location = New Point(6, 89)
         Panel_ELCAR.Name = "Panel_ELCAR"
-        Panel_ELCAR.Size = New Size(591, 24)
+        Panel_ELCAR.Size = New Size(591, 27)
         Panel_ELCAR.TabIndex = 42
         ' 
         ' Label6
@@ -393,6 +411,7 @@ Partial Class F_Compilazione
         ImageList1.Images.SetKeyName(7, "icons8-modificare-96.png")
         ImageList1.Images.SetKeyName(8, "icons8-segno-di-spunta-96.png")
         ImageList1.Images.SetKeyName(9, "icons8-rimuovere-96.png")
+        ImageList1.Images.SetKeyName(10, "Emoji Symbols-147.png")
         ' 
         ' Panel_ROUTINE
         ' 
@@ -401,7 +420,7 @@ Partial Class F_Compilazione
         Panel_ROUTINE.Controls.Add(Label8)
         Panel_ROUTINE.Controls.Add(Label_ROUTINE)
         Panel_ROUTINE.Controls.Add(DGV_ROUTINE)
-        Panel_ROUTINE.Location = New Point(6, 110)
+        Panel_ROUTINE.Location = New Point(6, 119)
         Panel_ROUTINE.Name = "Panel_ROUTINE"
         Panel_ROUTINE.Size = New Size(591, 27)
         Panel_ROUTINE.TabIndex = 43
@@ -439,14 +458,15 @@ Partial Class F_Compilazione
         ' DGV_ROUTINE
         ' 
         DGV_ROUTINE.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        DGV_ROUTINE.Columns.AddRange(New DataGridViewColumn() {DataGridViewImageColumn1, DataGridViewTextBoxColumn1, DataGridViewTextBoxColumn3, DataGridViewTextBoxColumn4, DataGridViewTextBoxColumn6, Column6})
+        DGV_ROUTINE.Columns.AddRange(New DataGridViewColumn() {DataGridViewImageColumn1, DataGridViewTextBoxColumn1, DataGridViewTextBoxColumn3, DataGridViewTextBoxColumn4, DataGridViewTextBoxColumn6, Column6, Column7})
         DGV_ROUTINE.Location = New Point(8, 28)
         DGV_ROUTINE.MultiSelect = False
         DGV_ROUTINE.Name = "DGV_ROUTINE"
+        DGV_ROUTINE.ReadOnly = True
         DGV_ROUTINE.RowHeadersVisible = False
         DGV_ROUTINE.RowHeadersWidth = 62
         DGV_ROUTINE.SelectionMode = DataGridViewSelectionMode.FullRowSelect
-        DGV_ROUTINE.Size = New Size(572, 250)
+        DGV_ROUTINE.Size = New Size(571, 251)
         DGV_ROUTINE.TabIndex = 0
         ' 
         ' DataGridViewImageColumn1
@@ -454,6 +474,7 @@ Partial Class F_Compilazione
         DataGridViewImageColumn1.HeaderText = ""
         DataGridViewImageColumn1.MinimumWidth = 8
         DataGridViewImageColumn1.Name = "DataGridViewImageColumn1"
+        DataGridViewImageColumn1.ReadOnly = True
         DataGridViewImageColumn1.Resizable = DataGridViewTriState.True
         DataGridViewImageColumn1.Width = 30
         ' 
@@ -462,6 +483,7 @@ Partial Class F_Compilazione
         DataGridViewTextBoxColumn1.HeaderText = "N."
         DataGridViewTextBoxColumn1.MinimumWidth = 8
         DataGridViewTextBoxColumn1.Name = "DataGridViewTextBoxColumn1"
+        DataGridViewTextBoxColumn1.ReadOnly = True
         DataGridViewTextBoxColumn1.SortMode = DataGridViewColumnSortMode.NotSortable
         DataGridViewTextBoxColumn1.Width = 30
         ' 
@@ -472,6 +494,7 @@ Partial Class F_Compilazione
         DataGridViewTextBoxColumn3.HeaderText = "Testo inserito"
         DataGridViewTextBoxColumn3.MinimumWidth = 8
         DataGridViewTextBoxColumn3.Name = "DataGridViewTextBoxColumn3"
+        DataGridViewTextBoxColumn3.ReadOnly = True
         DataGridViewTextBoxColumn3.SortMode = DataGridViewColumnSortMode.NotSortable
         DataGridViewTextBoxColumn3.Width = 400
         ' 
@@ -480,7 +503,9 @@ Partial Class F_Compilazione
         DataGridViewTextBoxColumn4.HeaderText = "Tot"
         DataGridViewTextBoxColumn4.MinimumWidth = 8
         DataGridViewTextBoxColumn4.Name = "DataGridViewTextBoxColumn4"
+        DataGridViewTextBoxColumn4.ReadOnly = True
         DataGridViewTextBoxColumn4.SortMode = DataGridViewColumnSortMode.Programmatic
+        DataGridViewTextBoxColumn4.Visible = False
         DataGridViewTextBoxColumn4.Width = 40
         ' 
         ' DataGridViewTextBoxColumn6
@@ -488,6 +513,7 @@ Partial Class F_Compilazione
         DataGridViewTextBoxColumn6.HeaderText = "index"
         DataGridViewTextBoxColumn6.MinimumWidth = 8
         DataGridViewTextBoxColumn6.Name = "DataGridViewTextBoxColumn6"
+        DataGridViewTextBoxColumn6.ReadOnly = True
         DataGridViewTextBoxColumn6.SortMode = DataGridViewColumnSortMode.Programmatic
         DataGridViewTextBoxColumn6.Visible = False
         DataGridViewTextBoxColumn6.Width = 150
@@ -497,8 +523,18 @@ Partial Class F_Compilazione
         Column6.HeaderText = "compilato"
         Column6.MinimumWidth = 8
         Column6.Name = "Column6"
+        Column6.ReadOnly = True
         Column6.Visible = False
         Column6.Width = 150
+        ' 
+        ' Column7
+        ' 
+        Column7.HeaderText = "Stato"
+        Column7.MinimumWidth = 8
+        Column7.Name = "Column7"
+        Column7.ReadOnly = True
+        Column7.Resizable = DataGridViewTriState.True
+        Column7.Width = 40
         ' 
         ' Label9
         ' 
@@ -516,9 +552,9 @@ Partial Class F_Compilazione
         Panel_CP.Controls.Add(Label10)
         Panel_CP.Controls.Add(Label11)
         Panel_CP.Controls.Add(Label_CP)
-        Panel_CP.Location = New Point(5, 143)
+        Panel_CP.Location = New Point(5, 152)
         Panel_CP.Name = "Panel_CP"
-        Panel_CP.Size = New Size(591, 25)
+        Panel_CP.Size = New Size(591, 27)
         Panel_CP.TabIndex = 45
         ' 
         ' Label10
@@ -568,9 +604,9 @@ Partial Class F_Compilazione
         GroupBox_CP.Controls.Add(P_CP1)
         GroupBox_CP.Controls.Add(P_CP2)
         GroupBox_CP.Controls.Add(Button2)
-        GroupBox_CP.Location = New Point(6, 172)
+        GroupBox_CP.Location = New Point(16, 373)
         GroupBox_CP.Name = "GroupBox_CP"
-        GroupBox_CP.Size = New Size(513, 127)
+        GroupBox_CP.Size = New Size(513, 118)
         GroupBox_CP.TabIndex = 46
         GroupBox_CP.TabStop = False
         GroupBox_CP.Text = "CP"
@@ -583,7 +619,7 @@ Partial Class F_Compilazione
         P_CP3.Location = New Point(5, 79)
         P_CP3.Margin = New Padding(2)
         P_CP3.Name = "P_CP3"
-        P_CP3.Size = New Size(452, 24)
+        P_CP3.Size = New Size(444, 24)
         P_CP3.TabIndex = 51
         ' 
         ' LCP3
@@ -613,7 +649,7 @@ Partial Class F_Compilazione
         L_CP3.Font = New Font("Calibri", 9.75F)
         L_CP3.Location = New Point(114, 4)
         L_CP3.Name = "L_CP3"
-        L_CP3.Size = New Size(333, 14)
+        L_CP3.Size = New Size(319, 14)
         L_CP3.TabIndex = 51
         ' 
         ' P_CP1
@@ -624,7 +660,7 @@ Partial Class F_Compilazione
         P_CP1.Location = New Point(5, 18)
         P_CP1.Margin = New Padding(2)
         P_CP1.Name = "P_CP1"
-        P_CP1.Size = New Size(452, 24)
+        P_CP1.Size = New Size(444, 24)
         P_CP1.TabIndex = 44
         ' 
         ' L_CP1
@@ -632,7 +668,7 @@ Partial Class F_Compilazione
         L_CP1.Font = New Font("Calibri", 9.75F)
         L_CP1.Location = New Point(113, 4)
         L_CP1.Name = "L_CP1"
-        L_CP1.Size = New Size(333, 14)
+        L_CP1.Size = New Size(319, 14)
         L_CP1.TabIndex = 49
         ' 
         ' LCP1
@@ -650,7 +686,7 @@ Partial Class F_Compilazione
         T_CP1.BackColor = SystemColors.Window
         T_CP1.Font = New Font("Calibri", 9.75F)
         T_CP1.ForeColor = Color.Navy
-        T_CP1.Location = New Point(74, 1)
+        T_CP1.Location = New Point(71, 1)
         T_CP1.Name = "T_CP1"
         T_CP1.Size = New Size(25, 23)
         T_CP1.TabIndex = 45
@@ -665,7 +701,7 @@ Partial Class F_Compilazione
         P_CP2.Location = New Point(5, 49)
         P_CP2.Margin = New Padding(2)
         P_CP2.Name = "P_CP2"
-        P_CP2.Size = New Size(452, 24)
+        P_CP2.Size = New Size(444, 24)
         P_CP2.TabIndex = 50
         ' 
         ' L_CP2
@@ -673,7 +709,7 @@ Partial Class F_Compilazione
         L_CP2.Font = New Font("Calibri", 9.75F)
         L_CP2.Location = New Point(114, 4)
         L_CP2.Name = "L_CP2"
-        L_CP2.Size = New Size(333, 14)
+        L_CP2.Size = New Size(319, 14)
         L_CP2.TabIndex = 50
         ' 
         ' LCP2
@@ -691,7 +727,7 @@ Partial Class F_Compilazione
         T_CP2.BackColor = SystemColors.Window
         T_CP2.Font = New Font("Calibri", 9.75F)
         T_CP2.ForeColor = Color.Navy
-        T_CP2.Location = New Point(70, 2)
+        T_CP2.Location = New Point(70, 1)
         T_CP2.Name = "T_CP2"
         T_CP2.Size = New Size(25, 23)
         T_CP2.TabIndex = 47
@@ -702,7 +738,7 @@ Partial Class F_Compilazione
         ' 
         Button2.Font = New Font("Segoe UI", 9F)
         Button2.ForeColor = SystemColors.ControlText
-        Button2.Location = New Point(456, 98)
+        Button2.Location = New Point(454, 80)
         Button2.Name = "Button2"
         Button2.Size = New Size(49, 23)
         Button2.TabIndex = 65
@@ -729,9 +765,9 @@ Partial Class F_Compilazione
         GroupBox_ELCAR.Controls.Add(Label24)
         GroupBox_ELCAR.Controls.Add(Label25)
         GroupBox_ELCAR.Controls.Add(T_PROMPT1)
-        GroupBox_ELCAR.Location = New Point(6, 304)
+        GroupBox_ELCAR.Location = New Point(51, 189)
         GroupBox_ELCAR.Name = "GroupBox_ELCAR"
-        GroupBox_ELCAR.Size = New Size(513, 127)
+        GroupBox_ELCAR.Size = New Size(513, 118)
         GroupBox_ELCAR.TabIndex = 47
         GroupBox_ELCAR.TabStop = False
         GroupBox_ELCAR.Text = "ELCAR"
@@ -740,7 +776,7 @@ Partial Class F_Compilazione
         ' 
         Button1.Font = New Font("Segoe UI", 9F)
         Button1.ForeColor = SystemColors.ControlText
-        Button1.Location = New Point(455, 98)
+        Button1.Location = New Point(454, 85)
         Button1.Name = "Button1"
         Button1.Size = New Size(49, 23)
         Button1.TabIndex = 64
@@ -770,7 +806,7 @@ Partial Class F_Compilazione
         ' 
         Label21.AutoSize = True
         Label21.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
-        Label21.Location = New Point(196, 97)
+        Label21.Location = New Point(196, 91)
         Label21.Name = "Label21"
         Label21.Size = New Size(42, 15)
         Label21.TabIndex = 61
@@ -779,7 +815,7 @@ Partial Class F_Compilazione
         ' Label15
         ' 
         Label15.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
-        Label15.Location = New Point(196, 65)
+        Label15.Location = New Point(196, 59)
         Label15.Name = "Label15"
         Label15.Size = New Size(41, 15)
         Label15.TabIndex = 60
@@ -788,7 +824,7 @@ Partial Class F_Compilazione
         ' Label19
         ' 
         Label19.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
-        Label19.Location = New Point(14, 95)
+        Label19.Location = New Point(14, 89)
         Label19.Name = "Label19"
         Label19.Size = New Size(15, 17)
         Label19.TabIndex = 59
@@ -799,14 +835,14 @@ Partial Class F_Compilazione
         T_POS2.BackColor = SystemColors.Window
         T_POS2.Font = New Font("Calibri", 9.75F)
         T_POS2.ForeColor = Color.Navy
-        T_POS2.Location = New Point(36, 92)
+        T_POS2.Location = New Point(36, 86)
         T_POS2.Name = "T_POS2"
         T_POS2.Size = New Size(44, 23)
         T_POS2.TabIndex = 58
         ' 
         ' Label27
         ' 
-        Label27.Location = New Point(34, 41)
+        Label27.Location = New Point(34, 36)
         Label27.Name = "Label27"
         Label27.Size = New Size(50, 17)
         Label27.TabIndex = 48
@@ -817,7 +853,7 @@ Partial Class F_Compilazione
         T_NEG2.BackColor = SystemColors.Window
         T_NEG2.Font = New Font("Calibri", 9.75F)
         T_NEG2.ForeColor = Color.Navy
-        T_NEG2.Location = New Point(86, 92)
+        T_NEG2.Location = New Point(87, 86)
         T_NEG2.Name = "T_NEG2"
         T_NEG2.Size = New Size(44, 23)
         T_NEG2.TabIndex = 57
@@ -827,7 +863,7 @@ Partial Class F_Compilazione
         T_pos1.BackColor = SystemColors.Window
         T_pos1.Font = New Font("Calibri", 9.75F)
         T_pos1.ForeColor = Color.Navy
-        T_pos1.Location = New Point(36, 61)
+        T_pos1.Location = New Point(36, 55)
         T_pos1.Name = "T_pos1"
         T_pos1.Size = New Size(44, 23)
         T_pos1.TabIndex = 49
@@ -837,14 +873,14 @@ Partial Class F_Compilazione
         T_PROMPT2.BackColor = SystemColors.Window
         T_PROMPT2.Font = New Font("Calibri", 9.75F)
         T_PROMPT2.ForeColor = Color.Navy
-        T_PROMPT2.Location = New Point(138, 92)
+        T_PROMPT2.Location = New Point(140, 86)
         T_PROMPT2.Name = "T_PROMPT2"
         T_PROMPT2.Size = New Size(44, 23)
         T_PROMPT2.TabIndex = 56
         ' 
         ' Label26
         ' 
-        Label26.Location = New Point(86, 41)
+        Label26.Location = New Point(86, 36)
         Label26.Name = "Label26"
         Label26.Size = New Size(56, 17)
         Label26.TabIndex = 50
@@ -853,7 +889,7 @@ Partial Class F_Compilazione
         ' Label22
         ' 
         Label22.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
-        Label22.Location = New Point(15, 64)
+        Label22.Location = New Point(15, 58)
         Label22.Name = "Label22"
         Label22.Size = New Size(15, 17)
         Label22.TabIndex = 55
@@ -864,14 +900,14 @@ Partial Class F_Compilazione
         T_NEG1.BackColor = SystemColors.Window
         T_NEG1.Font = New Font("Calibri", 9.75F)
         T_NEG1.ForeColor = Color.Navy
-        T_NEG1.Location = New Point(87, 61)
+        T_NEG1.Location = New Point(87, 55)
         T_NEG1.Name = "T_NEG1"
         T_NEG1.Size = New Size(44, 23)
         T_NEG1.TabIndex = 51
         ' 
         ' Label24
         ' 
-        Label24.Location = New Point(196, 41)
+        Label24.Location = New Point(196, 36)
         Label24.Name = "Label24"
         Label24.Size = New Size(51, 17)
         Label24.TabIndex = 54
@@ -879,7 +915,7 @@ Partial Class F_Compilazione
         ' 
         ' Label25
         ' 
-        Label25.Location = New Point(140, 41)
+        Label25.Location = New Point(140, 36)
         Label25.Name = "Label25"
         Label25.Size = New Size(51, 17)
         Label25.TabIndex = 52
@@ -890,7 +926,7 @@ Partial Class F_Compilazione
         T_PROMPT1.BackColor = SystemColors.Window
         T_PROMPT1.Font = New Font("Calibri", 9.75F)
         T_PROMPT1.ForeColor = Color.Navy
-        T_PROMPT1.Location = New Point(140, 61)
+        T_PROMPT1.Location = New Point(140, 55)
         T_PROMPT1.Name = "T_PROMPT1"
         T_PROMPT1.Size = New Size(44, 23)
         T_PROMPT1.TabIndex = 53
@@ -898,23 +934,90 @@ Partial Class F_Compilazione
         ' GroupBox_Routine
         ' 
         GroupBox_Routine.BackColor = Color.Transparent
+        GroupBox_Routine.Controls.Add(Label13)
+        GroupBox_Routine.Controls.Add(Label12)
+        GroupBox_Routine.Controls.Add(RadioButton2)
+        GroupBox_Routine.Controls.Add(RadioButton1)
         GroupBox_Routine.Controls.Add(Button3)
         GroupBox_Routine.Controls.Add(Label18)
-        GroupBox_Routine.Controls.Add(TextBox1)
         GroupBox_Routine.Controls.Add(Label30)
         GroupBox_Routine.Controls.Add(Label31)
-        GroupBox_Routine.Location = New Point(-16, 383)
+        GroupBox_Routine.Location = New Point(51, 313)
         GroupBox_Routine.Name = "GroupBox_Routine"
-        GroupBox_Routine.Size = New Size(513, 127)
+        GroupBox_Routine.Size = New Size(513, 118)
         GroupBox_Routine.TabIndex = 48
         GroupBox_Routine.TabStop = False
         GroupBox_Routine.Text = "ROUTINE"
+        ' 
+        ' Label13
+        ' 
+        Label13.AutoSize = True
+        Label13.Font = New Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        Label13.Location = New Point(137, 23)
+        Label13.Name = "Label13"
+        Label13.Size = New Size(37, 15)
+        Label13.TabIndex = 70
+        Label13.Text = "Stato"
+        ' 
+        ' Label12
+        ' 
+        Label12.AutoSize = True
+        Label12.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
+        Label12.ImageAlign = ContentAlignment.MiddleLeft
+        Label12.ImageIndex = 6
+        Label12.ImageList = ImageList1
+        Label12.Location = New Point(74, 83)
+        Label12.Name = "Label12"
+        Label12.Size = New Size(88, 15)
+        Label12.TabIndex = 69
+        Label12.Text = "      Unckecked"
+        ' 
+        ' RadioButton2
+        ' 
+        RadioButton2.Appearance = Appearance.Button
+        RadioButton2.ImageIndex = 6
+        RadioButton2.ImageList = ImageList2
+        RadioButton2.Location = New Point(272, 74)
+        RadioButton2.Name = "RadioButton2"
+        RadioButton2.Size = New Size(57, 30)
+        RadioButton2.TabIndex = 68
+        RadioButton2.TabStop = True
+        RadioButton2.UseVisualStyleBackColor = True
+        ' 
+        ' ImageList2
+        ' 
+        ImageList2.ColorDepth = ColorDepth.Depth32Bit
+        ImageList2.ImageStream = CType(resources.GetObject("ImageList2.ImageStream"), ImageListStreamer)
+        ImageList2.TransparentColor = Color.Transparent
+        ImageList2.Images.SetKeyName(0, "Emoji Symbols-199.png")
+        ImageList2.Images.SetKeyName(1, "Emoji Symbols-200.png")
+        ImageList2.Images.SetKeyName(2, "Emoji Symbols-201.png")
+        ImageList2.Images.SetKeyName(3, "Emoji Symbols-202 - Copy.png")
+        ImageList2.Images.SetKeyName(4, "Emoji Symbols-202.png")
+        ImageList2.Images.SetKeyName(5, "Emoji Symbols-211  Yellow.png")
+        ImageList2.Images.SetKeyName(6, "icons8-eliminare-96.png")
+        ImageList2.Images.SetKeyName(7, "icons8-modificare-96.png")
+        ImageList2.Images.SetKeyName(8, "icons8-segno-di-spunta-96.png")
+        ImageList2.Images.SetKeyName(9, "icons8-rimuovere-96.png")
+        ImageList2.Images.SetKeyName(10, "icons8-aggiorna-96.png")
+        ' 
+        ' RadioButton1
+        ' 
+        RadioButton1.Appearance = Appearance.Button
+        RadioButton1.ImageIndex = 8
+        RadioButton1.ImageList = ImageList2
+        RadioButton1.Location = New Point(188, 74)
+        RadioButton1.Name = "RadioButton1"
+        RadioButton1.Size = New Size(57, 30)
+        RadioButton1.TabIndex = 67
+        RadioButton1.TabStop = True
+        RadioButton1.UseVisualStyleBackColor = True
         ' 
         ' Button3
         ' 
         Button3.Font = New Font("Segoe UI", 9F)
         Button3.ForeColor = SystemColors.ControlText
-        Button3.Location = New Point(455, 99)
+        Button3.Location = New Point(454, 76)
         Button3.Name = "Button3"
         Button3.Size = New Size(49, 23)
         Button3.TabIndex = 66
@@ -923,23 +1026,13 @@ Partial Class F_Compilazione
         ' 
         ' Label18
         ' 
+        Label18.AutoSize = True
         Label18.Font = New Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
-        Label18.Location = New Point(16, 79)
+        Label18.Location = New Point(23, 83)
         Label18.Name = "Label18"
-        Label18.Size = New Size(51, 17)
+        Label18.Size = New Size(37, 15)
         Label18.TabIndex = 65
-        Label18.Text = "Totale"
-        ' 
-        ' TextBox1
-        ' 
-        TextBox1.BackColor = SystemColors.Window
-        TextBox1.Font = New Font("Calibri", 9.75F)
-        TextBox1.ForeColor = Color.Navy
-        TextBox1.Location = New Point(84, 75)
-        TextBox1.Name = "TextBox1"
-        TextBox1.Size = New Size(46, 23)
-        TextBox1.TabIndex = 64
-        TextBox1.TextAlign = HorizontalAlignment.Center
+        Label18.Text = "Stato"
         ' 
         ' Label30
         ' 
@@ -965,7 +1058,7 @@ Partial Class F_Compilazione
         Button4.BackColor = Color.DimGray
         Button4.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
         Button4.ForeColor = Color.Snow
-        Button4.Location = New Point(533, 513)
+        Button4.Location = New Point(533, 498)
         Button4.Name = "Button4"
         Button4.Size = New Size(66, 35)
         Button4.TabIndex = 49
@@ -980,7 +1073,7 @@ Partial Class F_Compilazione
         Panel0.Controls.Add(DataGridView1)
         Panel0.Controls.Add(Label20)
         Panel0.Controls.Add(Label32)
-        Panel0.Location = New Point(6, 43)
+        Panel0.Location = New Point(6, 52)
         Panel0.Name = "Panel0"
         Panel0.Size = New Size(189, 26)
         Panel0.TabIndex = 50
@@ -1117,7 +1210,7 @@ Partial Class F_Compilazione
         Panel2.Controls.Add(DataGridView2)
         Panel2.Controls.Add(Label34)
         Panel2.Controls.Add(Label35)
-        Panel2.Location = New Point(205, 43)
+        Panel2.Location = New Point(205, 52)
         Panel2.Name = "Panel2"
         Panel2.Size = New Size(189, 26)
         Panel2.TabIndex = 51
@@ -1254,7 +1347,7 @@ Partial Class F_Compilazione
         Panel3.Controls.Add(DataGridView3)
         Panel3.Controls.Add(Label38)
         Panel3.Controls.Add(Label39)
-        Panel3.Location = New Point(405, 43)
+        Panel3.Location = New Point(405, 52)
         Panel3.Name = "Panel3"
         Panel3.Size = New Size(189, 26)
         Panel3.TabIndex = 52
@@ -1383,39 +1476,77 @@ Partial Class F_Compilazione
         Label39.TabIndex = 27
         Label39.Text = "N. "
         ' 
-        ' Button5
+        ' B_salva
         ' 
-        Button5.BackColor = Color.DimGray
-        Button5.Enabled = False
-        Button5.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
-        Button5.ForeColor = Color.Snow
-        Button5.Location = New Point(5, 513)
-        Button5.Name = "Button5"
-        Button5.Size = New Size(165, 35)
-        Button5.TabIndex = 53
-        Button5.Text = "Salva foglio compilato"
-        Button5.UseVisualStyleBackColor = False
+        B_salva.BackColor = Color.DimGray
+        B_salva.Enabled = False
+        B_salva.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
+        B_salva.ForeColor = Color.Snow
+        B_salva.Location = New Point(5, 498)
+        B_salva.Name = "B_salva"
+        B_salva.Size = New Size(165, 35)
+        B_salva.TabIndex = 53
+        B_salva.Text = "Salva foglio compilato"
+        B_salva.UseVisualStyleBackColor = False
         ' 
         ' Button6
         ' 
         Button6.BackColor = SystemColors.Control
         Button6.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
         Button6.ForeColor = SystemColors.ControlText
-        Button6.Location = New Point(332, 516)
+        Button6.ImageIndex = 10
+        Button6.ImageList = ImageList2
+        Button6.Location = New Point(3, 3)
         Button6.Name = "Button6"
-        Button6.Size = New Size(165, 35)
+        Button6.Size = New Size(31, 31)
         Button6.TabIndex = 54
-        Button6.Text = "Pulisci e aggiorna"
         Button6.UseVisualStyleBackColor = False
+        ' 
+        ' B_edit
+        ' 
+        B_edit.BackColor = Color.DodgerBlue
+        B_edit.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
+        B_edit.ForeColor = Color.Snow
+        B_edit.Location = New Point(176, 498)
+        B_edit.Name = "B_edit"
+        B_edit.Size = New Size(148, 35)
+        B_edit.TabIndex = 55
+        B_edit.Text = "Inizia compilazione"
+        B_edit.UseVisualStyleBackColor = False
+        ' 
+        ' Panel1
+        ' 
+        Panel1.Controls.Add(ComboBox1)
+        Panel1.Controls.Add(Label1)
+        Panel1.Controls.Add(Button6)
+        Panel1.Controls.Add(Label2)
+        Panel1.Controls.Add(Label4)
+        Panel1.Controls.Add(Label3)
+        Panel1.Location = New Point(9, 4)
+        Panel1.Name = "Panel1"
+        Panel1.Size = New Size(583, 42)
+        Panel1.TabIndex = 56
+        ' 
+        ' B_annulla
+        ' 
+        B_annulla.Location = New Point(336, 501)
+        B_annulla.Name = "B_annulla"
+        B_annulla.Size = New Size(150, 31)
+        B_annulla.TabIndex = 57
+        B_annulla.Text = "Annulla Compilazione"
+        B_annulla.UseVisualStyleBackColor = True
+        B_annulla.Visible = False
         ' 
         ' F_Compilazione
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
         AutoSize = True
-        ClientSize = New Size(603, 556)
-        Controls.Add(Button6)
-        Controls.Add(Button5)
+        ClientSize = New Size(599, 545)
+        Controls.Add(B_annulla)
+        Controls.Add(Panel1)
+        Controls.Add(B_edit)
+        Controls.Add(B_salva)
         Controls.Add(Panel3)
         Controls.Add(Panel2)
         Controls.Add(Panel0)
@@ -1426,11 +1557,6 @@ Partial Class F_Compilazione
         Controls.Add(GroupBox_ELCAR)
         Controls.Add(GroupBox_CP)
         Controls.Add(Panel_CP)
-        Controls.Add(Label3)
-        Controls.Add(Label4)
-        Controls.Add(Label2)
-        Controls.Add(Label1)
-        Controls.Add(ComboBox1)
         FormBorderStyle = FormBorderStyle.Fixed3D
         Name = "F_Compilazione"
         StartPosition = FormStartPosition.CenterScreen
@@ -1464,8 +1590,9 @@ Partial Class F_Compilazione
         Panel3.ResumeLayout(False)
         Panel3.PerformLayout()
         CType(DataGridView3, ComponentModel.ISupportInitialize).EndInit()
+        Panel1.ResumeLayout(False)
+        Panel1.PerformLayout()
         ResumeLayout(False)
-        PerformLayout()
     End Sub
 
     Friend WithEvents ComboBox1 As ComboBox
@@ -1518,7 +1645,6 @@ Partial Class F_Compilazione
     Friend WithEvents GroupBox_Routine As GroupBox
     Friend WithEvents Label30 As Label
     Friend WithEvents Label31 As Label
-    Friend WithEvents TextBox1 As TextBox
     Friend WithEvents Label18 As Label
     Friend WithEvents Button1 As Button
     Friend WithEvents Button2 As Button
@@ -1573,7 +1699,7 @@ Partial Class F_Compilazione
     Friend WithEvents DataGridViewTextBoxColumn28 As DataGridViewTextBoxColumn
     Friend WithEvents Label38 As Label
     Friend WithEvents Label39 As Label
-    Friend WithEvents Button5 As Button
+    Friend WithEvents B_salva As Button
     Friend WithEvents stato As DataGridViewImageColumn
     Friend WithEvents Column1 As DataGridViewTextBoxColumn
     Friend WithEvents Col2 As DataGridViewTextBoxColumn
@@ -1583,11 +1709,20 @@ Partial Class F_Compilazione
     Friend WithEvents col1 As DataGridViewTextBoxColumn
     Friend WithEvents Column2 As DataGridViewTextBoxColumn
     Friend WithEvents Column3 As DataGridViewTextBoxColumn
+    Friend WithEvents Button6 As Button
+    Friend WithEvents B_edit As Button
+    Friend WithEvents ImageList2 As ImageList
+    Friend WithEvents RadioButton2 As RadioButton
+    Friend WithEvents RadioButton1 As RadioButton
+    Friend WithEvents Label12 As Label
     Friend WithEvents DataGridViewImageColumn1 As DataGridViewImageColumn
     Friend WithEvents DataGridViewTextBoxColumn1 As DataGridViewTextBoxColumn
     Friend WithEvents DataGridViewTextBoxColumn3 As DataGridViewTextBoxColumn
     Friend WithEvents DataGridViewTextBoxColumn4 As DataGridViewTextBoxColumn
     Friend WithEvents DataGridViewTextBoxColumn6 As DataGridViewTextBoxColumn
     Friend WithEvents Column6 As DataGridViewTextBoxColumn
-    Friend WithEvents Button6 As Button
+    Friend WithEvents Column7 As DataGridViewImageColumn
+    Friend WithEvents Label13 As Label
+    Friend WithEvents Panel1 As Panel
+    Friend WithEvents B_annulla As Button
 End Class

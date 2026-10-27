@@ -136,5 +136,55 @@ Public Class Class_Giornaliero_ROUTINE
 
 
     End Function
+    Public Shared Function totali_RT_giornalieri(Optional DBBAMNINO As String = "") As List(Of Dati_Totali_Giornaliero)
+
+        Dim lista_Totali_Giornalieri As New List(Of Dati_Totali_Giornaliero)
+
+        Dim query As String = "SELECT " &
+                      "  ID_foglio, " &
+                      "  Data, " &
+                      "  SUM(tot) AS tot, " &
+                      "  COUNT(*) AS n_record " &
+                      "FROM GIORNALIERO_ROUTINE " &
+                      "GROUP BY ID_foglio"
+
+
+        Using cn = DB.GetConnection_Bambino(DBBAMNINO)
+            Using cmd As New SqliteCommand(query, cn)
+                ' Esegui il comando SQLite...
+                Using reader As SqliteDataReader = cmd.ExecuteReader()
+                    While reader.Read()
+                        Dim elemento As New Dati_Totali_Giornaliero
+                        elemento.id_foglio = Convert.ToInt32(reader("ID_FOGLIO"))
+                        elemento.Data = reader("DATA").ToString()
+                        elemento.tot_RT = reader("TOT")
+                        elemento.n_record = reader("n_record")
+                        lista_Totali_Giornalieri.Add(elemento)
+                    End While
+                End Using
+            End Using
+        End Using
+        Return lista_Totali_Giornalieri
+
+    End Function
+
+    Public Shared Function OttieniTuttiIRecordGiornalieri(Optional dbBambino = "") As DataTable
+        Dim dt As New DataTable()
+
+        ' Rimuoviamo la clausola WHERE e ordiniamo prima per CODICE, poi per DATA (convertita in formato YYYY-MM-DD)
+        Dim query As String = "SELECT * FROM GIORNALIERO_ROUTINE " &
+                          "ORDER BY TESTO ASC, " &
+                          "SUBSTR(DATA, 7, 4) || '-' || SUBSTR(DATA, 4, 2) || '-' || SUBSTR(DATA, 1, 2) ASC"
+        Using cn = DB.GetConnection_Bambino(dbBambino)
+            Using cmd As New SqliteCommand(query, cn)
+                Using reader As SqliteDataReader = cmd.ExecuteReader()
+                    ' Carica tutti i record estratti all'interno della DataTable
+                    dt.Load(reader)
+                End Using
+            End Using
+        End Using
+
+        Return dt
+    End Function
 
 End Class

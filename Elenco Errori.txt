@@ -1,0 +1,21 @@
+001-F_Seleziona_categoria-foglio_salva
+[Errore 001] F_COMPILAZIONE-Button5_click-Foglio_Esistente_Aggiorna
+[Errore 002] F_Foglio_Esistente-Button5_click-Foglio_Esistente_Aggiorna
+[Errore 003] F_Foglio_Esistente-TSM_Azzera_Totali_Click
+[Errore 004] F_Foglio_Esistente-TSM_Segna_da_compilare_Click
+[Errore 004] Modulo_Codice-SalvaFoglioCompilato_Json
+
+
+
+[Errore 006] Azzeramento foglio (" + G_foglio.ID_foglio.ToString + ") di: " + G_foglio.Bambino
+[Errore 007] Azzeramento Parziale del foglio (" + G_foglio.ID_foglio.ToString + ") di: " + G_foglio.Bambino
+[Errore 008] Annullamento Compilazione (" + G_foglio.ID_foglio.ToString + ") di: " + G_foglio.Bambino
+[Errore 009] TODOLIST Errore cancellazione record " + ID_TODOLIST.ToString
+[Errore 010] Problemi salvataggio codice (" + foglio.VociDiUnFoglio(j).Codice + ") id_foglio:" + foglio.VociDiUnFoglio(j).ID_FOGLIO.ToString + " DB:" + Gbl_DB_BAMBINO
+[Errore 013] Nuovo Device (errore registrazione) (ID:" + IdDispositivoDaAbilitare.ToString + ") (Nome:" + Nome_Dispositivo + ")"
+[Errore 014] Errore durante l'eliminazione del record: " & ex.Message
+[Errore 015] Impossibile eliminare. Il database potrebbe essere bloccato da un altro programma: " & ex.Message
+
+
+
+

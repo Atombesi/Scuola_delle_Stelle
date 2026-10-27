@@ -41,9 +41,6 @@ Public Class Class_Giornaliero_CP
                             record.TOT = Convert.ToInt32(rd("TOT"))
                             If Not rd.IsDBNull(rd.GetOrdinal("TESTO")) Then record.TESTO = rd("TESTO").ToString() Else record.TESTO = ""
                             If Not rd.IsDBNull(rd.GetOrdinal("DATA")) Then record.DATA = rd("DATA").ToString() Else record.DATA = ""
-                            'record.TESTO = rd("TESTO").ToString()
-                            'record.DATA = rd("data").ToString()
-
                             ' Mappiamo il flag compilato leggendo il valore intero nativo di SQLite
                             record.COMPILATO = Convert.ToInt32(rd("COMPILATO"))
 
@@ -133,4 +130,24 @@ Public Class Class_Giornaliero_CP
         End Using
         Return True
     End Function
+
+    Public Shared Function OttieniTuttiIRecordGiornalieri(Optional dbBambino = "") As DataTable
+        Dim dt As New DataTable()
+
+        ' Rimuoviamo la clausola WHERE e ordiniamo prima per CODICE, poi per DATA (convertita in formato YYYY-MM-DD)
+        Dim query As String = "SELECT * FROM GIORNALIERO_COMPORTAMENTALE " &
+                          "ORDER BY TESTO ASC, " &
+                          "SUBSTR(DATA, 7, 4) || '-' || SUBSTR(DATA, 4, 2) || '-' || SUBSTR(DATA, 1, 2) ASC"
+        Using cn = DB.GetConnection_Bambino(dbBambino)
+            Using cmd As New SqliteCommand(query, cn)
+                Using reader As SqliteDataReader = cmd.ExecuteReader()
+                    ' Carica tutti i record estratti all'interno della DataTable
+                    dt.Load(reader)
+                End Using
+            End Using
+        End Using
+
+        Return dt
+    End Function
+
 End Class

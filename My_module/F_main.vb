@@ -91,17 +91,6 @@ Public Class F_main
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
         Gbl_Elenco_bambini = Carica_bambini()
         F_Compilazione.ShowDialog()
-        Dim N = 0
-        Try
-            N = Gbl_Elenco_bambini.Count
-        Catch ex As Exception
-            Dim risultati = Class_ANAGRAFICA.CercaPerCognome("", True)
-            Gbl_Elenco_bambini = risultati
-
-        End Try
-
-
-        Dim XX = F_Foglio_esistente.Main(-1, True, False)
     End Sub
 
     Private Sub Button3_Click_1(sender As Object, e As EventArgs) Handles Button3.Click
@@ -239,7 +228,30 @@ Public Class F_main
     End Sub
 
     Private Sub Button7_Click(sender As Object, e As EventArgs) Handles Button7.Click
-        Call Todolist_Azzera_e_Ricrea()
+        F_Grafici.ShowDialog()
+    End Sub
+
+    Private Sub Button5_Click_1(sender As Object, e As EventArgs) Handles Button5.Click
+        F_Foglio_esistente.Main(-1)
+    End Sub
+
+    Private Sub Button13_Click(sender As Object, e As EventArgs) Handles Button13.Click
+        Dim fileini = Gbl_app_path + "\Scuola_delle_Stelle.ini"
+        If Not IO.File.Exists(fileini) Then
+            Dim m = "File non trovato!" + vbCrLf + fileini
+            Call MsgBox(m, vbCritical + vbOKOnly)
+            Exit Sub
+        End If
+        Apri_documento(fileini)
+    End Sub
+
+    Private Sub Button14_Click(sender As Object, e As EventArgs) Handles Button14.Click
+        If Not IO.File.Exists(ini.File_Log) Then
+            Dim m = "File log non trovato!" + vbCrLf + ini.File_Log
+            Call MsgBox(m, vbInformation + vbOKOnly)
+            Exit Sub
+        End If
+        Apri_documento(ini.File_Log)
 
     End Sub
 End Class

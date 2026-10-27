@@ -127,6 +127,7 @@ Public Class Class_TODOLIST
     End Function
 
     Public Shared Function Load_By_ID(Idd As Integer) As Class_TODOLIST
+        ' 
         ' Inizializza la lista che conterrà i risultati trovati
         Dim listaRisultati As New List(Of Class_TODOLIST)()
         Dim sql_string = ""
@@ -201,7 +202,7 @@ Public Class Class_TODOLIST
                     Return True
                 Catch ex As Exception
                     ' Gestione di eventuali errori (es. database bloccato o file non trovato)
-                    Dim m = "Errore durante l'eliminazione: " & ex.Message
+                    Dim m = "[Errore 014] Errore durante l'eliminazione del record: " & ex.Message
                     APPEND_LOG(m, ini.File_Log, True)
                     Return False
                 End Try
@@ -277,25 +278,22 @@ Public Class Class_TODOLIST
             End If
         End Using
     End Sub
-    Public Shared Function Foglio_gia_inserito_nella_lista_OLD(ID_foglio As Integer, id_bambino As Integer) As Boolean
-        ' Inizializza la lista che conterrà i risultati trovati
-        Dim listaRisultati As New List(Of Class_TODOLIST)()
-        Dim sql_string = ""
+
+
+    Public Shared Function Trova_By_IDfoglio_IDbambino(ID_foglio As Integer, id_bambino As Integer) As (Esito As Boolean, todolist As Class_TODOLIST)
+        If ID_foglio = 0 Then Return (False, Nothing)
+        If id_bambino = 0 Then Return (False, Nothing)
         Dim record As New Class_TODOLIST()
 
+        Dim sql As String = "SELECT * FROM TODOLIST WHERE ID_FOGLIO = @ID_FOGLIO AND ID_BAMBINO = @ID_BAMBINO"
+
         Using cn = DB.GetConnection_Scuoladellestelle()
+            If cn.State <> ConnectionState.Open Then cn.Open()
 
-
-            sql_string = "SELECT * FROM TODOLIST WHERE ID_FOGLIO = @ID_FOGLIO"
-            If cn.State <> ConnectionState.Open Then
-                cn.Open()
-            End If
-
-            Using cmd As New SqliteCommand(sql_string, cn)
+            Using cmd As New SqliteCommand(sql, cn)
                 cmd.Parameters.AddWithValue("@ID_FOGLIO", ID_foglio)
+                cmd.Parameters.AddWithValue("@ID_BAMBINO", id_bambino)
 
-                ' Il carattere % indica a SQLite di trovare qualsiasi carattere prima e dopo il testo
-                'cmd.Parameters.AddWithValue("@Testo", "%" & testoCercato & "%")
                 Try
 
                     Using rd As SqliteDataReader = cmd.ExecuteReader()
@@ -303,23 +301,34 @@ Public Class Class_TODOLIST
                         ' Usa While al posto di If perché ci possono essere più record corrispondenti
                         If rd.Read() Then
                             ' Crea una nuova istanza della classe per ogni riga trovata
-                            Dim IDd = Convert.ToInt32(rd("ID"))
-                            Return True
+                            record.ID = Convert.ToInt32(rd("ID"))
+                            record.ID_FOGLIO = Convert.ToInt32(rd("ID_FOGLIO"))
+                            record.DB_BAMBINO = Convert.ToString(rd("DB_BAMBINO"))
+                            record.ID_BAMBINO = Convert.ToInt32(rd("ID_BAMBINO"))
+                            record.DATA_FOGLIO = Convert.ToString(rd("DATA_FOGLIO"))
+                            record.NOMEFILE = Convert.ToString(rd("NOMEFILE"))
+                            record.BAMBINO = Convert.ToString(rd("BAMBINO"))
+                            record.COMPILATO = Convert.ToInt32(rd("COMPILATO"))
+                            record.CLIENT_ID = Convert.ToInt32(rd("CLIENT_ID"))
+                            record.CLIENT_NOME = Convert.ToString(rd("CLIENT_NOME"))
+                            record.CLIENT_DATAINVIO = Convert.ToString(rd("CLIENT_DATAINVIO"))
+                            record.CLIENT_DATARICONSEGNA = Convert.ToString(rd("CLIENT_DATARICONSEGNA"))
+                            Dim i = Convert.ToBoolean(1)
+                            Return (True, record)
                         End If
 
                     End Using
                 Catch ex As Exception
                     Console.WriteLine(ex.ToString)
                 End Try
-
-            End Using
+            End Using ' Chiude cn
         End Using
+        Return (False, Nothing)
 
-        ' Restituisce la lista (sarà vuota se non trova nessuna corrispondenza)
-        Return False
+
     End Function
 
-    Public Shared Function Foglio_gia_inserito_nella_lista(ID_foglio As Integer, id_bambino As Integer) As Boolean
+    Public Shared Function Trova_By_IDfoglio_IDbambino_old(ID_foglio As Integer, id_bambino As Integer) As Boolean
         If ID_foglio = 0 Then Return False
         If id_bambino = 0 Then Return False
         Dim sql As String = "SELECT * FROM TODOLIST WHERE ID_FOGLIO = @ID_FOGLIO AND ID_BAMBINO = @ID_BAMBINO"
@@ -348,7 +357,6 @@ Public Class Class_TODOLIST
 
 
     End Function
-
     Public Shared Function Delete(ID) As Boolean
         ' Controllo di sicurezza: se l'ID è 0, il record non esiste nel database
         If ID = 0 Then Return False
@@ -369,7 +377,7 @@ Public Class Class_TODOLIST
             Return True
         Catch ex As SqliteException
             ' Se il database è bloccato da DB Browser, entrerà qui
-            Dim m = "Impossibile eliminare. Il database potrebbe essere bloccato da un altro programma: " & ex.Message
+            Dim m = "[Errore 015] Impossibile eliminare. Il database potrebbe essere bloccato da un altro programma: " & ex.Message
             APPEND_LOG(m, ini.File_Log, True)
             Return False
         End Try

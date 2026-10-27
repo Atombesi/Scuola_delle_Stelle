@@ -20,7 +20,7 @@
             Me.Close() ' Chiude la maschera
         Else
             MessageBox.Show("Errore durante l'abilitazione sul database.")
-            Dim m = "Nuovo Device (errore registrazione) (ID:" + IdDispositivoDaAbilitare.ToString + ") (Nome:" + Nome_Dispositivo + ")"
+            Dim m = "[Errore 013] Nuovo Device (errore registrazione) (ID:" + IdDispositivoDaAbilitare.ToString + ") (Nome:" + Nome_Dispositivo + ")"
             APPEND_LOG(m, ini.File_Log, True)
         End If
     End Sub

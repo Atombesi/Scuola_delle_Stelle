@@ -848,6 +848,12 @@ Public Class F_Seleziona_Categoria
                 Gbl_CP_selezionate(j).TOT = 0
                 Gbl_CP_selezionate(j).COMPILATO = False
                 Gbl_CP_selezionate(j).ID = 0
+                Dim x = UCase(Gbl_CP_selezionate(j).TESTO)
+                If x = "TRUE" Or x = "" Then
+                    'trova il testo della voce CP
+                    Dim cp = Class_COMPORTAMENTI.Load(Gbl_CP_selezionate(j).ID_VOCE)
+                    Gbl_CP_selezionate(j).TESTO = cp.TESTO
+                End If
             End If
         Next
         If Gbl_CP_selezionate.Count > 0 Then
@@ -924,6 +930,11 @@ Public Class F_Seleziona_Categoria
                 If Gbl_foglio.CP(j).ID_VOCE = 0 Then
                     error_cnt = error_cnt + 1 : ReDim Preserve error_list(error_cnt)
                     error_list(error_cnt) = "ID_VOCE CP non inserita"
+                Else
+                    Dim x = Gbl_foglio.CP(j).TESTO.ToUpper
+                    If x = "" Or x = "TRUE" Then
+                        Dim y = 1
+                    End If
                 End If
             Next
         End If
@@ -1002,8 +1013,14 @@ Public Class F_Seleziona_Categoria
         Dim elenco_fogli As New Class_Elenco_fogli()
         Dim trovato = elenco_fogli.Foglio_esistente(Gbl_foglio.Data)
         If trovato Then
-            m = "E' stato trovato un foglio con la stesso stessa Data"
+            m = "Non è stato possibile salvare il nuovo foglio " + vbCrLf
+            m = m + "perchè è stato trovato un altro foglio con la stesso stessa Data"
+            m = m + "foglio id: " + Gbl_foglio.ID_foglio.ToString + ") del: " + Gbl_foglio.Data + ""
             Call MsgBox(m, vbCritical + vbOKOnly)
+            m = "[Errore 001] Salvataggio foglio " + Gbl_foglio.ID_foglio.ToString + ") del: " + Gbl_foglio.Data + " " + Gbl_foglio.DB_Bambino
+            APPEND_LOG(m, ini.File_Log, True)
+            Dim st As New StackTrace()
+            Dim frame As StackFrame = st.GetFrame(1)
             Return False
         End If
 
@@ -1026,7 +1043,7 @@ Public Class F_Seleziona_Categoria
             Gbl_CP_selezionate = Gbl_foglio.CP
             For j = 0 To Gbl_CP_selezionate.Count - 1
                 If Not Gbl_foglio.CP(j).Salva() Then
-                    m = "Problemi salvataggio CP (" + Gbl_foglio.CP(j).TESTO + ") id_foglio:" + Gbl_foglio.CP(j).ID_FOGLIO.ToString + " DB:" + Gbl_foglio.DB_Bambino
+                    m = "[Errore 002] Problemi salvataggio CP (" + Gbl_foglio.CP(j).TESTO + ") id_foglio:" + Gbl_foglio.CP(j).ID_FOGLIO.ToString + " DB:" + Gbl_foglio.DB_Bambino
                     APPEND_LOG(m, GbL_Logfile, True)
                     salvato = False
 
@@ -1040,7 +1057,7 @@ Public Class F_Seleziona_Categoria
             Gbl_RT_selezionate = Gbl_foglio.RT
             For j = 0 To Gbl_RT_selezionate.Count - 1
                 If Not Gbl_foglio.RT(j).Salva() Then
-                    m = "Problemi salvataggio RT (" + Gbl_foglio.RT(j).TESTO + ") id_foglio:" + Gbl_foglio.RT(j).ID_FOGLIO.ToString + " DB:" + Gbl_foglio.DB_Bambino
+                    m = "[Errore 003] Problemi salvataggio RT (" + Gbl_foglio.RT(j).TESTO + ") id_foglio:" + Gbl_foglio.RT(j).ID_FOGLIO.ToString + " DB:" + Gbl_foglio.DB_Bambino
                     APPEND_LOG(m, GbL_Logfile, True)
                     salvato = False
 
@@ -1056,11 +1073,7 @@ Public Class F_Seleziona_Categoria
 
         Dim salvato = Foglio_Carica_e_Salva()
 
-        If Not salvato Then
-            MsgBox("Problemi nella scrittura nel database")
-            Exit Sub
-        End If
-
+        If Not salvato Then Exit Sub
         Stampa_foglio_giornaliero()
 
     End Sub
@@ -1437,11 +1450,16 @@ Public Class F_Seleziona_Categoria
 
 
     End Sub
-    Sub carica_ultimo_foglio_bambino(id_foglio As Integer)
+    Sub carica_ultimo_foglio_bambino(id_foglio As Integer, Optional DBbAMBINO As String = "")
         ' Carico utimo foglio
 
         ' do per scontato che Gbl_foglio.DB_Bambino sia corretta 
-        Dim DBbAMBINO = Gbl_foglio.DB_Bambino
+        If DBbAMBINO = "" Then
+            DBbAMBINO = Gbl_foglio.DB_Bambino
+        Else
+            Gbl_foglio.DB_Bambino = DBbAMBINO
+        End If
+
         Gbl_foglio = Carica_foglio(id_foglio, DBbAMBINO)
 
         Label24.Text = "Copiato dal foglio n. " + id_foglio.ToString + " del: " + Gbl_foglio.Data
@@ -1451,9 +1469,26 @@ Public Class F_Seleziona_Categoria
         ' Carico la griglia con i dati letti 
         Carica_dati_foglio_in_DGV1()
 
-        'FORZO ID_FOGLIO=0 (IN TUTTE LE VOCI CHE LO COMPONGONO)  PER INDICARE IL FOGLIO NUOVO 
+        '------------------------------------------------------------------------------------------
+        '-- AZZERO TUTTE LE VARIABILI EVENTUALMENTE PRESENTI IN MODO CHE IL FOGLIO RISULTI NUOVO --
+        '------------------------------------------------------------------------------------------
+        '[VOCI] 
         Gbl_foglio.ID_foglio = 0
-        For Each voce In Gbl_foglio.VociDiUnFoglio : voce.ID_FOGLIO = 0 : Next
+        For Each voce In Gbl_foglio.VociDiUnFoglio
+            voce.ID_FOGLIO = 0 : voce.COMPILATO = 0
+            voce.TOT1_POS = 0 : voce.TOT1_NEG = 0 : voce.TOT1_PROMPT = 0 : voce.TOT1 = 0
+            voce.TOT2_POS = 0 : voce.TOT2_NEG = 0 : voce.TOT2_PROMPT = 0 : voce.TOT2 = 0
+        Next
+
+        '[RT] 
+        For Each voce In Gbl_foglio.RT
+            voce.ID_FOGLIO = 0 : voce.TOT = 0 : voce.COMPILATO = 0
+        Next
+
+        '[CP] 
+        For Each voce In Gbl_foglio.CP
+            voce.ID_FOGLIO = 0 : voce.TOT = 0 : voce.COMPILATO = 0
+        Next
 
 
         TP1.SetToolTip(Label22, "Voci importate dal foglio n:" + id_foglio.ToString)
@@ -1762,7 +1797,7 @@ Public Class F_Seleziona_Categoria
             cod = riga.Cells(1).Value
             If cod = "" Then Continue For
             Call Carica_dati_codice_elcar(cod)
-            Call F_MyGraph.Carica_dati()
+            Call F_MyGraph.Carica_dati_ELCAR()
 
             Dim N = Gbl_datigrafico.Count
             Dim datiSingoloGrafico As New List(Of ElementoGrafico)
@@ -1792,10 +1827,10 @@ Public Class F_Seleziona_Categoria
         Dim word_graf_modello = dir_bar(ini.Path_GRAFICI_DaStampare) + "Grafico_codici_1.docx"
         Dim nomedoc = m_bambino + "_(" + m_Data + ").DOCX"
         Dim documento = dir_bar(ini.Path_GRAFICI_DaStampare) + nomedoc
-        IO.File.Copy(ini.Modello_Grafico_codici, documento, True)
+        'IO.File.Copy(ini.Modello_Grafico_codici, documento, True)
 
 
-        AggiornaTuttiIGraficiNellaGriglia(documento, superContenitoreDati)
+        AggiornaTuttiIGraficiElcar(documento, superContenitoreDati)
 
 
         ' -- riapro il docx e aggiorno tutti i campi testo
@@ -1816,36 +1851,7 @@ Public Class F_Seleziona_Categoria
         Return documento
     End Function
 
-    Sub Stampa_grafico_Codici_old(j)
-        ' Preparo la matrice dei dati da stampare
-        Dim Gbl_elementoGrafico As New List(Of ElementoGrafico)()
-        Dim record1 As ElementoGrafico
-        record1.X = 0
-        record1.Y1 = 45        ' Valore prima barra
-        record1.Y2 = 60        ' Valore seconda barra
-        Gbl_elementoGrafico.Add(record1) ' Aggiunge l'elemento alla lista
-        Call F_MyGraph.Carica_dati()
-        Dim N = Gbl_datigrafico.Count
-        For j = 0 To N - 1
-            record1.X = j + 1
-            record1.Y1 = Calcola_Percentuale(Gbl_datigrafico(j).ValoriY(0))
-            If Gbl_datigrafico(j).ValoriY.Count = 2 Then
-                record1.Y2 = Calcola_Percentuale(Gbl_datigrafico(j).ValoriY(1))
-            Else
-                record1.Y2 = 0
-            End If
-            Gbl_elementoGrafico.Add(record1)
-        Next
-        Dim word_graf = dir_bar(ini.Path_GRAFICI_DaStampare) + "Grafico_codici_1.docx"
-        AggiornaGraficoDocumento(word_graf, Gbl_elementoGrafico)
-        If MsgBox("Vuoi aprire il foglio del grafico", vbYesNo + vbQuestion) <> vbYes Then Exit Sub
 
-    End Sub
-
-
-    Private Sub F_Seleziona_Categoria_Move(sender As Object, e As EventArgs) Handles Me.Move
-
-    End Sub
 
     Private Sub Label21_Click(sender As Object, e As EventArgs) Handles Label21.Click
         Info.Show()
@@ -1957,11 +1963,11 @@ Public Class F_Seleziona_Categoria
         Mostra_info_codice()
     End Sub
 
-    Private Sub Button15_Click(sender As Object, e As EventArgs) Handles Button15.Click
+    Private Sub Button15_Click(sender As Object, e As EventArgs)
         Dim doc = Stampa_tutti_Grafici_ELCAR()
         If MsgBox("Vuoi aprire il foglio appena creato?", vbYesNo, vbQuestion) <> vbYes Then Exit Sub
         Apri_documento(doc)
-        Call MsgBox("Bisogna aprire un menu per decidere cosa stampare")
+        MsgBox("Bisogna aprire un menu per decidere cosa stampare")
 
     End Sub
 

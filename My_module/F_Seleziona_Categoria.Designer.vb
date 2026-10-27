@@ -93,7 +93,6 @@ Partial Class F_Seleziona_Categoria
         SoloCompilatiToolStripMenuItem = New ToolStripMenuItem()
         ImageList2 = New ImageList(components)
         Label24 = New Label()
-        Button15 = New Button()
         GroupBox1.SuspendLayout()
         CType(PictureBox1, ComponentModel.ISupportInitialize).BeginInit()
         GroupBox2.SuspendLayout()
@@ -107,7 +106,7 @@ Partial Class F_Seleziona_Categoria
         ' 
         ' ComboBox3
         ' 
-        ComboBox3.Font = New Font("Calibri", 9F, FontStyle.Regular, GraphicsUnit.Point, 0)
+        ComboBox3.Font = New Font("Calibri", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         ComboBox3.FormattingEnabled = True
         ComboBox3.Location = New Point(6, 38)
         ComboBox3.Name = "ComboBox3"
@@ -125,7 +124,7 @@ Partial Class F_Seleziona_Categoria
         ' 
         ' ComboBox2
         ' 
-        ComboBox2.Font = New Font("Calibri", 9F, FontStyle.Regular, GraphicsUnit.Point, 0)
+        ComboBox2.Font = New Font("Calibri", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         ComboBox2.FormattingEnabled = True
         ComboBox2.Location = New Point(290, 19)
         ComboBox2.Name = "ComboBox2"
@@ -147,7 +146,7 @@ Partial Class F_Seleziona_Categoria
         ' 
         ' ComboBox4
         ' 
-        ComboBox4.Font = New Font("Calibri", 9F, FontStyle.Regular, GraphicsUnit.Point, 0)
+        ComboBox4.Font = New Font("Calibri", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         ComboBox4.FormattingEnabled = True
         ComboBox4.Location = New Point(6, 85)
         ComboBox4.Name = "ComboBox4"
@@ -158,7 +157,7 @@ Partial Class F_Seleziona_Categoria
         ' 
         TextBox1.BorderStyle = BorderStyle.FixedSingle
         TextBox1.Font = New Font("Microsoft Sans Serif", 8.25F, FontStyle.Bold)
-        TextBox1.ForeColor = Color.FromArgb(0, 0, 192)
+        TextBox1.ForeColor = Color.FromArgb(CByte(0), CByte(0), CByte(192))
         TextBox1.Location = New Point(15, 575)
         TextBox1.MaxLength = 60
         TextBox1.Multiline = True
@@ -237,7 +236,7 @@ Partial Class F_Seleziona_Categoria
         ' 
         ' ComboBox0
         ' 
-        ComboBox0.Font = New Font("Calibri", 9F, FontStyle.Regular, GraphicsUnit.Point, 0)
+        ComboBox0.Font = New Font("Calibri", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         ComboBox0.FormattingEnabled = True
         ComboBox0.Location = New Point(13, 8)
         ComboBox0.Name = "ComboBox0"
@@ -247,7 +246,7 @@ Partial Class F_Seleziona_Categoria
         ' ComboBox5
         ' 
         ComboBox5.DropDownStyle = ComboBoxStyle.Simple
-        ComboBox5.Font = New Font("Calibri", 9F, FontStyle.Regular, GraphicsUnit.Point, 0)
+        ComboBox5.Font = New Font("Calibri", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         ComboBox5.FormattingEnabled = True
         ComboBox5.Location = New Point(6, 20)
         ComboBox5.Name = "ComboBox5"
@@ -274,7 +273,7 @@ Partial Class F_Seleziona_Categoria
         GroupBox2.Controls.Add(Button1)
         GroupBox2.Controls.Add(ComboBox5)
         GroupBox2.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
-        GroupBox2.ForeColor = Color.FromArgb(64, 64, 64)
+        GroupBox2.ForeColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
         GroupBox2.Location = New Point(3, 154)
         GroupBox2.Name = "GroupBox2"
         GroupBox2.RightToLeft = RightToLeft.No
@@ -311,7 +310,7 @@ Partial Class F_Seleziona_Categoria
         GroupBox3.Controls.Add(CheckBox2)
         GroupBox3.Controls.Add(ComboBox6)
         GroupBox3.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
-        GroupBox3.ForeColor = Color.FromArgb(64, 64, 64)
+        GroupBox3.ForeColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
         GroupBox3.Location = New Point(3, 312)
         GroupBox3.Name = "GroupBox3"
         GroupBox3.Size = New Size(431, 155)
@@ -344,7 +343,7 @@ Partial Class F_Seleziona_Categoria
         ' ComboBox6
         ' 
         ComboBox6.DropDownStyle = ComboBoxStyle.Simple
-        ComboBox6.Font = New Font("Calibri", 9F, FontStyle.Regular, GraphicsUnit.Point, 0)
+        ComboBox6.Font = New Font("Calibri", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         ComboBox6.FormattingEnabled = True
         ComboBox6.Location = New Point(6, 22)
         ComboBox6.Name = "ComboBox6"
@@ -761,7 +760,7 @@ Partial Class F_Seleziona_Categoria
         ' 
         Label15.AutoSize = True
         Label15.Font = New Font("Microsoft Sans Serif", 10F, FontStyle.Bold)
-        Label15.ForeColor = Color.FromArgb(0, 0, 192)
+        Label15.ForeColor = Color.FromArgb(CByte(0), CByte(0), CByte(192))
         Label15.Location = New Point(320, 12)
         Label15.Name = "Label15"
         Label15.Size = New Size(14, 17)
@@ -871,24 +870,11 @@ Partial Class F_Seleziona_Categoria
         Label24.Text = "foglio n."
         Label24.TextAlign = ContentAlignment.MiddleCenter
         ' 
-        ' Button15
-        ' 
-        Button15.BackColor = Color.DodgerBlue
-        Button15.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
-        Button15.ForeColor = Color.Snow
-        Button15.Location = New Point(730, 575)
-        Button15.Name = "Button15"
-        Button15.Size = New Size(126, 35)
-        Button15.TabIndex = 41
-        Button15.Text = "Stampa grafici"
-        Button15.UseVisualStyleBackColor = False
-        ' 
         ' F_Seleziona_Categoria
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
         ClientSize = New Size(982, 621)
-        Controls.Add(Button15)
         Controls.Add(Label23)
         Controls.Add(Button6)
         Controls.Add(Label24)
@@ -992,7 +978,6 @@ Partial Class F_Seleziona_Categoria
     Friend WithEvents Button10 As Button
     Friend WithEvents Label24 As Label
     Friend WithEvents Button14 As Button
-    Friend WithEvents Button15 As Button
     Friend WithEvents ComboBox0 As ComboBox
     Friend WithEvents Label4 As Label
 End Class

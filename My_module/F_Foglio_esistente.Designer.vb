@@ -150,11 +150,9 @@ Partial Class F_Foglio_esistente
         ' 
         GroupBox4.Controls.Add(LabelV)
         GroupBox4.Controls.Add(DGV1)
-        GroupBox4.Location = New Point(11, 185)
-        GroupBox4.Margin = New Padding(4, 5, 4, 5)
+        GroupBox4.Location = New Point(8, 111)
         GroupBox4.Name = "GroupBox4"
-        GroupBox4.Padding = New Padding(4, 5, 4, 5)
-        GroupBox4.Size = New Size(717, 273)
+        GroupBox4.Size = New Size(502, 164)
         GroupBox4.TabIndex = 25
         GroupBox4.TabStop = False
         GroupBox4.Text = "Foglio Voci"
@@ -163,10 +161,9 @@ Partial Class F_Foglio_esistente
         ' 
         LabelV.AutoSize = True
         LabelV.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
-        LabelV.Location = New Point(199, 0)
-        LabelV.Margin = New Padding(4, 0, 4, 0)
+        LabelV.Location = New Point(139, 0)
         LabelV.Name = "LabelV"
-        LabelV.Size = New Size(22, 25)
+        LabelV.Size = New Size(14, 15)
         LabelV.TabIndex = 7
         LabelV.Text = "0"
         ' 
@@ -174,14 +171,13 @@ Partial Class F_Foglio_esistente
         ' 
         DGV1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
         DGV1.Columns.AddRange(New DataGridViewColumn() {col1, Col2, Column4, Column5, j, stato})
-        DGV1.Location = New Point(6, 37)
-        DGV1.Margin = New Padding(4, 5, 4, 5)
+        DGV1.Location = New Point(4, 22)
         DGV1.MultiSelect = False
         DGV1.Name = "DGV1"
         DGV1.RowHeadersVisible = False
         DGV1.RowHeadersWidth = 62
         DGV1.SelectionMode = DataGridViewSelectionMode.FullRowSelect
-        DGV1.Size = New Size(709, 225)
+        DGV1.Size = New Size(496, 135)
         DGV1.TabIndex = 0
         ' 
         ' col1
@@ -235,32 +231,33 @@ Partial Class F_Foglio_esistente
         ' CheckBox4
         ' 
         CheckBox4.AutoSize = True
-        CheckBox4.Location = New Point(519, 62)
-        CheckBox4.Margin = New Padding(4, 5, 4, 5)
+        CheckBox4.Location = New Point(363, 37)
         CheckBox4.Name = "CheckBox4"
-        CheckBox4.Size = New Size(142, 29)
+        CheckBox4.Size = New Size(96, 19)
         CheckBox4.TabIndex = 38
         CheckBox4.Text = "Mostra Trend"
         CheckBox4.UseVisualStyleBackColor = True
         ' 
         ' Label23
         ' 
-        Label23.Font = New Font("Segoe UI", 9F)
-        Label23.Location = New Point(607, 7)
-        Label23.Margin = New Padding(4, 0, 4, 0)
+        Label23.BackColor = Color.Red
+        Label23.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
+        Label23.ForeColor = Color.WhiteSmoke
+        Label23.Location = New Point(425, 4)
         Label23.Name = "Label23"
-        Label23.Size = New Size(103, 25)
+        Label23.Size = New Size(81, 16)
         Label23.TabIndex = 37
         Label23.Text = "Admitance"
+        Label23.TextAlign = ContentAlignment.MiddleCenter
+        Label23.Visible = False
         ' 
         ' Button6
         ' 
         Button6.Font = New Font("Segoe UI", 9F)
         Button6.ForeColor = SystemColors.ControlText
-        Button6.Location = New Point(753, 878)
-        Button6.Margin = New Padding(4, 5, 4, 5)
+        Button6.Location = New Point(527, 527)
         Button6.Name = "Button6"
-        Button6.Size = New Size(196, 50)
+        Button6.Size = New Size(137, 30)
         Button6.TabIndex = 20
         Button6.Text = "Esercizio IMPORTA"
         Button6.UseVisualStyleBackColor = True
@@ -268,19 +265,17 @@ Partial Class F_Foglio_esistente
         ' ComboBox1
         ' 
         ComboBox1.FormattingEnabled = True
-        ComboBox1.Location = New Point(77, 38)
-        ComboBox1.Margin = New Padding(4, 5, 4, 5)
+        ComboBox1.Location = New Point(54, 23)
         ComboBox1.Name = "ComboBox1"
-        ComboBox1.Size = New Size(243, 33)
+        ComboBox1.Size = New Size(171, 23)
         ComboBox1.TabIndex = 28
         ' 
         ' Label11
         ' 
         Label11.AutoSize = True
-        Label11.Location = New Point(11, 43)
-        Label11.Margin = New Padding(4, 0, 4, 0)
+        Label11.Location = New Point(8, 26)
         Label11.Name = "Label11"
-        Label11.Size = New Size(63, 25)
+        Label11.Size = New Size(41, 15)
         Label11.TabIndex = 22
         Label11.Text = "foglio:"
         ' 
@@ -288,20 +283,18 @@ Partial Class F_Foglio_esistente
         ' 
         Dtp1.Enabled = False
         Dtp1.Format = DateTimePickerFormat.Short
-        Dtp1.Location = New Point(50, 45)
-        Dtp1.Margin = New Padding(4, 5, 4, 5)
+        Dtp1.Location = New Point(35, 27)
         Dtp1.Name = "Dtp1"
-        Dtp1.Size = New Size(113, 31)
+        Dtp1.Size = New Size(80, 23)
         Dtp1.TabIndex = 26
         ' 
         ' Button5
         ' 
         Button5.Font = New Font("Segoe UI", 9F)
         Button5.ForeColor = SystemColors.ControlText
-        Button5.Location = New Point(14, 65)
-        Button5.Margin = New Padding(4, 5, 4, 5)
+        Button5.Location = New Point(10, 39)
         Button5.Name = "Button5"
-        Button5.Size = New Size(143, 42)
+        Button5.Size = New Size(100, 25)
         Button5.TabIndex = 19
         Button5.Text = "Salva Modifiche"
         Button5.UseVisualStyleBackColor = True
@@ -324,11 +317,9 @@ Partial Class F_Foglio_esistente
         GroupBox_VOCI.Controls.Add(Label2)
         GroupBox_VOCI.Controls.Add(TextBox1)
         GroupBox_VOCI.Controls.Add(Label1)
-        GroupBox_VOCI.Location = New Point(749, 195)
-        GroupBox_VOCI.Margin = New Padding(4, 5, 4, 5)
+        GroupBox_VOCI.Location = New Point(524, 117)
         GroupBox_VOCI.Name = "GroupBox_VOCI"
-        GroupBox_VOCI.Padding = New Padding(4, 5, 4, 5)
-        GroupBox_VOCI.Size = New Size(357, 277)
+        GroupBox_VOCI.Size = New Size(250, 166)
         GroupBox_VOCI.TabIndex = 26
         GroupBox_VOCI.TabStop = False
         GroupBox_VOCI.Text = "Voci elcar"
@@ -338,10 +329,9 @@ Partial Class F_Foglio_esistente
         Button_voci.BackColor = SystemColors.Control
         Button_voci.Font = New Font("Segoe UI", 9F)
         Button_voci.ForeColor = SystemColors.ControlText
-        Button_voci.Location = New Point(247, 230)
-        Button_voci.Margin = New Padding(4, 5, 4, 5)
+        Button_voci.Location = New Point(173, 138)
         Button_voci.Name = "Button_voci"
-        Button_voci.Size = New Size(83, 37)
+        Button_voci.Size = New Size(58, 22)
         Button_voci.TabIndex = 41
         Button_voci.Text = "Accetta"
         Button_voci.UseVisualStyleBackColor = False
@@ -350,70 +340,63 @@ Partial Class F_Foglio_esistente
         ' 
         Label21.AutoSize = True
         Label21.Font = New Font("Segoe UI", 9F)
-        Label21.Location = New Point(259, 178)
-        Label21.Margin = New Padding(4, 0, 4, 0)
+        Label21.Location = New Point(181, 107)
         Label21.Name = "Label21"
-        Label21.Size = New Size(61, 25)
+        Label21.Size = New Size(41, 15)
         Label21.TabIndex = 35
         Label21.Text = "Titolo:"
         ' 
         ' Label20
         ' 
         Label20.Font = New Font("Segoe UI", 9F)
-        Label20.Location = New Point(263, 130)
-        Label20.Margin = New Padding(4, 0, 4, 0)
+        Label20.Location = New Point(184, 78)
         Label20.Name = "Label20"
-        Label20.Size = New Size(59, 25)
+        Label20.Size = New Size(41, 15)
         Label20.TabIndex = 34
         Label20.Text = "Titolo:"
         ' 
         ' Label12
         ' 
         Label12.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
-        Label12.Location = New Point(10, 173)
-        Label12.Margin = New Padding(4, 0, 4, 0)
+        Label12.Location = New Point(7, 104)
         Label12.Name = "Label12"
-        Label12.Size = New Size(21, 28)
+        Label12.Size = New Size(15, 17)
         Label12.TabIndex = 27
         Label12.Text = "2"
         ' 
         ' TextBox5
         ' 
         TextBox5.BackColor = Color.WhiteSmoke
-        TextBox5.Location = New Point(41, 172)
-        TextBox5.Margin = New Padding(4, 5, 4, 5)
+        TextBox5.Location = New Point(29, 103)
         TextBox5.Name = "TextBox5"
         TextBox5.ReadOnly = True
-        TextBox5.Size = New Size(61, 31)
+        TextBox5.Size = New Size(44, 23)
         TextBox5.TabIndex = 26
         ' 
         ' TextBox6
         ' 
         TextBox6.BackColor = Color.WhiteSmoke
-        TextBox6.Location = New Point(113, 172)
-        TextBox6.Margin = New Padding(4, 5, 4, 5)
+        TextBox6.Location = New Point(79, 103)
         TextBox6.Name = "TextBox6"
         TextBox6.ReadOnly = True
-        TextBox6.Size = New Size(61, 31)
+        TextBox6.Size = New Size(44, 23)
         TextBox6.TabIndex = 25
         ' 
         ' TextBox7
         ' 
         TextBox7.BackColor = Color.WhiteSmoke
-        TextBox7.Location = New Point(187, 172)
-        TextBox7.Margin = New Padding(4, 5, 4, 5)
+        TextBox7.Location = New Point(131, 103)
         TextBox7.Name = "TextBox7"
         TextBox7.ReadOnly = True
-        TextBox7.Size = New Size(61, 31)
+        TextBox7.Size = New Size(44, 23)
         TextBox7.TabIndex = 24
         ' 
         ' Label9
         ' 
         Label9.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
-        Label9.Location = New Point(11, 125)
-        Label9.Margin = New Padding(4, 0, 4, 0)
+        Label9.Location = New Point(8, 75)
         Label9.Name = "Label9"
-        Label9.Size = New Size(21, 28)
+        Label9.Size = New Size(15, 17)
         Label9.TabIndex = 22
         Label9.Text = "1"
         ' 
@@ -422,88 +405,79 @@ Partial Class F_Foglio_esistente
         L_V.BorderStyle = BorderStyle.Fixed3D
         L_V.Font = New Font("Segoe UI", 8F)
         L_V.ForeColor = Color.Navy
-        L_V.Location = New Point(9, 30)
-        L_V.Margin = New Padding(4, 0, 4, 0)
+        L_V.Location = New Point(6, 18)
         L_V.Name = "L_V"
-        L_V.Size = New Size(343, 50)
+        L_V.Size = New Size(240, 30)
         L_V.TabIndex = 8
         L_V.Text = "Descizione del codice"
         L_V.TextAlign = ContentAlignment.TopCenter
         ' 
         ' Label4
         ' 
-        Label4.Location = New Point(259, 90)
-        Label4.Margin = New Padding(4, 0, 4, 0)
+        Label4.Location = New Point(181, 54)
         Label4.Name = "Label4"
-        Label4.Size = New Size(73, 28)
+        Label4.Size = New Size(51, 17)
         Label4.TabIndex = 6
         Label4.Text = "Totale"
         ' 
         ' TextBox3
         ' 
         TextBox3.BackColor = Color.WhiteSmoke
-        TextBox3.Location = New Point(190, 123)
-        TextBox3.Margin = New Padding(4, 5, 4, 5)
+        TextBox3.Location = New Point(133, 74)
         TextBox3.Name = "TextBox3"
         TextBox3.ReadOnly = True
-        TextBox3.Size = New Size(61, 31)
+        TextBox3.Size = New Size(44, 23)
         TextBox3.TabIndex = 5
         ' 
         ' Label3
         ' 
-        Label3.Location = New Point(190, 90)
-        Label3.Margin = New Padding(4, 0, 4, 0)
+        Label3.Location = New Point(133, 54)
         Label3.Name = "Label3"
-        Label3.Size = New Size(73, 28)
+        Label3.Size = New Size(51, 17)
         Label3.TabIndex = 4
         Label3.Text = "Prompt"
         ' 
         ' TextBox2
         ' 
         TextBox2.BackColor = Color.WhiteSmoke
-        TextBox2.Location = New Point(114, 123)
-        TextBox2.Margin = New Padding(4, 5, 4, 5)
+        TextBox2.Location = New Point(80, 74)
         TextBox2.Name = "TextBox2"
         TextBox2.ReadOnly = True
-        TextBox2.Size = New Size(61, 31)
+        TextBox2.Size = New Size(44, 23)
         TextBox2.TabIndex = 3
         ' 
         ' Label2
         ' 
-        Label2.Location = New Point(113, 90)
-        Label2.Margin = New Padding(4, 0, 4, 0)
+        Label2.Location = New Point(79, 54)
         Label2.Name = "Label2"
-        Label2.Size = New Size(80, 28)
+        Label2.Size = New Size(56, 17)
         Label2.TabIndex = 2
         Label2.Text = "Negativi"
         ' 
         ' TextBox1
         ' 
         TextBox1.BackColor = Color.WhiteSmoke
-        TextBox1.Location = New Point(41, 123)
-        TextBox1.Margin = New Padding(4, 5, 4, 5)
+        TextBox1.Location = New Point(29, 74)
         TextBox1.Name = "TextBox1"
         TextBox1.ReadOnly = True
-        TextBox1.Size = New Size(61, 31)
+        TextBox1.Size = New Size(44, 23)
         TextBox1.TabIndex = 1
         ' 
         ' Label1
         ' 
-        Label1.Location = New Point(39, 90)
-        Label1.Margin = New Padding(4, 0, 4, 0)
+        Label1.Location = New Point(27, 54)
         Label1.Name = "Label1"
-        Label1.Size = New Size(71, 28)
+        Label1.Size = New Size(50, 17)
         Label1.TabIndex = 0
         Label1.Text = "Positivi"
         ' 
         ' TextBox8
         ' 
         TextBox8.BackColor = Color.WhiteSmoke
-        TextBox8.Location = New Point(110, 93)
-        TextBox8.Margin = New Padding(4, 5, 4, 5)
+        TextBox8.Location = New Point(77, 56)
         TextBox8.Name = "TextBox8"
         TextBox8.ReadOnly = True
-        TextBox8.Size = New Size(41, 31)
+        TextBox8.Size = New Size(30, 23)
         TextBox8.TabIndex = 38
         TextBox8.TextAlign = HorizontalAlignment.Center
         ' 
@@ -511,10 +485,9 @@ Partial Class F_Foglio_esistente
         ' 
         LCP1.AutoSize = True
         LCP1.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
-        LCP1.Location = New Point(27, 102)
-        LCP1.Margin = New Padding(4, 0, 4, 0)
+        LCP1.Location = New Point(19, 61)
         LCP1.Name = "LCP1"
-        LCP1.Size = New Size(62, 25)
+        LCP1.Size = New Size(40, 15)
         LCP1.TabIndex = 37
         LCP1.Text = "totale"
         ' 
@@ -523,10 +496,9 @@ Partial Class F_Foglio_esistente
         Label5.BackColor = Color.FromArgb(CByte(192), CByte(255), CByte(192))
         Label5.BorderStyle = BorderStyle.Fixed3D
         Label5.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
-        Label5.Location = New Point(299, 5)
-        Label5.Margin = New Padding(4, 0, 4, 0)
+        Label5.Location = New Point(209, 3)
         Label5.Name = "Label5"
-        Label5.Size = New Size(293, 28)
+        Label5.Size = New Size(205, 17)
         Label5.TabIndex = 27
         Label5.Text = "Foglio compilato"
         Label5.TextAlign = ContentAlignment.MiddleCenter
@@ -535,10 +507,9 @@ Partial Class F_Foglio_esistente
         ' 
         Label6.BackColor = Color.White
         Label6.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
-        Label6.Location = New Point(16, 5)
-        Label6.Margin = New Padding(4, 0, 4, 0)
+        Label6.Location = New Point(11, 3)
         Label6.Name = "Label6"
-        Label6.Size = New Size(269, 28)
+        Label6.Size = New Size(188, 17)
         Label6.TabIndex = 28
         Label6.Text = "Pinco Pallino giuseppe"
         Label6.TextAlign = ContentAlignment.MiddleCenter
@@ -563,76 +534,74 @@ Partial Class F_Foglio_esistente
         CMenuStrip1.ImageScalingSize = New Size(24, 24)
         CMenuStrip1.Items.AddRange(New ToolStripItem() {ToolStrip_modifica, ToolStripSeparator2, ToolStrip_more})
         CMenuStrip1.Name = "CMenuStrip1"
-        CMenuStrip1.Size = New Size(204, 74)
+        CMenuStrip1.Size = New Size(158, 70)
         ' 
         ' ToolStrip_modifica
         ' 
         ToolStrip_modifica.Image = My.Resources.Resources.Emoji_Objects_117
         ToolStrip_modifica.Name = "ToolStrip_modifica"
-        ToolStrip_modifica.Size = New Size(203, 32)
+        ToolStrip_modifica.Size = New Size(157, 30)
         ToolStrip_modifica.Text = "Edit (ON/OFF)"
         ' 
         ' ToolStripSeparator2
         ' 
         ToolStripSeparator2.Name = "ToolStripSeparator2"
-        ToolStripSeparator2.Size = New Size(200, 6)
+        ToolStripSeparator2.Size = New Size(154, 6)
         ' 
         ' ToolStrip_more
         ' 
         ToolStrip_more.DropDownItems.AddRange(New ToolStripItem() {TSM_Azzera_Totali, ToolStripSeparator1, TSM_Segna_da_compilare, ToolStripSeparator3, TSM_Elimina_foglio})
         ToolStrip_more.Name = "ToolStrip_more"
-        ToolStrip_more.Size = New Size(203, 32)
+        ToolStrip_more.Size = New Size(157, 30)
         ToolStrip_more.Text = "More..."
         ' 
         ' TSM_Azzera_Totali
         ' 
         TSM_Azzera_Totali.ForeColor = Color.OrangeRed
         TSM_Azzera_Totali.Name = "TSM_Azzera_Totali"
-        TSM_Azzera_Totali.Size = New Size(320, 34)
+        TSM_Azzera_Totali.Size = New Size(211, 22)
         TSM_Azzera_Totali.Text = "Azzera tutti i totali"
         ' 
         ' ToolStripSeparator1
         ' 
         ToolStripSeparator1.Name = "ToolStripSeparator1"
-        ToolStripSeparator1.Size = New Size(317, 6)
+        ToolStripSeparator1.Size = New Size(208, 6)
         ' 
         ' TSM_Segna_da_compilare
         ' 
         TSM_Segna_da_compilare.ForeColor = Color.OrangeRed
         TSM_Segna_da_compilare.Name = "TSM_Segna_da_compilare"
-        TSM_Segna_da_compilare.Size = New Size(320, 34)
+        TSM_Segna_da_compilare.Size = New Size(211, 22)
         TSM_Segna_da_compilare.Text = "Segna come da compilare"
         ' 
         ' ToolStripSeparator3
         ' 
         ToolStripSeparator3.Name = "ToolStripSeparator3"
-        ToolStripSeparator3.Size = New Size(317, 6)
+        ToolStripSeparator3.Size = New Size(208, 6)
         ' 
         ' TSM_Elimina_foglio
         ' 
         TSM_Elimina_foglio.ForeColor = Color.Red
         TSM_Elimina_foglio.Image = My.Resources.Resources.warning_sign_by_kg_just_another_warning_sigh_with_exclamation_mark_UFwEFR_clipart
         TSM_Elimina_foglio.Name = "TSM_Elimina_foglio"
-        TSM_Elimina_foglio.Size = New Size(320, 34)
+        TSM_Elimina_foglio.Size = New Size(211, 22)
         TSM_Elimina_foglio.Text = "Elimina foglio"
         ' 
         ' Label29
         ' 
         Label29.AutoSize = True
-        Label29.Location = New Point(173, 53)
-        Label29.Margin = New Padding(4, 0, 4, 0)
+        Label29.Location = New Point(121, 32)
         Label29.Name = "Label29"
-        Label29.Size = New Size(25, 25)
+        Label29.Size = New Size(16, 15)
         Label29.TabIndex = 36
         Label29.Text = "a:"
         ' 
         ' Label28
         ' 
         Label28.AutoSize = True
-        Label28.Location = New Point(16, 12)
-        Label28.Margin = New Padding(4, 0, 4, 0)
+        Label28.Location = New Point(11, 7)
         Label28.Name = "Label28"
-        Label28.Size = New Size(77, 25)
+        Label28.Size = New Size(51, 15)
         Label28.TabIndex = 35
         Label28.Text = "Periodo:"
         ' 
@@ -641,10 +610,9 @@ Partial Class F_Foglio_esistente
         CheckBox3.AutoSize = True
         CheckBox3.Checked = True
         CheckBox3.CheckState = CheckState.Checked
-        CheckBox3.Location = New Point(96, 12)
-        CheckBox3.Margin = New Padding(4, 5, 4, 5)
+        CheckBox3.Location = New Point(67, 7)
         CheckBox3.Name = "CheckBox3"
-        CheckBox3.Size = New Size(117, 29)
+        CheckBox3.Size = New Size(80, 19)
         CheckBox3.TabIndex = 34
         CheckBox3.Text = "Tutti i dati"
         CheckBox3.UseVisualStyleBackColor = True
@@ -653,19 +621,17 @@ Partial Class F_Foglio_esistente
         ' 
         DateTimePicker1.Enabled = False
         DateTimePicker1.Format = DateTimePickerFormat.Short
-        DateTimePicker1.Location = New Point(197, 45)
-        DateTimePicker1.Margin = New Padding(4, 5, 4, 5)
+        DateTimePicker1.Location = New Point(138, 27)
         DateTimePicker1.Name = "DateTimePicker1"
-        DateTimePicker1.Size = New Size(113, 31)
+        DateTimePicker1.Size = New Size(80, 23)
         DateTimePicker1.TabIndex = 33
         ' 
         ' Label14
         ' 
         Label14.AutoSize = True
-        Label14.Location = New Point(13, 52)
-        Label14.Margin = New Padding(4, 0, 4, 0)
+        Label14.Location = New Point(9, 31)
         Label14.Name = "Label14"
-        Label14.Size = New Size(38, 25)
+        Label14.Size = New Size(24, 15)
         Label14.TabIndex = 32
         Label14.Text = "Da:"
         ' 
@@ -673,20 +639,18 @@ Partial Class F_Foglio_esistente
         ' 
         ComboBox2.FormattingEnabled = True
         ComboBox2.Items.AddRange(New Object() {"Tutti", "Da compilare", "Compilati"})
-        ComboBox2.Location = New Point(84, 15)
-        ComboBox2.Margin = New Padding(4, 5, 4, 5)
+        ComboBox2.Location = New Point(59, 9)
         ComboBox2.Name = "ComboBox2"
-        ComboBox2.Size = New Size(250, 33)
+        ComboBox2.Size = New Size(176, 23)
         ComboBox2.TabIndex = 29
         ComboBox2.Text = "Tutti"
         ' 
         ' Label24
         ' 
         Label24.AutoSize = True
-        Label24.Location = New Point(4, 20)
-        Label24.Margin = New Padding(4, 0, 4, 0)
+        Label24.Location = New Point(3, 12)
         Label24.Name = "Label24"
-        Label24.Size = New Size(76, 25)
+        Label24.Size = New Size(51, 15)
         Label24.TabIndex = 25
         Label24.Text = "Bambini"
         ' 
@@ -695,10 +659,9 @@ Partial Class F_Foglio_esistente
         Button4.BackColor = Color.DimGray
         Button4.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
         Button4.ForeColor = Color.Snow
-        Button4.Location = New Point(1001, 873)
-        Button4.Margin = New Padding(4, 5, 4, 5)
+        Button4.Location = New Point(701, 524)
         Button4.Name = "Button4"
-        Button4.Size = New Size(94, 58)
+        Button4.Size = New Size(66, 35)
         Button4.TabIndex = 34
         Button4.Text = "Close"
         Button4.UseVisualStyleBackColor = False
@@ -708,10 +671,9 @@ Partial Class F_Foglio_esistente
         Label26.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
         Label26.ImageIndex = 5
         Label26.ImageList = ImageList1
-        Label26.Location = New Point(669, 50)
-        Label26.Margin = New Padding(4, 0, 4, 0)
+        Label26.Location = New Point(468, 30)
         Label26.Name = "Label26"
-        Label26.Size = New Size(47, 38)
+        Label26.Size = New Size(33, 23)
         Label26.TabIndex = 35
         ' 
         ' GroupBox3
@@ -722,11 +684,9 @@ Partial Class F_Foglio_esistente
         GroupBox3.Controls.Add(Label11)
         GroupBox3.Controls.Add(CheckBox4)
         GroupBox3.Controls.Add(Label26)
-        GroupBox3.Location = New Point(11, 85)
-        GroupBox3.Margin = New Padding(4, 5, 4, 5)
+        GroupBox3.Location = New Point(8, 51)
         GroupBox3.Name = "GroupBox3"
-        GroupBox3.Padding = New Padding(4, 5, 4, 5)
-        GroupBox3.Size = New Size(717, 103)
+        GroupBox3.Size = New Size(502, 62)
         GroupBox3.TabIndex = 37
         GroupBox3.TabStop = False
         GroupBox3.Text = "elenco fogli"
@@ -734,10 +694,9 @@ Partial Class F_Foglio_esistente
         ' Label19
         ' 
         Label19.BorderStyle = BorderStyle.Fixed3D
-        Label19.Location = New Point(329, 42)
-        Label19.Margin = New Padding(4, 0, 4, 0)
+        Label19.Location = New Point(230, 25)
         Label19.Name = "Label19"
-        Label19.Size = New Size(169, 35)
+        Label19.Size = New Size(118, 21)
         Label19.TabIndex = 29
         Label19.Text = "n. 23 del 12-12-2026"
         Label19.TextAlign = ContentAlignment.MiddleCenter
@@ -745,10 +704,9 @@ Partial Class F_Foglio_esistente
         ' CheckBox1
         ' 
         CheckBox1.AutoSize = True
-        CheckBox1.Location = New Point(519, 28)
-        CheckBox1.Margin = New Padding(4, 5, 4, 5)
+        CheckBox1.Location = New Point(363, 17)
         CheckBox1.Name = "CheckBox1"
-        CheckBox1.Size = New Size(159, 29)
+        CheckBox1.Size = New Size(108, 19)
         CheckBox1.TabIndex = 29
         CheckBox1.Text = "NON Compilati"
         CheckBox1.UseVisualStyleBackColor = True
@@ -758,10 +716,9 @@ Partial Class F_Foglio_esistente
         Label18.AutoSize = True
         Label18.Font = New Font("Segoe UI", 27.75F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         Label18.ForeColor = Color.Red
-        Label18.Location = New Point(57, 443)
-        Label18.Margin = New Padding(4, 0, 4, 0)
+        Label18.Location = New Point(40, 266)
         Label18.Name = "Label18"
-        Label18.Size = New Size(582, 74)
+        Label18.Size = New Size(388, 50)
         Label18.TabIndex = 38
         Label18.Text = "Nessun Foglio Trovato"
         Label18.Visible = False
@@ -770,22 +727,20 @@ Partial Class F_Foglio_esistente
         ' 
         Tab_option.Controls.Add(TabPage1)
         Tab_option.Controls.Add(TabPage2)
-        Tab_option.Location = New Point(749, 3)
-        Tab_option.Margin = New Padding(4, 5, 4, 5)
+        Tab_option.Location = New Point(524, 2)
         Tab_option.Name = "Tab_option"
         Tab_option.SelectedIndex = 0
-        Tab_option.Size = New Size(357, 142)
+        Tab_option.Size = New Size(250, 85)
         Tab_option.TabIndex = 39
         ' 
         ' TabPage1
         ' 
         TabPage1.Controls.Add(ComboBox2)
         TabPage1.Controls.Add(Label24)
-        TabPage1.Location = New Point(4, 34)
-        TabPage1.Margin = New Padding(4, 5, 4, 5)
+        TabPage1.Location = New Point(4, 24)
         TabPage1.Name = "TabPage1"
-        TabPage1.Padding = New Padding(4, 5, 4, 5)
-        TabPage1.Size = New Size(349, 104)
+        TabPage1.Padding = New Padding(3, 3, 3, 3)
+        TabPage1.Size = New Size(242, 57)
         TabPage1.TabIndex = 0
         TabPage1.Text = "Option"
         TabPage1.UseVisualStyleBackColor = True
@@ -798,11 +753,10 @@ Partial Class F_Foglio_esistente
         TabPage2.Controls.Add(Label14)
         TabPage2.Controls.Add(CheckBox3)
         TabPage2.Controls.Add(DateTimePicker1)
-        TabPage2.Location = New Point(4, 34)
-        TabPage2.Margin = New Padding(4, 5, 4, 5)
+        TabPage2.Location = New Point(4, 24)
         TabPage2.Name = "TabPage2"
-        TabPage2.Padding = New Padding(4, 5, 4, 5)
-        TabPage2.Size = New Size(349, 104)
+        TabPage2.Padding = New Padding(3, 3, 3, 3)
+        TabPage2.Size = New Size(242, 57)
         TabPage2.TabIndex = 1
         TabPage2.Text = "More..."
         TabPage2.UseVisualStyleBackColor = True
@@ -813,11 +767,9 @@ Partial Class F_Foglio_esistente
         GroupBox_CP.Controls.Add(L_CP)
         GroupBox_CP.Controls.Add(TextBox8)
         GroupBox_CP.Controls.Add(LCP1)
-        GroupBox_CP.Location = New Point(749, 490)
-        GroupBox_CP.Margin = New Padding(4, 5, 4, 5)
+        GroupBox_CP.Location = New Point(524, 294)
         GroupBox_CP.Name = "GroupBox_CP"
-        GroupBox_CP.Padding = New Padding(4, 5, 4, 5)
-        GroupBox_CP.Size = New Size(357, 142)
+        GroupBox_CP.Size = New Size(250, 85)
         GroupBox_CP.TabIndex = 40
         GroupBox_CP.TabStop = False
         GroupBox_CP.Text = "Voci Comportamentali (CP)"
@@ -826,10 +778,9 @@ Partial Class F_Foglio_esistente
         ' 
         Button_CP.Font = New Font("Segoe UI", 9F)
         Button_CP.ForeColor = SystemColors.ControlText
-        Button_CP.Location = New Point(247, 93)
-        Button_CP.Margin = New Padding(4, 5, 4, 5)
+        Button_CP.Location = New Point(173, 56)
         Button_CP.Name = "Button_CP"
-        Button_CP.Size = New Size(83, 37)
+        Button_CP.Size = New Size(58, 22)
         Button_CP.TabIndex = 40
         Button_CP.Text = "Accetta"
         Button_CP.UseVisualStyleBackColor = True
@@ -839,10 +790,9 @@ Partial Class F_Foglio_esistente
         L_CP.BorderStyle = BorderStyle.Fixed3D
         L_CP.Font = New Font("Segoe UI", 8F)
         L_CP.ForeColor = Color.Navy
-        L_CP.Location = New Point(9, 35)
-        L_CP.Margin = New Padding(4, 0, 4, 0)
+        L_CP.Location = New Point(6, 21)
         L_CP.Name = "L_CP"
-        L_CP.Size = New Size(343, 50)
+        L_CP.Size = New Size(240, 30)
         L_CP.TabIndex = 39
         L_CP.Text = "Descizione del codice"
         L_CP.TextAlign = ContentAlignment.TopCenter
@@ -851,14 +801,13 @@ Partial Class F_Foglio_esistente
         ' 
         DGV2.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
         DGV2.Columns.AddRange(New DataGridViewColumn() {DataGridViewTextBoxColumn2, DataGridViewTextBoxColumn3, DataGridViewTextBoxColumn5, tot})
-        DGV2.Location = New Point(9, 35)
-        DGV2.Margin = New Padding(4, 5, 4, 5)
+        DGV2.Location = New Point(6, 21)
         DGV2.MultiSelect = False
         DGV2.Name = "DGV2"
         DGV2.RowHeadersVisible = False
         DGV2.RowHeadersWidth = 62
         DGV2.SelectionMode = DataGridViewSelectionMode.FullRowSelect
-        DGV2.Size = New Size(697, 192)
+        DGV2.Size = New Size(488, 115)
         DGV2.TabIndex = 39
         ' 
         ' DataGridViewTextBoxColumn2
@@ -899,11 +848,9 @@ Partial Class F_Foglio_esistente
         ' 
         GroupBoxRT.Controls.Add(LabelRT)
         GroupBoxRT.Controls.Add(DGV2)
-        GroupBoxRT.Location = New Point(17, 677)
-        GroupBoxRT.Margin = New Padding(4, 5, 4, 5)
+        GroupBoxRT.Location = New Point(12, 406)
         GroupBoxRT.Name = "GroupBoxRT"
-        GroupBoxRT.Padding = New Padding(4, 5, 4, 5)
-        GroupBoxRT.Size = New Size(714, 237)
+        GroupBoxRT.Size = New Size(500, 142)
         GroupBoxRT.TabIndex = 41
         GroupBoxRT.TabStop = False
         GroupBoxRT.Text = "Foglio Routine"
@@ -912,10 +859,9 @@ Partial Class F_Foglio_esistente
         ' 
         LabelRT.AutoSize = True
         LabelRT.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
-        LabelRT.Location = New Point(199, 0)
-        LabelRT.Margin = New Padding(4, 0, 4, 0)
+        LabelRT.Location = New Point(139, 0)
         LabelRT.Name = "LabelRT"
-        LabelRT.Size = New Size(22, 25)
+        LabelRT.Size = New Size(14, 15)
         LabelRT.TabIndex = 41
         LabelRT.Text = "0"
         ' 
@@ -923,11 +869,9 @@ Partial Class F_Foglio_esistente
         ' 
         GroupBoxCP.Controls.Add(LabelCP)
         GroupBoxCP.Controls.Add(DGV3)
-        GroupBoxCP.Location = New Point(14, 468)
-        GroupBoxCP.Margin = New Padding(4, 5, 4, 5)
+        GroupBoxCP.Location = New Point(10, 281)
         GroupBoxCP.Name = "GroupBoxCP"
-        GroupBoxCP.Padding = New Padding(4, 5, 4, 5)
-        GroupBoxCP.Size = New Size(714, 198)
+        GroupBoxCP.Size = New Size(500, 119)
         GroupBoxCP.TabIndex = 42
         GroupBoxCP.TabStop = False
         GroupBoxCP.Text = "Voci comportamentali"
@@ -936,10 +880,9 @@ Partial Class F_Foglio_esistente
         ' 
         LabelCP.AutoSize = True
         LabelCP.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
-        LabelCP.Location = New Point(200, 0)
-        LabelCP.Margin = New Padding(4, 0, 4, 0)
+        LabelCP.Location = New Point(140, 0)
         LabelCP.Name = "LabelCP"
-        LabelCP.Size = New Size(22, 25)
+        LabelCP.Size = New Size(14, 15)
         LabelCP.TabIndex = 41
         LabelCP.Text = "0"
         ' 
@@ -947,14 +890,13 @@ Partial Class F_Foglio_esistente
         ' 
         DGV3.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
         DGV3.Columns.AddRange(New DataGridViewColumn() {DataGridViewTextBoxColumn1, DataGridViewTextBoxColumn4, DataGridViewTextBoxColumn6})
-        DGV3.Location = New Point(9, 32)
-        DGV3.Margin = New Padding(4, 5, 4, 5)
+        DGV3.Location = New Point(6, 19)
         DGV3.MultiSelect = False
         DGV3.Name = "DGV3"
         DGV3.RowHeadersVisible = False
         DGV3.RowHeadersWidth = 62
         DGV3.SelectionMode = DataGridViewSelectionMode.FullRowSelect
-        DGV3.Size = New Size(697, 152)
+        DGV3.Size = New Size(488, 91)
         DGV3.TabIndex = 39
         ' 
         ' DataGridViewTextBoxColumn1
@@ -990,11 +932,9 @@ Partial Class F_Foglio_esistente
         GroupBox_RT.Controls.Add(PictureBox0)
         GroupBox_RT.Controls.Add(PictureBox1)
         GroupBox_RT.Controls.Add(L_RT)
-        GroupBox_RT.Location = New Point(749, 698)
-        GroupBox_RT.Margin = New Padding(4, 5, 4, 5)
+        GroupBox_RT.Location = New Point(524, 419)
         GroupBox_RT.Name = "GroupBox_RT"
-        GroupBox_RT.Padding = New Padding(4, 5, 4, 5)
-        GroupBox_RT.Size = New Size(357, 152)
+        GroupBox_RT.Size = New Size(250, 91)
         GroupBox_RT.TabIndex = 43
         GroupBox_RT.TabStop = False
         GroupBox_RT.Text = "Voci Routine"
@@ -1002,10 +942,9 @@ Partial Class F_Foglio_esistente
         ' RadioButtonRT1
         ' 
         RadioButtonRT1.AutoSize = True
-        RadioButtonRT1.Location = New Point(27, 108)
-        RadioButtonRT1.Margin = New Padding(4, 5, 4, 5)
+        RadioButtonRT1.Location = New Point(19, 65)
         RadioButtonRT1.Name = "RadioButtonRT1"
-        RadioButtonRT1.Size = New Size(21, 20)
+        RadioButtonRT1.Size = New Size(14, 13)
         RadioButtonRT1.TabIndex = 45
         RadioButtonRT1.TabStop = True
         RadioButtonRT1.UseVisualStyleBackColor = True
@@ -1013,10 +952,9 @@ Partial Class F_Foglio_esistente
         ' RadioButtonRT0
         ' 
         RadioButtonRT0.AutoSize = True
-        RadioButtonRT0.Location = New Point(149, 108)
-        RadioButtonRT0.Margin = New Padding(4, 5, 4, 5)
+        RadioButtonRT0.Location = New Point(104, 65)
         RadioButtonRT0.Name = "RadioButtonRT0"
-        RadioButtonRT0.Size = New Size(21, 20)
+        RadioButtonRT0.Size = New Size(14, 13)
         RadioButtonRT0.TabIndex = 46
         RadioButtonRT0.TabStop = True
         RadioButtonRT0.UseVisualStyleBackColor = True
@@ -1025,10 +963,9 @@ Partial Class F_Foglio_esistente
         ' 
         Button_RT.Font = New Font("Segoe UI", 9F)
         Button_RT.ForeColor = SystemColors.ControlText
-        Button_RT.Location = New Point(247, 98)
-        Button_RT.Margin = New Padding(4, 5, 4, 5)
+        Button_RT.Location = New Point(173, 59)
         Button_RT.Name = "Button_RT"
-        Button_RT.Size = New Size(83, 37)
+        Button_RT.Size = New Size(58, 22)
         Button_RT.TabIndex = 48
         Button_RT.Text = "Accetta"
         Button_RT.UseVisualStyleBackColor = True
@@ -1038,10 +975,9 @@ Partial Class F_Foglio_esistente
         PictureBox0.BackColor = SystemColors.Control
         PictureBox0.Image = CType(resources.GetObject("PictureBox0.Image"), Image)
         PictureBox0.InitialImage = CType(resources.GetObject("PictureBox0.InitialImage"), Image)
-        PictureBox0.Location = New Point(177, 98)
-        PictureBox0.Margin = New Padding(4, 5, 4, 5)
+        PictureBox0.Location = New Point(124, 59)
         PictureBox0.Name = "PictureBox0"
-        PictureBox0.Size = New Size(37, 40)
+        PictureBox0.Size = New Size(26, 24)
         PictureBox0.SizeMode = PictureBoxSizeMode.StretchImage
         PictureBox0.TabIndex = 47
         PictureBox0.TabStop = False
@@ -1051,10 +987,9 @@ Partial Class F_Foglio_esistente
         PictureBox1.BackColor = SystemColors.Control
         PictureBox1.Image = My.Resources.Resources.icons8_segno_di_spunta_96
         PictureBox1.InitialImage = CType(resources.GetObject("PictureBox1.InitialImage"), Image)
-        PictureBox1.Location = New Point(56, 98)
-        PictureBox1.Margin = New Padding(4, 5, 4, 5)
+        PictureBox1.Location = New Point(39, 59)
         PictureBox1.Name = "PictureBox1"
-        PictureBox1.Size = New Size(37, 40)
+        PictureBox1.Size = New Size(26, 24)
         PictureBox1.SizeMode = PictureBoxSizeMode.StretchImage
         PictureBox1.TabIndex = 46
         PictureBox1.TabStop = False
@@ -1064,10 +999,9 @@ Partial Class F_Foglio_esistente
         L_RT.BorderStyle = BorderStyle.Fixed3D
         L_RT.Font = New Font("Segoe UI", 8F)
         L_RT.ForeColor = Color.Navy
-        L_RT.Location = New Point(9, 32)
-        L_RT.Margin = New Padding(4, 0, 4, 0)
+        L_RT.Location = New Point(6, 19)
         L_RT.Name = "L_RT"
-        L_RT.Size = New Size(343, 50)
+        L_RT.Size = New Size(240, 30)
         L_RT.TabIndex = 43
         L_RT.Text = "Descizione del codice"
         L_RT.TextAlign = ContentAlignment.TopCenter
@@ -1078,10 +1012,9 @@ Partial Class F_Foglio_esistente
         Panel_risposte.Controls.Add(Label7)
         Panel_risposte.Controls.Add(Button1)
         Panel_risposte.Controls.Add(Button5)
-        Panel_risposte.Location = New Point(107, 942)
-        Panel_risposte.Margin = New Padding(4, 5, 4, 5)
+        Panel_risposte.Location = New Point(75, 565)
         Panel_risposte.Name = "Panel_risposte"
-        Panel_risposte.Size = New Size(357, 122)
+        Panel_risposte.Size = New Size(250, 73)
         Panel_risposte.TabIndex = 44
         ' 
         ' Label7
@@ -1090,10 +1023,9 @@ Partial Class F_Foglio_esistente
         Label7.BorderStyle = BorderStyle.Fixed3D
         Label7.Font = New Font("Segoe UI", 8F, FontStyle.Bold)
         Label7.ForeColor = Color.Black
-        Label7.Location = New Point(11, 12)
-        Label7.Margin = New Padding(4, 0, 4, 0)
+        Label7.Location = New Point(8, 7)
         Label7.Name = "Label7"
-        Label7.Size = New Size(336, 30)
+        Label7.Size = New Size(235, 18)
         Label7.TabIndex = 40
         Label7.Text = "Modifiche Risposte Abilitate"
         Label7.TextAlign = ContentAlignment.TopCenter
@@ -1102,10 +1034,9 @@ Partial Class F_Foglio_esistente
         ' 
         Button1.Font = New Font("Segoe UI", 9F)
         Button1.ForeColor = SystemColors.ControlText
-        Button1.Location = New Point(266, 65)
-        Button1.Margin = New Padding(4, 5, 4, 5)
+        Button1.Location = New Point(186, 39)
         Button1.Name = "Button1"
-        Button1.Size = New Size(77, 42)
+        Button1.Size = New Size(54, 25)
         Button1.TabIndex = 31
         Button1.Text = "Esci"
         Button1.UseVisualStyleBackColor = True
@@ -1131,20 +1062,18 @@ Partial Class F_Foglio_esistente
         Panel1.Controls.Add(Label13)
         Panel1.Controls.Add(Label10)
         Panel1.Controls.Add(Label8)
-        Panel1.Location = New Point(19, 43)
-        Panel1.Margin = New Padding(4, 5, 4, 5)
+        Panel1.Location = New Point(13, 26)
         Panel1.Name = "Panel1"
-        Panel1.Size = New Size(711, 34)
+        Panel1.Size = New Size(499, 22)
         Panel1.TabIndex = 45
         ' 
         ' L_Fogli_dacompilare
         ' 
         L_Fogli_dacompilare.AutoSize = True
         L_Fogli_dacompilare.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
-        L_Fogli_dacompilare.Location = New Point(461, 3)
-        L_Fogli_dacompilare.Margin = New Padding(4, 0, 4, 0)
+        L_Fogli_dacompilare.Location = New Point(323, 2)
         L_Fogli_dacompilare.Name = "L_Fogli_dacompilare"
-        L_Fogli_dacompilare.Size = New Size(22, 25)
+        L_Fogli_dacompilare.Size = New Size(14, 15)
         L_Fogli_dacompilare.TabIndex = 43
         L_Fogli_dacompilare.Text = "0"
         ' 
@@ -1152,10 +1081,9 @@ Partial Class F_Foglio_esistente
         ' 
         L_foglicompilati.AutoSize = True
         L_foglicompilati.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
-        L_foglicompilati.Location = New Point(279, 3)
-        L_foglicompilati.Margin = New Padding(4, 0, 4, 0)
+        L_foglicompilati.Location = New Point(195, 2)
         L_foglicompilati.Name = "L_foglicompilati"
-        L_foglicompilati.Size = New Size(22, 25)
+        L_foglicompilati.Size = New Size(14, 15)
         L_foglicompilati.TabIndex = 42
         L_foglicompilati.Text = "0"
         ' 
@@ -1163,45 +1091,41 @@ Partial Class F_Foglio_esistente
         ' 
         L_Nfogli.AutoSize = True
         L_Nfogli.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
-        L_Nfogli.Location = New Point(129, 3)
-        L_Nfogli.Margin = New Padding(4, 0, 4, 0)
+        L_Nfogli.Location = New Point(90, 2)
         L_Nfogli.Name = "L_Nfogli"
-        L_Nfogli.Size = New Size(22, 25)
+        L_Nfogli.Size = New Size(14, 15)
         L_Nfogli.TabIndex = 41
         L_Nfogli.Text = "0"
         ' 
         ' Label13
         ' 
-        Label13.Location = New Point(333, 3)
-        Label13.Margin = New Padding(4, 0, 4, 0)
+        Label13.Location = New Point(233, 2)
         Label13.Name = "Label13"
-        Label13.Size = New Size(120, 25)
+        Label13.Size = New Size(84, 15)
         Label13.TabIndex = 40
         Label13.Text = "Da compilare:"
         ' 
         ' Label10
         ' 
-        Label10.Location = New Point(177, 3)
-        Label10.Margin = New Padding(4, 0, 4, 0)
+        Label10.Location = New Point(124, 2)
         Label10.Name = "Label10"
-        Label10.Size = New Size(94, 25)
+        Label10.Size = New Size(66, 15)
         Label10.TabIndex = 39
         Label10.Text = "Compilati:"
         ' 
         ' Label8
         ' 
-        Label8.Location = New Point(16, 3)
-        Label8.Margin = New Padding(4, 0, 4, 0)
+        Label8.Location = New Point(11, 2)
         Label8.Name = "Label8"
-        Label8.Size = New Size(121, 25)
+        Label8.Size = New Size(85, 15)
         Label8.TabIndex = 38
         Label8.Text = "N totali fogli:"
         ' 
         ' F_Foglio_esistente
         ' 
-        AutoScaleDimensions = New SizeF(10F, 25F)
+        AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
-        ClientSize = New Size(1121, 935)
+        ClientSize = New Size(785, 561)
         Controls.Add(Panel1)
         Controls.Add(Panel_risposte)
         Controls.Add(GroupBox_RT)
@@ -1218,7 +1142,6 @@ Partial Class F_Foglio_esistente
         Controls.Add(GroupBox_VOCI)
         Controls.Add(GroupBox4)
         Controls.Add(Label18)
-        Margin = New Padding(4, 5, 4, 5)
         Name = "F_Foglio_esistente"
         Text = "Fogli_Esistenti"
         GroupBox4.ResumeLayout(False)

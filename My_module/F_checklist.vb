@@ -1,6 +1,8 @@
 ﻿Public Class F_checklist
     Dim elenco_unchecked As List(Of Elenco_checklist)
     Dim elenco_checked As List(Of Elenco_checklist)
+    Dim elenco_returned As List(Of Elenco_checklist)
+
     Private noneseguire
     Private MAX_VOCI As Integer = 0
     Function main(elencoLista As List(Of Elenco_checklist), Optional max_checked As Integer = 0) As List(Of Elenco_checklist)
@@ -20,12 +22,31 @@
         Next
         Button1.Enabled = False
         Me.ShowDialog()
+        If Me.Tag = "OK" Then
+            prepara_elenco_returned()
+            Return elenco_returned
+        Else
+            Return Nothing
+        End If
     End Function
     Sub mostra()
         Label2.Text = ListBox1.Items.Count.ToString + "\" + MAX_VOCI.ToString
         Label5.Text = ListBox2.Items.Count.ToString
+        If ListBox1.Items.Count > 0 Then
+            Button1.Enabled = True
+        Else
+            Button1.Enabled = False
+        End If
+    End Sub
+    Sub prepara_elenco_returned()
+        Dim v As New Elenco_checklist
+        elenco_returned = New List(Of Elenco_checklist)()
+        For Each voce In ListBox1.Items
+            elenco_returned.Add(voce)
+        Next
     End Sub
     Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
+        Me.Tag = ""
         Me.Hide()
 
     End Sub
@@ -58,6 +79,12 @@
     End Sub
 
     Private Sub F_checklist_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
+    End Sub
+
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+        Me.Tag = "OK"
+        Me.Hide()
 
     End Sub
 End Class

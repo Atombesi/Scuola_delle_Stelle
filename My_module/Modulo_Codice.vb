@@ -35,8 +35,9 @@ Public Structure Esportazione_dati_ELCAR
     Public Tot2_Neg As Integer
     Public Tot2_prompt As Integer
     Public Tot2_perc As Integer
+    Public valutativo As Integer
 End Structure
-Public Structure Esportazione_dati_CTRT
+Public Structure Esportazione_dati_CPRT
     Public Descrizione As String
     Public Data As DateTime
     Public Tot As Double
@@ -132,6 +133,8 @@ Public Module Modulo_Codice
         Public Modello_Grafico_codici2 As String ' Full_path_Modello Foglio grafici
         Public Modello_Grafico_codici6 As String ' Full_path_Modello Foglio grafici
         Public Modello_Grafico_codici12 As String ' Full_path_Modello Foglio grafici
+        Public Modello_Grafico_CP_6 As String ' Full_path_Modello Foglio grafici
+
         Public Modello_Grafico_TotaleGiornaliero As String ' Full_path_Modello Foglio grafici
         Public Modello_Excel_esportazione_dati As String
         Public Path_SCHEDE_DaStampare As String
@@ -244,9 +247,7 @@ Public Module Modulo_Codice
 
 
     Public Gbl_datigrafico_totalegiornaliero As New List(Of Dati_Totali_Giornaliero)()
-
     Public Gbl_Elenco_fogli_stampa() As Struct_FogliDaStampare
-
     Public Gbl_Graph As Struct_Graph_Codice
     Public Gbl_Graph1() As Struct_Graph_Codice
 
@@ -291,6 +292,10 @@ Public Module Modulo_Codice
     Public Gbl_Percentuale(8)
     Public GbL_Logfile As String
     Public cod(7) As String
+    Public Gbl_IP_SERVER As String
+    Public Gbl_server_connected As Boolean
+    Public Gbl_Elenco_Device As List(Of Class_DEVICE)
+    Public Gbl_MioServer As Class_WebServerTablet
 
     ' --- VARIABILI DI STATO TABLET ---
     Public DispositiviInAttesa As New List(Of String)
@@ -668,8 +673,11 @@ Public Module Modulo_Codice
         ini.Modello_Grafico_codici6 = ReadINIString(fileini, K, "Grafici Modello6 ", x)
 
         x = dir_bar(y) + "Modello_Grafico_Elcar 12.xlsx"
-
         ini.Modello_Grafico_codici12 = ReadINIString(fileini, K, "Grafici Modello12 ", x)
+
+        x = dir_bar(y) + "Modello_Grafico_CP 6.xlsx"
+        ini.Modello_Grafico_CP_6 = ReadINIString(fileini, K, "Grafici CP Modello6 ", x)
+
 
         x = dir_bar(y) + "Modello_Grafico_Totali_Giornaliero.xslx"
         ini.Modello_Grafico_TotaleGiornaliero = ReadINIString(fileini, K, "Modello Grafico Totale Giornaliero", x)
@@ -954,17 +962,16 @@ Public Module Modulo_Codice
             Return -1
         Loop
         ' Ciclo che attraversa ogni riga della tabella
-        Dim J = 0, i = -1
+        Dim i = -1
 
         Gbl_Graph.Cod_ELCAR = cod
         Gbl_Graph.Cod_Testo = dt.Rows(0)("testo")
 
 
-        Dim xx = ""
 
         For Each riga As DataRow In dt.Rows
             ' 1. Lettura del campo codice
-            cod = riga("Codice").ToString()
+            'cod = riga("Codice").ToString()
             i = i + 1
             ReDim Preserve Gbl_Graph.Data(i)
             Gbl_Graph.Data(i).ID = Convert.ToInt32(riga("ID"))
@@ -983,44 +990,31 @@ Public Module Modulo_Codice
         Next
         Return i
     End Function
-    Public Function Carica_dati_codice_elcar_new(cod As String) As List(Of Struct_Graph_data)
-        'dalla tabella giornaliero del database del ragazzo, Carica tutti i record del codice richiesto leggendo tutti i record presenti che rientrano nell'intervallo di tempo indicato
-        ' se intervallo =0 allora utilizza intervallo di default letto dal file ini
-        'i valori dell'inrervallo possono essere: 15 gg, 1 mese, 3 mesi, 6 mesi, 1 anno,0  tutto
-
-        Dim dt As DataTable = Class_GIORNALIERO.OttieniRecordPerCodice(cod)
+    Public Function Carica_dati_voce_CP(cod As String, Optional solocompilati As Boolean = True) As Integer
+        Dim dt As DataTable = Class_Giornaliero_CP.OttieniRecordPerVoceCP(cod, solocompilati)
         Do While dt.Rows.Count = 0
             ReDim Gbl_Graph.Data(0)
             Dim m = "nessun Codice trovato:" + vbCrLf
-            Return Nothing
+            Return -1
         Loop
 
         ' Ciclo che attraversa ogni riga della tabella
-        Dim J = 0, i = -1
-        Dim tmp_graph As Struct_Graph_data
-        Dim all_graph As New List(Of Struct_Graph_data)
-        Dim xx = ""
+        Dim i = -1
+
+        Gbl_Graph.Cod_ELCAR = cod
+        Gbl_Graph.Cod_Testo = dt.Rows(0)("testo")
 
         For Each riga As DataRow In dt.Rows
-            ' 1. Lettura del campo codice
-            cod = riga("Codice").ToString()
-            tmp_graph.ID = Convert.ToInt32(riga("ID"))
-            tmp_graph.Data = Convert.ToString(riga("DATA"))
-            tmp_graph.TOT1_Pos = Convert.ToInt32(riga("tot1_pos"))
-            tmp_graph.TOT1_Neg = Convert.ToInt32(riga("tot1_neg"))
-            tmp_graph.Tot1_PROMPT = Convert.ToInt32(riga("tot1_prompt"))
-            tmp_graph.Tot1 = Convert.ToInt32(riga("tot1"))
-            tmp_graph.Tot2 = Convert.ToInt32(riga("tot2"))
-            tmp_graph.TOT2_Pos = Convert.ToInt32(riga("tot2_pos"))
-            tmp_graph.TOT2_Neg = Convert.ToInt32(riga("tot2_neg"))
-            tmp_graph.Tot2_PROMPT = Convert.ToInt32(riga("tot2_prompt"))
-            tmp_graph.Valutativo = Convert.ToBoolean(riga("valutativo"))
-            tmp_graph.tuttelerisposte = Convert.ToBoolean(riga("tuttelerisposte"))
-            tmp_graph.Compilato = Convert.ToBoolean(riga("compilato"))
-            all_graph.Add(tmp_graph)
+            i = i + 1
+            ReDim Preserve Gbl_Graph.Data(i)
+            Gbl_Graph.Data(i).ID = Convert.ToInt32(riga("ID"))
+            Gbl_Graph.Data(i).Data = Convert.ToString(riga("DATA"))
+            Gbl_Graph.Data(i).Tot1 = Convert.ToInt32(riga("tot"))
         Next
-        Return all_graph
+        Return i
     End Function
+
+
 
 
     Public Function Trend_1() As Boolean
@@ -1513,8 +1507,9 @@ Public Module Modulo_Codice
             Dim parser As System.Text.Json.JsonDocument = System.Text.Json.JsonDocument.Parse(jsonGrezzo)
             Dim root As System.Text.Json.JsonElement = parser.RootElement
 
-            Dim idFoglio As Integer = root.GetProperty("id_questionario").GetInt32()
+            Dim id_questionario As Integer = root.GetProperty("id_questionario").GetInt32()
             Dim tabletId As String = root.GetProperty("device_id").GetString()
+            'Dim idbambino As Integer = root.GetProperty("id_bambino").GetInt32()
 
             If Not Verifica_ID_messaggio(tabletId) Then Exit Sub
 
@@ -1522,16 +1517,16 @@ Public Module Modulo_Codice
             Dim device As New Class_DEVICE
             Dim result = device.Trova_dispositivo(tabletId)
             If result.Esito Then
-                'Aggiorno e salv
+                'Aggiorno e todolist 
                 Dim id = result.Devices.ID
-                Dim todolist = Class_TODOLIST.Load_By_ID_tablet(id)
+                Dim todolist = Class_TODOLIST.Load_By_ID(id_questionario)
                 todolist.CLIENT_ID = id
                 todolist.CLIENT_NOME = result.Devices.NOME
                 todolist.CLIENT_DATAINVIO = Now.ToString
                 todolist.CLIENT_DATARICONSEGNA = "INVIATO PER LA COMPILAZIONE IL " + todolist.CLIENT_DATAINVIO
                 todolist.Save()
             End If
-            Console.WriteLine("🎯 DB AGGIORNATO: Foglio " & idFoglio & " assegnato a " & tabletId)
+            Console.WriteLine("🎯 DB AGGIORNATO: Foglio " & id_questionario & " assegnato a " & tabletId)
         Catch ex As Exception
             Console.WriteLine("ERRORE NEL PARSING DELLA CONFERMA DB: " & ex.Message)
         End Try
@@ -1723,8 +1718,8 @@ Public Module Modulo_Codice
 
     End Function
 
-    Public Function Esportazione_ottieni_tutti_elcar(dbBambino) As List(Of Esportazione_dati_ELCAR)
-        Dim dt As DataTable = Class_GIORNALIERO.OttieniTuttiIRecordGiornalieri(dbBambino)
+    Public Function Esportazione_ottieni_tutti_elcar(dbBambino, Optional solocompilati = True) As List(Of Esportazione_dati_ELCAR)
+        Dim dt As DataTable = Class_GIORNALIERO.OttieniTuttiIRecordGiornalieri(dbBambino, solocompilati)
         Dim elenco_ELCAR_Esportazione As New List(Of Esportazione_dati_ELCAR)
         For Each riga As DataRow In dt.Rows
             Dim voce As New Esportazione_dati_ELCAR
@@ -1739,11 +1734,27 @@ Public Module Modulo_Codice
         Next
         Return elenco_ELCAR_Esportazione
     End Function
-    Public Function Esportazione_ottieni_tutti_RT(dbBambino) As List(Of Esportazione_dati_CTRT)
+
+    Public Function Esportazione_giornaliero(dbBambino) As List(Of Esportazione_dati_ELCAR)
+        Dim totali_voci = Carico_totali_giornalieri(dbBambino)
+        Dim elenco_CTRT_Esportazione As New List(Of Esportazione_dati_ELCAR)
+        For Each riga In totali_voci
+            Dim voce As New Esportazione_dati_ELCAR
+            voce.Descrizione = riga.tot
+            voce.Data = riga.Data
+            voce.Tot1 = riga.tot
+            voce.Tot1_Pos = riga.tot_POS_voci
+            elenco_CTRT_Esportazione.Add(voce)
+        Next
+        Return elenco_CTRT_Esportazione
+
+    End Function
+
+    Public Function Esportazione_ottieni_tutti_RT(dbBambino) As List(Of Esportazione_dati_CPRT)
         Dim dt As DataTable = Class_Giornaliero_ROUTINE.OttieniTuttiIRecordGiornalieri(dbBambino)
-        Dim elenco_CTRT_Esportazione As New List(Of Esportazione_dati_CTRT)
+        Dim elenco_CTRT_Esportazione As New List(Of Esportazione_dati_CPRT)
         For Each riga As DataRow In dt.Rows
-            Dim voce As New Esportazione_dati_CTRT
+            Dim voce As New Esportazione_dati_CPRT
             voce.Descrizione = riga("testo").ToString()
             voce.Data = riga("data").ToString()
             voce.Tot = riga("tot").ToString()
@@ -1751,11 +1762,11 @@ Public Module Modulo_Codice
         Next
         Return elenco_CTRT_Esportazione
     End Function
-    Public Function Esportazione_ottieni_tutti_CP(dbBambino) As List(Of Esportazione_dati_CTRT)
+    Public Function Esportazione_ottieni_tutti_CP(dbBambino) As List(Of Esportazione_dati_CPRT)
         Dim dt As DataTable = Class_Giornaliero_CP.OttieniTuttiIRecordGiornalieri(dbBambino)
-        Dim elenco_CTRT_Esportazione As New List(Of Esportazione_dati_CTRT)
+        Dim elenco_CTRT_Esportazione As New List(Of Esportazione_dati_CPRT)
         For Each riga As DataRow In dt.Rows
-            Dim voce As New Esportazione_dati_CTRT
+            Dim voce As New Esportazione_dati_CPRT
             voce.Descrizione = riga("testo").ToString()
             voce.Data = riga("data").ToString()
             voce.Tot = riga("tot").ToString()
@@ -1764,4 +1775,41 @@ Public Module Modulo_Codice
         Return elenco_CTRT_Esportazione
     End Function
 
+    Function Carico_totali_giornalieri(dbbambino As String) As List(Of Dati_Totali_Giornaliero)
+        Dim Totale_voci As New List(Of Dati_Totali_Giornaliero)
+
+        'ritorna tutti i totali delle voci ELCAR
+        Totale_voci = Class_GIORNALIERO.totali_giornalieri(dbbambino)
+
+        'ritorna tutti il numero delle voci RT
+        Dim totale_Rt = Class_Giornaliero_ROUTINE.totali_RT_giornalieri
+
+        ' unisco i due risultati nel totale_voce
+        'NB di RT utilizzo solo il numero di eventi flaggati (tot=1)
+        Dim idf = 0
+        Dim s1 As New DatiGrafico
+        Dim COL0 = 0
+        'ListaDati.Clear()
+
+        For j = 0 To Totale_voci.Count - 1
+            idf = Totale_voci(j).id_foglio
+            Dim voce = Totale_voci(j)
+            For Each vocert In totale_Rt
+                If idf = vocert.id_foglio Then
+                    voce.tot_RT = vocert.tot_RT
+                    voce.tot = vocert.tot_RT + voce.tot_voci
+                    's1.Data = Date.ParseExact(Totale_voci(j).Data, "dd/MM/yyyy", Nothing)
+                    's1.ValoriY = New List(Of Integer)({voce.tot, voce.tot_POS_voci})
+                    's1.Color = New List(Of Integer)({COL0, COL0})
+                    'ListaDati.Add(s1)
+                    Totale_voci(j) = voce
+                    Exit For
+                End If
+            Next
+        Next
+        'Gbl_datigrafico = ListaDati
+        Return Totale_voci
+
+
+    End Function
 End Module

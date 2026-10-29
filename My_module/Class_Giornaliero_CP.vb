@@ -150,4 +150,62 @@ Public Class Class_Giornaliero_CP
         Return dt
     End Function
 
+    Public Shared Function Ottieni_Tutte_CP_usati() As DataTable
+
+        Dim dt As New DataTable()
+        Dim query As String = "SELECT * FROM GIORNALIERO_COMPORTAMENTALE GROUP BY ID_VOCE ORDER BY TESTO ASC"
+        Using cn = DB.GetConnection_Bambino()
+            Using cmd As New SqliteCommand(query, cn)
+                Using reader As SqliteDataReader = cmd.ExecuteReader()
+                    dt.Load(reader)
+                End Using
+            End Using
+        End Using
+        Return dt
+    End Function
+
+    Public Shared Function OttieniRecordPerVoceCP(testo As String, Optional solocompilati As Boolean = True) As DataTable
+        If testo = "" Then Return Nothing
+        Dim query As String = ""
+        Dim dt As New DataTable()
+
+        If solocompilati Then
+            query = "SELECT * FROM GIORNALIERO_COMPORTAMENTALE WHERE TESTO = @testo AND COMPILATO = 1 ORDER BY SUBSTR(DATA, 7, 4) || '-' || SUBSTR(DATA, 4, 2) || '-' || SUBSTR(DATA, 1, 2) ASC"
+        Else
+            query = "SELECT * FROM GIORNALIERO_COMPORTAMENTALE WHERE TESTO = @testo ORDER BY SUBSTR(DATA, 7, 4) || '-' || SUBSTR(DATA, 4, 2) || '-' || SUBSTR(DATA, 1, 2) ASC"
+        End If
+
+        Using cn = DB.GetConnection_Bambino()
+
+            Using cmd As New SqliteCommand(query, cn)
+                ' Aggiungiamo il parametro in modo sicuro
+                cmd.Parameters.AddWithValue("@testo", testo)
+
+                Using reader As SqliteDataReader = cmd.ExecuteReader()
+                    dt.Load(reader)
+                End Using
+            End Using
+        End Using
+
+        Return dt
+    End Function
+
+    Public Shared Function Ottieni_CP_by_IDF(id_foglio As Integer) As DataTable
+
+        Dim query As String = ""
+        Dim dt As New DataTable()
+        query = "SELECT * FROM GIORNALIERO_COMPORTAMENTALE WHERE ID_FOGLIO = @ID_FOGLIO"
+        Using cn = DB.GetConnection_Bambino()
+            Using cmd As New SqliteCommand(query, cn)
+                cmd.Parameters.AddWithValue("@ID_FOGLIO", id_foglio)
+                Using reader As SqliteDataReader = cmd.ExecuteReader()
+                    dt.Load(reader)
+                End Using
+            End Using
+        End Using
+        Return dt
+    End Function
+
+
+
 End Class

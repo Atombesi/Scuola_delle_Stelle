@@ -81,7 +81,7 @@ Partial Class F_main
         ' Button3
         ' 
         Button3.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
-        Button3.Location = New Point(3, 32)
+        Button3.Location = New Point(3, 5)
         Button3.Name = "Button3"
         Button3.Size = New Size(109, 25)
         Button3.TabIndex = 9
@@ -213,7 +213,7 @@ Partial Class F_main
         ' Button10
         ' 
         Button10.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
-        Button10.Location = New Point(4, 91)
+        Button10.Location = New Point(4, 64)
         Button10.Name = "Button10"
         Button10.Size = New Size(109, 25)
         Button10.TabIndex = 12
@@ -223,7 +223,7 @@ Partial Class F_main
         ' Button9
         ' 
         Button9.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
-        Button9.Location = New Point(4, 62)
+        Button9.Location = New Point(4, 35)
         Button9.Name = "Button9"
         Button9.Size = New Size(109, 25)
         Button9.TabIndex = 11
@@ -233,11 +233,11 @@ Partial Class F_main
         ' Button8
         ' 
         Button8.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
-        Button8.Location = New Point(3, 2)
+        Button8.Location = New Point(4, 145)
         Button8.Name = "Button8"
         Button8.Size = New Size(109, 25)
         Button8.TabIndex = 10
-        Button8.Text = "Gestione fogli"
+        Button8.Text = "Codici ELCAR"
         Button8.UseVisualStyleBackColor = True
         ' 
         ' CheckBox2
@@ -277,7 +277,7 @@ Partial Class F_main
         ' Button12
         ' 
         Button12.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
-        Button12.Location = New Point(5, 61)
+        Button12.Location = New Point(5, 5)
         Button12.Name = "Button12"
         Button12.Size = New Size(108, 25)
         Button12.TabIndex = 11
@@ -287,17 +287,17 @@ Partial Class F_main
         ' Button13
         ' 
         Button13.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
-        Button13.Location = New Point(4, 2)
+        Button13.Location = New Point(5, 124)
         Button13.Name = "Button13"
         Button13.Size = New Size(108, 25)
         Button13.TabIndex = 10
-        Button13.Text = "Opend File Ini"
+        Button13.Text = "Open File Ini"
         Button13.UseVisualStyleBackColor = True
         ' 
         ' Button14
         ' 
         Button14.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
-        Button14.Location = New Point(4, 31)
+        Button14.Location = New Point(5, 153)
         Button14.Name = "Button14"
         Button14.Size = New Size(108, 25)
         Button14.TabIndex = 9
@@ -357,7 +357,7 @@ Partial Class F_main
         AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
         CancelButton = Button6
-        ClientSize = New Size(129, 347)
+        ClientSize = New Size(422, 347)
         Controls.Add(TransparentskControl1)
         Controls.Add(PctNotifica)
         Controls.Add(CheckBox4)

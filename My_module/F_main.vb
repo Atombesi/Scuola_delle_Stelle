@@ -6,7 +6,6 @@ Public Class F_main
     Public my_ELCAR As New Class_GIORNALIERO
     Private isCaricato As Boolean = False
     Private Noneseguire As Boolean = False
-    Private MioServer As Class_WebServerTablet
 
     Private Sub F_main_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
@@ -66,7 +65,7 @@ Public Class F_main
         ' Prendi il primo dispositivo della coda
         Dim prossimoDeviceId = DispositiviInAttesa(0)
 
-        ' Apri la maschera che hai preparato
+
         Dim frm As New F_Client
         frm.IdDispositivoDaAbilitare = prossimoDeviceId
         frm.T_nomeclient.Text = "Richiesta di connessione in sospeso..."
@@ -209,22 +208,31 @@ Public Class F_main
     Private Sub CheckBox4_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox4.CheckedChanged
         If CheckBox4.Checked Then
             CheckBox4.ImageIndex = 1
-            MioServer = New Class_WebServerTablet()
-            If MioServer.StartServer() Then
+            Gbl_MioServer = New Class_WebServerTablet()
+            If Gbl_MioServer.StartServer() Then
                 CheckBox4.BackColor = MyColor.PaleGreen
+                Gbl_server_connected = True
                 Dim ip As String
-                ip = "IP: " + Class_WebServerTablet.OttieniIPAscoltoReale
+                Gbl_IP_SERVER = Class_WebServerTablet.OttieniIPAscoltoReale
+                ip = "IP: " + Gbl_IP_SERVER
                 TP1.SetToolTip(CheckBox4, ip)
             Else
                 CheckBox4.BackColor = MyColor.Salmon
             End If
+            CheckBox4.Refresh()
         Else
             CheckBox4.ImageIndex = 2
-            If MioServer IsNot Nothing Then
-                MioServer.StopServer()
+            If Gbl_MioServer IsNot Nothing Then
+                Gbl_server_connected = False
+                Gbl_MioServer.StopServer()
                 CheckBox4.BackColor = Button2.BackColor
+                CheckBox4.Refresh()
             End If
         End If
+        CheckBox4.Refresh()
+
+
+
     End Sub
 
     Private Sub Button7_Click(sender As Object, e As EventArgs) Handles Button7.Click
@@ -253,5 +261,22 @@ Public Class F_main
         End If
         Apri_documento(ini.File_Log)
 
+    End Sub
+
+    Private Sub Button10_Click(sender As Object, e As EventArgs) Handles Button10.Click
+        F_Elenco_Comportamenti.Main("CP", True)
+    End Sub
+
+    Private Sub Button9_Click(sender As Object, e As EventArgs) Handles Button9.Click
+        F_Elenco_Comportamenti.Main("RT", True)
+
+    End Sub
+
+    Private Sub Button8_Click(sender As Object, e As EventArgs) Handles Button8.Click
+
+    End Sub
+
+    Private Sub Button12_Click(sender As Object, e As EventArgs) Handles Button12.Click
+        F_fogli_in_Compilazione.ShowDialog()
     End Sub
 End Class

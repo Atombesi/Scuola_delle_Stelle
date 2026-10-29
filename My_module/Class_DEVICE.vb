@@ -12,7 +12,66 @@ Public Class Class_DEVICE
     Private ReadOnly ConnectionString As String =
            "Server=.\SQLEXPRESS;Database=Scuoladellestelle;Trusted_Connection=True;"
 
+    Public Shared Function LoadAll() As List(Of Class_DEVICE)
+        ' Inizializza la lista che conterrà i risultati trovati
+        Dim listaRisultati As New List(Of Class_DEVICE)()
+        Dim sql_string = ""
+        Using cn = DB.GetConnection_Scuoladellestelle()
 
+            sql_string = "SELECT * FROM DEVICE ORDER BY ID"
+
+            Using cmd As New SqliteCommand(sql_string, cn)
+
+                ' Il carattere % indica a SQLite di trovare qualsiasi carattere prima e dopo il testo
+                'cmd.Parameters.AddWithValue("@Testo", "%" & testoCercato & "%")
+
+                Using rd = cmd.ExecuteReader()
+
+                    ' Usa While al posto di If perché ci possono essere più record corrispondenti
+                    While rd.Read()
+                        ' Crea una nuova istanza della classe per ogni riga trovata
+                        Dim record As New Class_DEVICE()
+                        record.ID = Convert.ToInt32(rd("ID"))
+                        record.NOME = Convert.ToString(rd("NOME"))
+                        record.ENABLED = Convert.ToInt32(rd("ENABLED"))
+                        record.MAC = Convert.ToString(rd("MAC"))
+                        record.STATO = Convert.ToString(rd("STATO"))
+                        listaRisultati.Add(record)
+                    End While
+
+                End Using
+            End Using
+        End Using
+
+        ' Restituisce la lista (sarà vuota se non trova nessuna corrispondenza)
+        Return listaRisultati
+    End Function
+    Public Shared Function Delete(ID) As Boolean
+        ' Controllo di sicurezza: se l'ID è 0, il record non esiste nel database
+        If ID = 0 Then Return False
+
+
+        Try
+            Using cn = DB.GetConnection_Scuoladellestelle()
+                If cn.State <> ConnectionState.Open Then cn.Open()
+
+                Dim sql As String = "DELETE FROM DEVICE WHERE ID = @ID;"
+
+                Using cmd As New SqliteCommand(sql, cn)
+                    cmd.Parameters.AddWithValue("@ID", ID)
+                    cmd.ExecuteNonQuery()
+                End Using
+            End Using
+            ID = 0
+            Return True
+        Catch ex As SqliteException
+            ' Se il database è bloccato da DB Browser, entrerà qui
+            Dim m = "[Errore 015] Impossibile eliminare. Il database potrebbe essere bloccato da un altro programma: " & ex.Message
+            APPEND_LOG(m, ini.File_Log, True)
+            Return False
+        End Try
+        Return True
+    End Function
     Public Sub Save()
         Using cn = DB.GetConnection_Scuoladellestelle()
             ' Assicurati di aprire la connessione se GetConnection non lo fa già in automatico
@@ -95,14 +154,14 @@ Public Class Class_DEVICE
             Return -1
         End Try
     End Function
-    Public Shared Function Load(id) As Class_DEVICE
+    Public Shared Function Load_by_MAC(MAC) As Class_DEVICE
         Try
             Using cn = DB.GetConnection_Scuoladellestelle()
                 If cn.State <> ConnectionState.Open Then cn.Open()
 
                 Dim queryRilevamento As String = "SELECT * FROM DEVICE WHERE MAC = @mac"
                 Using cmd As New SqliteCommand(queryRilevamento, cn)
-                    cmd.Parameters.AddWithValue("@mac", id)
+                    cmd.Parameters.AddWithValue("@mac", MAC)
 
                     Using reader As SqliteDataReader = cmd.ExecuteReader()
                         If reader.Read() Then
@@ -126,6 +185,38 @@ Public Class Class_DEVICE
         End Try
 
     End Function
+    Public Shared Function Load_by_ID(ID) As Class_DEVICE
+        Try
+            Using cn = DB.GetConnection_Scuoladellestelle()
+                If cn.State <> ConnectionState.Open Then cn.Open()
+
+                Dim queryRilevamento As String = "SELECT * FROM DEVICE WHERE ID = @ID"
+                Using cmd As New SqliteCommand(queryRilevamento, cn)
+                    cmd.Parameters.AddWithValue("@ID", ID)
+
+                    Using reader As SqliteDataReader = cmd.ExecuteReader()
+                        If reader.Read() Then
+                            Dim record As New Class_DEVICE()
+                            record.NOME = reader("NOME").ToString()
+                            record.ID = CInt(reader("ID"))
+                            record.MAC = reader("MAC").ToString()
+                            record.ENABLED = CInt(reader("ENABLED"))
+                            record.STATO = reader("STATO").ToString
+                            Return record
+                        Else
+                            ' Non esiste proprio nel DB
+                            Return Nothing
+                        End If
+                    End Using
+                End Using
+            End Using
+        Catch ex As Exception
+            Console.WriteLine("Errore SQLite: " & ex.Message)
+            Return Nothing
+        End Try
+
+    End Function
+
     Public Shared Function Trova_dispositivo(deviceId As String) As (Esito As Boolean, Devices As Class_DEVICE)
 
         Try
@@ -160,8 +251,8 @@ Public Class Class_DEVICE
     End Function
     Public Shared Function Abilita_dispositivo(ID_device As String, Optional Abilitato As Boolean = False) As Boolean
         Dim result = Trova_dispositivo(ID_device)
-        If result.esito Then
-            Dim record = Load(ID_device)
+        If result.Esito Then
+            Dim record = Load_by_MAC(ID_device)
             If Abilitato Then
                 record.ENABLED = 1
                 record.STATO = "OK"

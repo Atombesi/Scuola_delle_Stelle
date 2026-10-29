@@ -181,6 +181,7 @@ Public Class Class_TODOLIST
         Return Nothing
     End Function
 
+
     Public Shared Function EliminaRecordPerID(ByVal idDaEliminare As Integer) As Boolean
         ' 1. Definisci la stringa di connessione al tuo file SQLite (.db o .sqlite)
 

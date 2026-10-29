@@ -195,6 +195,9 @@ Public Class F_Compilazione
         ' 4. Seleziona il primo elemento solo se la lista contiene dati per evitare crash
         If ComboBox1.Items.Count > 0 Then
             ComboBox1.SelectedIndex = 0
+            B_edit.Enabled = True
+        Else
+            B_edit.Enabled = False
         End If
 
     End Sub
@@ -764,8 +767,8 @@ Public Class F_Compilazione
         If Gbl_foglio.Valutativo Then Return 0
         Dim cnt = 0
         For Each voce In Gbl_foglio.VociDiUnFoglio
-            If voce.TOT1 <> 0 Or voce.TOT1 <> 20 Then cnt = cnt + 1
-            If voce.TOT2 <> 0 Or voce.TOT2 <> 20 Then cnt = cnt + 1
+            If voce.TOT1 > 0 And voce.TOT1 <> 20 Then cnt = cnt + 1
+            If voce.TOT2 > 0 And voce.TOT2 <> 20 Then cnt = cnt + 1
         Next
         Return cnt
 
@@ -972,6 +975,7 @@ Public Class F_Compilazione
 
 
 
+
     End Sub
 
 
@@ -988,20 +992,25 @@ Public Class F_Compilazione
     Private Sub B_edit_Click(sender As Object, e As EventArgs) Handles B_edit.Click
 
         '1- Verifico che sia disponibile 
+        Dim giaregistrato = False
         Dim result = Class_TODOLIST.Trova_By_IDfoglio_IDbambino(Gbl_foglio.ID_foglio, Gbl_foglio.ID_Bambino)
-        If result.todolist.CLIENT_ID > 0 Then
+        If result.todolist.CLIENT_ID > 0 And result.todolist.CLIENT_NOME.ToUpper <> "MASTER" Then
             Dim m = "Il foglio (" + result.todolist.ID_FOGLIO.ToString + ") di " + result.todolist.BAMBINO + vbCrLf
             m = m + "é gia in compilazione da: " + result.todolist.CLIENT_NOME
             Call MsgBox(m, vbInformation + vbOKOnly, "Foglio gia in uso")
             Exit Sub
         End If
 
+        If result.todolist.CLIENT_ID > 0 And result.todolist.CLIENT_NOME.ToUpper = "MASTER" Then giaregistrato = True
+
         '2- è disponibile quindi registro che lo prendo in carico
-        result.todolist.CLIENT_ID = 9999
-        result.todolist.CLIENT_NOME = "MASTER"
-        result.todolist.CLIENT_DATAINVIO = Now.ToString
-        result.todolist.CLIENT_DATARICONSEGNA = "INVIATO PER LA COMPILAZIONE IL " + result.todolist.CLIENT_DATAINVIO
-        result.todolist.Save()
+        If Not giaregistrato Then
+            result.todolist.CLIENT_ID = 9999
+            result.todolist.CLIENT_NOME = "MASTER"
+            result.todolist.CLIENT_DATAINVIO = Now.ToString
+            result.todolist.CLIENT_DATARICONSEGNA = "INVIATO PER LA COMPILAZIONE IL " + result.todolist.CLIENT_DATAINVIO
+            result.todolist.Save()
+        End If
         B_edit.Tag = result.todolist.ID
 
         '3-Abilito per la compilazione 

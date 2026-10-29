@@ -105,16 +105,19 @@ Public Class Class_GIORNALIERO
         End Using
         Return listaRisultati
     End Function
-    Public Shared Function Trova_ultimo_IDFOGLIO() As Integer
+    Public Shared Function Trova_ultimo_IDFOGLIO(Optional solocompilato As Boolean = False) As Integer
         ' Valore predefinito se non vengono trovati record per quel codice ELCAR
         Dim ultimoId As Integer = 0
 
         ' Se il codice passato è vuoto o nullo, restituisce subito 0
-
+        Dim sql = ""
+        If solocompilato Then
+            sql = "SELECT MAX(CAST(ID_FOGLIO AS INTEGER)) FROM GIORNALIERO WHERE COMPILATO = 1 "
+        Else
+            sql = "SELECT MAX(CAST(ID_FOGLIO AS INTEGER)) FROM GIORNALIERO "
+        End If
         Using cn = DB.GetConnection_Bambino
             ' Applica il filtro WHERE sulla colonna ELCAR e converte ID_SUB in INTEGER per il calcolo del MAX
-            Dim sql As String = "SELECT MAX(CAST(ID_FOGLIO AS INTEGER)) " &
-                                "FROM GIORNALIERO "
 
             Using cmd As New SqliteCommand(sql, cn)
                 Dim risultato = cmd.ExecuteScalar()
@@ -309,14 +312,17 @@ Public Class Class_GIORNALIERO
         Return dt
     End Function
 
-    Public Shared Function OttieniRecordPerCodice(codice As String) As DataTable
+    Public Shared Function OttieniRecordPerCodice(codice As String, Optional Solocompilati As Boolean = True) As DataTable
+        ' Solo record compilati
         If codice = "" Then Return Nothing
-
+        Dim query = ""
         Dim dt As New DataTable()
+        If Solocompilati Then
+            query = "SELECT * FROM Giornaliero WHERE CODICE = @codice AND COMPILATO = 1 ORDER BY SUBSTR(DATA, 7, 4) || '-' || SUBSTR(DATA, 4, 2) || '-' || SUBSTR(DATA, 1, 2) ASC"
+        Else
+            query = "SELECT * FROM Giornaliero WHERE CODICE = @codice ORDER BY SUBSTR(DATA, 7, 4) || '-' || SUBSTR(DATA, 4, 2) || '-' || SUBSTR(DATA, 1, 2) ASC"
+        End If
 
-
-
-        Dim query As String = "SELECT * FROM Giornaliero WHERE CODICE = @codice ORDER BY SUBSTR(DATA, 7, 4) || '-' || SUBSTR(DATA, 4, 2) || '-' || SUBSTR(DATA, 1, 2) ASC"
         Using cn = DB.GetConnection_Bambino()
 
             Using cmd As New SqliteCommand(query, cn)
@@ -331,13 +337,20 @@ Public Class Class_GIORNALIERO
 
         Return dt
     End Function
-    Public Shared Function OttieniTuttiIRecordGiornalieri(Optional dbBambino = "") As DataTable
+    Public Shared Function OttieniTuttiIRecordGiornalieri(Optional dbBambino = "", Optional solocompilati = False) As DataTable
         Dim dt As New DataTable()
+        Dim query As String = ""
 
-        ' Rimuoviamo la clausola WHERE e ordiniamo prima per CODICE, poi per DATA (convertita in formato YYYY-MM-DD)
-        Dim query As String = "SELECT * FROM Giornaliero " &
+        If solocompilati Then
+            query = "SELECT * FROM Giornaliero WHERE COMPILATO = 1 " &
                           "ORDER BY CODICE ASC, " &
                           "SUBSTR(DATA, 7, 4) || '-' || SUBSTR(DATA, 4, 2) || '-' || SUBSTR(DATA, 1, 2) ASC"
+        Else
+            query = "SELECT * FROM Giornaliero " &
+                          "ORDER BY CODICE ASC, " &
+                          "SUBSTR(DATA, 7, 4) || '-' || SUBSTR(DATA, 4, 2) || '-' || SUBSTR(DATA, 1, 2) ASC"
+        End If
+
 
         Using cn = DB.GetConnection_Bambino(dbBambino)
             Using cmd As New SqliteCommand(query, cn)
@@ -380,25 +393,19 @@ Public Class Class_GIORNALIERO
         Return dt
     End Function
 
-    Public Shared Function OttienTitoli() As DataTable
+    Public Shared Function Ottieni_Tutti_codici_usati(Optional sortby As String = "DESC") As DataTable
+        Dim sortmode = "CODICE"
+        If sortby = "DESC" Then sortmode = "testo"
 
         Dim dt As New DataTable()
-
-
-
-        'Dim query As String = "Select Case DISTINCT titolo FROM FROM Giornaliero order by titolo"
-        'Dim query As String = "SELECT DISTINCT titolo, COUNT(titolo) As quante_volte, GROUP_CONCAT(ID_Foglio, ';') AS listaid FROM Giornaliero GROUP BY titolo ORDER BY titolo ASC"
-        Dim query As String = "SELECT DISTINCT titolo FROM Giornaliero GROUP BY titolo ORDER BY titolo ASC"
+        Dim query As String = "SELECT * FROM Giornaliero GROUP BY Codice ORDER BY " + sortmode + " ASC"
         Using cn = DB.GetConnection_Bambino()
-
             Using cmd As New SqliteCommand(query, cn)
-
                 Using reader As SqliteDataReader = cmd.ExecuteReader()
                     dt.Load(reader)
                 End Using
             End Using
         End Using
-
         Return dt
     End Function
 

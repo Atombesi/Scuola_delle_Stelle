@@ -175,6 +175,7 @@ Public Class F_Compilazione
         GroupBox_CP.Enabled = edit
         GroupBox_ELCAR.Enabled = edit
         GroupBox_Routine.Enabled = edit
+        Button4.Enabled = noedit
 
     End Sub
     Sub Carica_combo_fogli_da_compilare()
@@ -954,13 +955,15 @@ Public Class F_Compilazione
         Dim stato = Foglio_Esistente_Aggiorna(Gbl_foglio, dbbambino)
         Dim m1 = ""
         If stato.OK Then
+            Fogli_compilati_aggiungi_numero(1)
             m = "Il foglio Compilato è stato salvato correttamente" + vbCrLf + vbCrLf + "Foglio: " + Gbl_foglio.ID_foglio.ToString + ") di: " + Gbl_foglio.Bambino
             Call MsgBox(m, vbOKOnly + vbInformation)
         Else
+            Fogli_compilati_aggiungi_numero(1)
             m = "[Errore 001] " + stato.Err + "(" + Gbl_foglio.ID_foglio.ToString + ") di: " + Gbl_foglio.Bambino
             APPEND_LOG(m, ini.File_Log, True)
-
             m = "Errore durante il salvataggio del Foglio: " + Gbl_foglio.ID_foglio.ToString + ") di: " + Gbl_foglio.Bambino
+
             Call MsgBox(m, vbOKOnly + vbCritical)
         End If
 
@@ -1070,7 +1073,9 @@ Public Class F_Compilazione
         Dim m = "Vuoi uscire dalla modalità compilazione?"
         If MsgBox(m, vbYesNo + vbQuestion) <> vbYes Then Exit Sub
         Dim idt = Val(B_edit.Tag)
-        TODOLIST_rimuovi_Foglio_Compilato(idt)
+        If Not TODOLIST_rimuovi_Foglio_Compilato(idt) Then
+            Call MsgBox("Foglio non rimosso dallo stato di compilazione!")
+        End If
         Call Todolist_Azzera_e_Ricrea()
         Gbl_VociDiTodolist = Class_TODOLIST.LoadAll()
         Carica_combo_fogli_da_compilare()

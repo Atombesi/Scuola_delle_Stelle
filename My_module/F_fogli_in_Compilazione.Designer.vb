@@ -88,6 +88,7 @@ Partial Class F_fogli_in_Compilazione
         ToolStripSeparator3 = New ToolStripSeparator()
         TSM_Elimina_foglio = New ToolStripMenuItem()
         Button4 = New Button()
+        tp1 = New ToolTip(components)
         CType(dgv1, ComponentModel.ISupportInitialize).BeginInit()
         GroupBox1.SuspendLayout()
         GroupBox2.SuspendLayout()
@@ -237,10 +238,10 @@ Partial Class F_fogli_in_Compilazione
         ' 
         Dgv2.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Dgv2.Columns.AddRange(New DataGridViewColumn() {Column10, DataGridViewTextBoxColumn2, DataGridViewTextBoxColumn3, DataGridViewTextBoxColumn4, DataGridViewTextBoxColumn1, Column8, Column5, Column6, Column7, Column9, Column13})
-        Dgv2.Location = New Point(6, 9)
+        Dgv2.Location = New Point(5, 9)
         Dgv2.Name = "Dgv2"
         Dgv2.RowHeadersVisible = False
-        Dgv2.Size = New Size(577, 188)
+        Dgv2.Size = New Size(579, 188)
         Dgv2.TabIndex = 0
         ' 
         ' Column10
@@ -262,7 +263,7 @@ Partial Class F_fogli_in_Compilazione
         ' 
         DataGridViewTextBoxColumn3.HeaderText = "Bambino"
         DataGridViewTextBoxColumn3.Name = "DataGridViewTextBoxColumn3"
-        DataGridViewTextBoxColumn3.Width = 150
+        DataGridViewTextBoxColumn3.Width = 130
         ' 
         ' DataGridViewTextBoxColumn4
         ' 
@@ -281,6 +282,7 @@ Partial Class F_fogli_in_Compilazione
         ' 
         Column8.HeaderText = "Data carico"
         Column8.Name = "Column8"
+        Column8.Width = 130
         ' 
         ' Column5
         ' 
@@ -429,6 +431,7 @@ Partial Class F_fogli_in_Compilazione
         Button3.Size = New Size(76, 25)
         Button3.TabIndex = 61
         Button3.Text = "      Libera"
+        tp1.SetToolTip(Button3, "Rendi disponibile per la compilazione")
         Button3.UseVisualStyleBackColor = False
         ' 
         ' Button1
@@ -451,7 +454,7 @@ Partial Class F_fogli_in_Compilazione
         Button6.ForeColor = SystemColors.ControlText
         Button6.ImageIndex = 4
         Button6.ImageList = ImageList1
-        Button6.Location = New Point(589, 11)
+        Button6.Location = New Point(589, 9)
         Button6.Name = "Button6"
         Button6.Size = New Size(31, 28)
         Button6.TabIndex = 55
@@ -513,7 +516,7 @@ Partial Class F_fogli_in_Compilazione
         ' 
         Panel1.Controls.Add(Button8)
         Panel1.Controls.Add(Button9)
-        Panel1.Location = New Point(485, 110)
+        Panel1.Location = New Point(266, 234)
         Panel1.Name = "Panel1"
         Panel1.Size = New Size(179, 33)
         Panel1.TabIndex = 59
@@ -702,6 +705,7 @@ Partial Class F_fogli_in_Compilazione
         AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
         ClientSize = New Size(643, 378)
+        ControlBox = False
         Controls.Add(Button4)
         Controls.Add(GroupBox3)
         Controls.Add(TabControl1)
@@ -767,17 +771,6 @@ Partial Class F_fogli_in_Compilazione
     Friend WithEvents Label12 As Label
     Friend WithEvents Label10 As Label
     Friend WithEvents Label9 As Label
-    Friend WithEvents Column10 As DataGridViewImageColumn
-    Friend WithEvents DataGridViewTextBoxColumn2 As DataGridViewTextBoxColumn
-    Friend WithEvents DataGridViewTextBoxColumn3 As DataGridViewTextBoxColumn
-    Friend WithEvents DataGridViewTextBoxColumn4 As DataGridViewTextBoxColumn
-    Friend WithEvents DataGridViewTextBoxColumn1 As DataGridViewTextBoxColumn
-    Friend WithEvents Column8 As DataGridViewTextBoxColumn
-    Friend WithEvents Column5 As DataGridViewTextBoxColumn
-    Friend WithEvents Column6 As DataGridViewTextBoxColumn
-    Friend WithEvents Column7 As DataGridViewTextBoxColumn
-    Friend WithEvents Column9 As DataGridViewTextBoxColumn
-    Friend WithEvents Column13 As DataGridViewTextBoxColumn
     Friend WithEvents Column11 As DataGridViewImageColumn
     Friend WithEvents Column1 As DataGridViewTextBoxColumn
     Friend WithEvents Column2 As DataGridViewTextBoxColumn
@@ -791,4 +784,16 @@ Partial Class F_fogli_in_Compilazione
     Friend WithEvents Panel1 As Panel
     Friend WithEvents Button8 As Button
     Friend WithEvents Button9 As Button
+    Friend WithEvents Column10 As DataGridViewImageColumn
+    Friend WithEvents DataGridViewTextBoxColumn2 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn3 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn4 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn1 As DataGridViewTextBoxColumn
+    Friend WithEvents Column8 As DataGridViewTextBoxColumn
+    Friend WithEvents Column5 As DataGridViewTextBoxColumn
+    Friend WithEvents Column6 As DataGridViewTextBoxColumn
+    Friend WithEvents Column7 As DataGridViewTextBoxColumn
+    Friend WithEvents Column9 As DataGridViewTextBoxColumn
+    Friend WithEvents Column13 As DataGridViewTextBoxColumn
+    Friend WithEvents tp1 As ToolTip
 End Class

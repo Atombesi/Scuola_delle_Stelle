@@ -24,7 +24,7 @@ Partial Class F_Seleziona_Categoria
     Private Sub InitializeComponent()
         components = New ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(F_Seleziona_Categoria))
-        Dim DataGridViewCellStyle1 As DataGridViewCellStyle = New DataGridViewCellStyle()
+        Dim DataGridViewCellStyle2 As DataGridViewCellStyle = New DataGridViewCellStyle()
         ComboBox3 = New ComboBox()
         Label1 = New Label()
         ComboBox2 = New ComboBox()
@@ -85,6 +85,7 @@ Partial Class F_Seleziona_Categoria
         Button11 = New Button()
         TP1 = New ToolTip(components)
         Label9 = New Label()
+        Label14 = New Label()
         Panel1 = New Panel()
         Label3 = New Label()
         CMenuStrip1 = New ContextMenuStrip(components)
@@ -515,6 +516,7 @@ Partial Class F_Seleziona_Categoria
         ImageList1.Images.SetKeyName(8, "Emoji Objects-108.png")
         ImageList1.Images.SetKeyName(9, "icons8-full-recycle-bin-48.png")
         ImageList1.Images.SetKeyName(10, "icons8-elenco-puntato-48.png")
+        ImageList1.Images.SetKeyName(11, "xp0222.ico")
         ' 
         ' Label20
         ' 
@@ -531,7 +533,7 @@ Partial Class F_Seleziona_Categoria
         CheckBox4.AutoSize = True
         CheckBox4.Checked = True
         CheckBox4.CheckState = CheckState.Checked
-        CheckBox4.Location = New Point(348, 30)
+        CheckBox4.Location = New Point(423, 28)
         CheckBox4.Name = "CheckBox4"
         CheckBox4.Size = New Size(64, 19)
         CheckBox4.TabIndex = 32
@@ -542,13 +544,12 @@ Partial Class F_Seleziona_Categoria
         ' CheckBox3
         ' 
         CheckBox3.AutoSize = True
-        CheckBox3.CheckAlign = ContentAlignment.MiddleRight
         CheckBox3.Font = New Font("Segoe UI", 9F)
-        CheckBox3.Location = New Point(421, 30)
+        CheckBox3.Location = New Point(275, 28)
         CheckBox3.Name = "CheckBox3"
-        CheckBox3.Size = New Size(66, 19)
+        CheckBox3.Size = New Size(88, 19)
         CheckBox3.TabIndex = 29
-        CheckBox3.Text = "Prompt"
+        CheckBox3.Text = "Acceptance"
         CheckBox3.UseVisualStyleBackColor = True
         ' 
         ' Label13
@@ -647,8 +648,8 @@ Partial Class F_Seleziona_Categoria
         ' 
         ' Col2
         ' 
-        DataGridViewCellStyle1.WrapMode = DataGridViewTriState.True
-        Col2.DefaultCellStyle = DataGridViewCellStyle1
+        DataGridViewCellStyle2.WrapMode = DataGridViewTriState.True
+        Col2.DefaultCellStyle = DataGridViewCellStyle2
         Col2.HeaderText = "Testo inserito"
         Col2.Name = "Col2"
         Col2.Width = 370
@@ -693,7 +694,7 @@ Partial Class F_Seleziona_Categoria
         Label22.Font = New Font("Segoe UI", 9F)
         Label22.Location = New Point(467, 23)
         Label22.Name = "Label22"
-        Label22.Size = New Size(121, 18)
+        Label22.Size = New Size(115, 18)
         Label22.TabIndex = 39
         Label22.Text = "Nuovo"
         Label22.TextAlign = ContentAlignment.MiddleCenter
@@ -794,6 +795,17 @@ Partial Class F_Seleziona_Categoria
         TP1.SetToolTip(Label9, "Mostra Informazione sul codice")
         Label9.Visible = False
         ' 
+        ' Label14
+        ' 
+        Label14.Font = New Font("Segoe UI", 9F)
+        Label14.ImageIndex = 11
+        Label14.ImageList = ImageList1
+        Label14.Location = New Point(590, 23)
+        Label14.Name = "Label14"
+        Label14.Size = New Size(18, 20)
+        Label14.TabIndex = 41
+        TP1.SetToolTip(Label14, "Azzera tutti i codici presenti nel foglio")
+        ' 
         ' Panel1
         ' 
         Panel1.Controls.Add(ComboBox0)
@@ -863,9 +875,9 @@ Partial Class F_Seleziona_Categoria
         ' 
         Label24.BorderStyle = BorderStyle.Fixed3D
         Label24.Font = New Font("Segoe UI", 9F)
-        Label24.Location = New Point(604, 23)
+        Label24.Location = New Point(614, 23)
         Label24.Name = "Label24"
-        Label24.Size = New Size(331, 20)
+        Label24.Size = New Size(320, 20)
         Label24.TabIndex = 40
         Label24.Text = "foglio n."
         Label24.TextAlign = ContentAlignment.MiddleCenter
@@ -875,6 +887,7 @@ Partial Class F_Seleziona_Categoria
         AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
         ClientSize = New Size(982, 621)
+        Controls.Add(Label14)
         Controls.Add(Label23)
         Controls.Add(Button6)
         Controls.Add(Label24)
@@ -980,4 +993,5 @@ Partial Class F_Seleziona_Categoria
     Friend WithEvents Button14 As Button
     Friend WithEvents ComboBox0 As ComboBox
     Friend WithEvents Label4 As Label
+    Friend WithEvents Label14 As Label
 End Class

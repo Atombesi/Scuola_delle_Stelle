@@ -1070,11 +1070,22 @@ Public Class F_Seleziona_Categoria
 
     End Function
     Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
-
+        Me.Enabled = False
+        Dim t = "Salvataggio del foglio"
+        Dim m = " Procedura di salvataggio in corso..."
+        MostraMessaggioModeless(t, m, vbInformation)
         Dim salvato = Foglio_Carica_e_Salva()
 
-        If Not salvato Then Exit Sub
+        If Not salvato Then
+            Me.Enabled = True
+            Exit Sub
+        End If
+
+        m = " Preparazione Foglio per la stampa in corso..."
+        MostraMessaggioModeless(t, m, vbInformation)
         Stampa_foglio_giornaliero()
+        ChiudiMessaggioModeless()
+        Me.Enabled = True
 
     End Sub
     Function Carica_Giornaliero_da_Dgv1(r As Integer, Data As String, idff As Integer, Optional Nuovo As Boolean = True) As Class_GIORNALIERO
@@ -1880,7 +1891,7 @@ Public Class F_Seleziona_Categoria
             If MsgBox(m, vbYesNo + vbQuestion + vbDefaultButton2, "Azzeramento Voci della routine") = vbYes Then full = True
         End If
 
-        Call Azzera_foglio(full)
+        Azzera_foglio(full)
         DGV1.Rows.Clear()
 
 
@@ -2000,7 +2011,14 @@ Public Class F_Seleziona_Categoria
     End Sub
 
     Private Sub Button6_Click_1(sender As Object, e As EventArgs) Handles Button6.Click
-        Stampa_foglio_giornaliero()
+        If Gbl_Elenco_bambini Is Nothing Then
+            Gbl_Elenco_bambini = Carica_bambini()
+        End If
+
+        Dim oggi = Now.ToShortDateString
+        F_Elenco_da_Stampare.Main(oggi)
+
+        'Stampa_foglio_giornaliero()
 
     End Sub
 
@@ -2041,6 +2059,52 @@ Public Class F_Seleziona_Categoria
         Dim modello = Ritorna_modello_da_utilizzare(nvoci_elcar, nvoci_RT)
         Dim m = "Modello Word:" + modello
 
+
+    End Sub
+
+    Private Sub Label14_Click(sender As Object, e As EventArgs) Handles Label14.Click
+        'Verifico che sia selezionato un bambino
+        Dim m = ""
+        Try
+            Dim x = Gbl_foglio.DB_Bambino
+            If Gbl_foglio.DB_Bambino = "" Then m = "Nessun foglio selezionato"
+            If Val(Label13.Text) <= 0 Then m = "Nessun foglio selezionato"
+        Catch ex As Exception
+            m = "Nessun foglio selezionato"
+        End Try
+        If m <> "" Then
+            Call MsgBox(m, vbInformation + vbOKOnly)
+            Exit Sub
+        End If
+
+        m = m + "Bambino: " + Gbl_foglio.Bambino + vbCrLf
+        If Gbl_foglio.Valutativo Then
+            m = m + "Tipo: Foglio di Accettazione" + vbCrLf
+        Else
+            m = m + "Tipo: Foglio Standard" + vbCrLf
+        End If
+        m = m + "foglio n. " + Label13.Text + " per il giorno  " + Label11.Text + vbCrLf + vbCrLf
+
+        Dim nv = 0, ncp = 0, nrt = 0
+        Try
+            nv = Gbl_foglio.VociDiUnFoglio.Count
+        Catch ex As Exception
+
+        End Try
+        Try
+            ncp = Gbl_foglio.CP.Count
+        Catch ex As Exception
+
+        End Try
+        Try
+            nrt = Gbl_foglio.RT.Count
+        Catch ex As Exception
+
+        End Try
+        m = m + "N. Voci ELCAR: " + nv.ToString + vbCrLf
+        m = m + "N. Voci CP: " + ncp.ToString + vbCrLf
+        m = m + "N. Voci ELCAR: " + nrt.ToString + vbCrLf
+        Call MsgBox(m, vbInformation + vbOKOnly, "Info Foglio")
 
     End Sub
 End Class

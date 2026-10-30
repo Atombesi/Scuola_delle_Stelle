@@ -132,7 +132,7 @@ Partial Class F_Grafici
         Button3.Size = New Size(152, 27)
         Button3.TabIndex = 2
         Button3.Text = "Totale giornaliero (55)"
-        tp1.SetToolTip(Button3, "Grafica ultimi 55 giorni")
+        tp1.SetToolTip(Button3, "Grafica totali degli ultimi 55 giorni")
         Button3.UseVisualStyleBackColor = True
         ' 
         ' Button2
@@ -156,6 +156,7 @@ Partial Class F_Grafici
         Button6.Size = New Size(151, 27)
         Button6.TabIndex = 51
         Button6.Text = "Esporta tutti i dati "
+        tp1.SetToolTip(Button6, "Essporta (ELCAR,CP,RT,TOTALI) in un foglio di Excel")
         Button6.UseVisualStyleBackColor = True
         ' 
         ' Button5

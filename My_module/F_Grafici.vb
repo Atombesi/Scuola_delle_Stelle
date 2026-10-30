@@ -1111,10 +1111,12 @@ Public Class F_Grafici
             Button2.BackColor = MyColor.PapayaWhip
             Button2.Enabled = True
             Button2.Text = n.ToString + " Voci scelte"
+            tp1.SetToolTip(Button2, "Usa voci utilizzate nell'ultimo foglio compilato")
         Else
             Button2.Text = "voci (max 12)"
             Button2.BackColor = SystemColors.Control
             Button2.Enabled = False
+            tp1.SetToolTip(Button2, "Usa voci Selezionate")
         End If
     End Sub
 
@@ -1147,6 +1149,10 @@ Public Class F_Grafici
                 voce.Stato = True
                 Listachecked_CP.Add(voce)
             Next
+            If Listachecked_CP.Count = 0 Then
+                Call MsgBox("Non è stata trovata nessuna voce CP nell'ultimo foglio", vbInformation + vbOKOnly)
+                Exit Sub
+            End If
         End If
 
         If Listachecked_CP.Count = 0 Then
@@ -1179,22 +1185,13 @@ Public Class F_Grafici
             Button4.BackColor = MyColor.PapayaWhip
             Button4.Enabled = True
             Button4.Text = n.ToString + " Voci scelte"
+            tp1.SetToolTip(Button4, "Usa voci CP dell'ultimo foglio compilato")
+
         Else
-            'Dim idf = CInt(Button1.Tag)
-            'Dim dt = Class_Giornaliero_CP.Ottieni_CP_by_IDF(idf)
-            'Dim voce As New Elenco_checklist
-            'Dim Listachecked_CP As New List(Of Elenco_checklist)
-            'For Each riga As DataRow In dt.Rows
-            '    voce.TAG = Convert.ToInt32(riga("ID_voce"))
-            '    voce.voce = Convert.ToString(riga("testo"))
-            '    voce.Stato = True
-            '    Listachecked_CP.Add(voce)
-            'Next
-
-
-            Button4.Text = "voci (max 6)"
+            Button4.Text = "Comportamentali"
             Button4.BackColor = SystemColors.Control
-            Button4.Enabled = False
+            Button4.Enabled = True
+            tp1.SetToolTip(Button4, "Usa voci CP selezionate")
         End If
 
     End Sub

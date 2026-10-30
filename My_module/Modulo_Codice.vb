@@ -9,6 +9,7 @@ Imports System.Text.Json
 Imports System.Text.RegularExpressions
 Imports System.Windows.Documents.DocumentStructures
 Imports System.Windows.Forms.AxHost
+Imports System.Xaml
 Imports DocumentFormat.OpenXml.Bibliography
 Imports DocumentFormat.OpenXml.Office2010.Excel
 Imports DocumentFormat.OpenXml.Office2013.Drawing.Chart
@@ -146,6 +147,7 @@ Public Module Modulo_Codice
         Public Numero_min_CP As Integer
         Public Numero_min_RT As Integer
         Public Numero_min_voci_perpagina As Integer
+        Public Numero_fogli_compilati As Integer
 
 
     End Structure
@@ -573,7 +575,28 @@ Public Module Modulo_Codice
         Return filedb
 
     End Function
+    Function Fogli_compilati_aggiungi_numero(Optional num_da_aggiungere As Integer = 1) As Integer
+        Dim fileini = Gbl_app_path + "\Scuola_delle_Stelle.ini"
+        'Rileggo il numero registrato 
+        Dim y = "0;" + Now.ToShortDateString
+        y = ReadINIString(fileini, "GENERAL", "Numero Fogli Compilati", y)
+        Dim xx = Split(y, ";")
+        If xx(1) = Now.ToShortDateString Then
+            ini.Numero_fogli_compilati = CInt(xx(0))
+        Else
+            ini.Numero_fogli_compilati = 0
+        End If
 
+        'Aggiugo la quantita passata 
+        ini.Numero_fogli_compilati = ini.Numero_fogli_compilati + num_da_aggiungere
+
+        'Registro il nuovo valore 
+        y = ini.Numero_fogli_compilati.ToString + ";" + Now.ToShortDateString
+        WriteINIString(fileini, "GENERAL", "Numero Fogli Compilati", y)
+        Return ini.Numero_fogli_compilati
+
+
+    End Function
     Sub Read_ini()
         Dim x = ""
 
@@ -598,12 +621,21 @@ Public Module Modulo_Codice
             Call MsgBox(fileini)
         End If
 
+        Dim y = "0;" + Now.ToShortDateString
+        y = ReadINIString(fileini, K, "Numero Fogli Compilati", y)
+        Dim xx = Split(y, ";")
+        If xx(1) = Now.ToShortDateString Then
+            ini.Numero_fogli_compilati = CInt(xx(0))
+        Else
+            ini.Numero_fogli_compilati = 0
+        End If
+
         '------------------------------------------
         '--- PATH ---
         '------------------------------------------
         K = "PATH"
 
-        Dim y = Gbl_app_path + "\Scuola_delle_Stelle.log"
+        y = Gbl_app_path + "\Scuola_delle_Stelle.log"
         ini.File_Log = ReadINIString(fileini, K, "File log", y)
         GbL_Logfile = ini.File_Log
 
@@ -1642,11 +1674,14 @@ Public Module Modulo_Codice
                 ' return (1) Nessun record salvato
                 ' return >1 Salvataggio parziale record
                 Dim salvataggiook = False
+
                 If salvato.OK Then       ' Salvataggio completo
                     ' Aggiorna anche lo stato del record generale nella tabella TODOLIST del PC Windows
                     Dim passato = TODOLIST_rimuovi_Foglio_Compilato(idTodoList)
+                    Fogli_compilati_aggiungi_numero(1)
                     salvataggiook = True
                 Else
+                    Fogli_compilati_aggiungi_numero(1)
                     Dim m = "[Errore 005] " + salvato.Err + "(" + foglio.ID_foglio.ToString + ") di: " + foglio.Bambino
                     APPEND_LOG(m, ini.File_Log, True)
                     salvataggiook = False

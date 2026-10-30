@@ -4,6 +4,7 @@ Imports DocumentFormat.OpenXml.Office2010.Excel
 Imports DocumentFormat.OpenXml.Wordprocessing
 Imports Microsoft.Data
 Imports Microsoft.Data.Sqlite
+Imports SkiaSharp.HarfBuzz.SKShaper
 
 Public Class Class_TODOLIST
     Public Property ID As Integer
@@ -384,6 +385,35 @@ Public Class Class_TODOLIST
         End Try
         Return True
     End Function
+
+
+    Public Shared Function fogli_in_compilazione() As Integer
+
+        Dim sql As String = "SELECT COUNT(*) FROM TODOLIST WHERE CLIENT_ID <> 0"
+
+        Using cn = DB.GetConnection_Scuoladellestelle()
+            If cn.State <> ConnectionState.Open Then cn.Open()
+
+            Using cmd As New SqliteCommand(sql, cn)
+                Try
+                    ' ExecuteScalar restituisce il conteggio come oggetto
+                    Dim result = cmd.ExecuteScalar()
+
+                    If result IsNot Nothing AndAlso Not IsDBNull(result) Then
+                        ' Converte in Integer il valore numerico restituito da COUNT(*)
+                        Return Convert.ToInt32(result)
+                    Else
+                        Return 0
+                    End If
+                Catch ex As Exception
+                    Console.WriteLine(ex.ToString())
+                    Return 0
+                End Try
+            End Using ' Chiude cmd
+        End Using ' Chiude cn
+
+    End Function
+
     Public Overrides Function ToString() As String
         ' Dice alla ComboBox (e a qualsiasi griglia) di mostrare il testo di NOMEFILE
         Return Me.NOMEFILE

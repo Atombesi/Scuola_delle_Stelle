@@ -1,4 +1,5 @@
 ﻿Imports System.Windows
+Imports DocumentFormat.OpenXml.Drawing
 Imports DocumentFormat.OpenXml.Spreadsheet
 Imports Microsoft.Data.Sqlite
 
@@ -28,6 +29,8 @@ Public Class F_main
         End If
 
         isCaricato = True
+        Mostra_stato_rete_e_compilazione()
+        Timer1.Enabled = True
     End Sub
 
 
@@ -89,7 +92,7 @@ Public Class F_main
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
         Gbl_Elenco_bambini = Carica_bambini()
-        F_Compilazione.ShowDialog()
+        F_Compilazione.Show()
     End Sub
 
     Private Sub Button3_Click_1(sender As Object, e As EventArgs) Handles Button3.Click
@@ -140,12 +143,8 @@ Public Class F_main
     End Sub
 
     Private Sub Label1_Click(sender As Object, e As EventArgs) Handles Label1.Click
+        F_MyInfo.ShowDialog()
 
-
-        Dim jsonFoglioBambino As String = Carica_Foglio_da_inviare_al_Tablet(5)
-
-        Dim ip = Class_WebServerTablet.OttieniIPAscoltoReale
-        Call MsgBox(ip)
     End Sub
 
     Private Sub CheckBox1_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox1.CheckedChanged
@@ -208,8 +207,8 @@ Public Class F_main
     Private Sub CheckBox4_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox4.CheckedChanged
         If CheckBox4.Checked Then
             CheckBox4.ImageIndex = 1
-            Gbl_MioServer = New Class_WebServerTablet()
-            If Gbl_MioServer.StartServer() Then
+            Gbl_MioServer = New Class_WebServerTablet
+            If Gbl_MioServer.StartServer Then
                 CheckBox4.BackColor = MyColor.PaleGreen
                 Gbl_server_connected = True
                 Dim ip As String
@@ -233,6 +232,18 @@ Public Class F_main
 
 
 
+    End Sub
+    Sub Mostra_stato_rete_e_compilazione()
+        Dim n = Class_TODOLIST.fogli_in_compilazione
+        If n > 0 Then
+            Label5.BackColor = MyColor.Yellow
+            Dim m = n.ToString + "Fogli in compilazione"
+            TP1.SetToolTip(Label5, "Nessun Foglio in compilazione")
+        Else
+            Label5.BackColor = MyColor.Transparent
+            TP1.SetToolTip(Label5, "Nessun Foglio in compilazione")
+        End If
+        'verifico se ci sono dei fogli in compilazione
     End Sub
 
     Private Sub Button7_Click(sender As Object, e As EventArgs) Handles Button7.Click
@@ -276,7 +287,20 @@ Public Class F_main
 
     End Sub
 
-    Private Sub Button12_Click(sender As Object, e As EventArgs) Handles Button12.Click
+    Private Sub Button12_Click(sender As Object, e As EventArgs)
         F_fogli_in_Compilazione.ShowDialog()
+    End Sub
+
+    Private Sub CheckBox5_CheckedChanged(sender As Object, e As EventArgs)
+
+    End Sub
+
+    Private Sub Label5_Click(sender As Object, e As EventArgs) Handles Label5.Click
+        F_fogli_in_Compilazione.ShowDialog()
+
+    End Sub
+
+    Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
+        Mostra_stato_rete_e_compilazione()
     End Sub
 End Class

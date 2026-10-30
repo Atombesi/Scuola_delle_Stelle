@@ -24,10 +24,10 @@ Partial Class F_Elenco_da_Stampare
     Private Sub InitializeComponent()
         components = New ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(F_Elenco_da_Stampare))
-        Dim DataGridViewCellStyle1 As DataGridViewCellStyle = New DataGridViewCellStyle()
-        Dim DataGridViewCellStyle2 As DataGridViewCellStyle = New DataGridViewCellStyle()
-        Dim DataGridViewCellStyle3 As DataGridViewCellStyle = New DataGridViewCellStyle()
-        Dim DataGridViewCellStyle4 As DataGridViewCellStyle = New DataGridViewCellStyle()
+        Dim DataGridViewCellStyle5 As DataGridViewCellStyle = New DataGridViewCellStyle()
+        Dim DataGridViewCellStyle6 As DataGridViewCellStyle = New DataGridViewCellStyle()
+        Dim DataGridViewCellStyle7 As DataGridViewCellStyle = New DataGridViewCellStyle()
+        Dim DataGridViewCellStyle8 As DataGridViewCellStyle = New DataGridViewCellStyle()
         Label11 = New Label()
         Label19 = New Label()
         ImageList1 = New ImageList(components)
@@ -60,7 +60,6 @@ Partial Class F_Elenco_da_Stampare
         Button4 = New Button()
         TP1 = New ToolTip(components)
         Button6 = New Button()
-        Button7 = New Button()
         CType(DGV1, ComponentModel.ISupportInitialize).BeginInit()
         GroupBox1.SuspendLayout()
         SuspendLayout()
@@ -116,10 +115,10 @@ Partial Class F_Elenco_da_Stampare
         ' Column1
         ' 
         Column1.AutoSizeMode = DataGridViewAutoSizeColumnMode.None
-        DataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle1.Font = New Font("Calibri", 6.75F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
-        DataGridViewCellStyle1.NullValue = False
-        Column1.DefaultCellStyle = DataGridViewCellStyle1
+        DataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle5.Font = New Font("Calibri", 6.75F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        DataGridViewCellStyle5.NullValue = False
+        Column1.DefaultCellStyle = DataGridViewCellStyle5
         Column1.HeaderText = ""
         Column1.Name = "Column1"
         Column1.ToolTipText = "Foglio da stampare"
@@ -135,9 +134,9 @@ Partial Class F_Elenco_da_Stampare
         ' 
         ' Column2
         ' 
-        DataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle2.WrapMode = DataGridViewTriState.True
-        Column2.DefaultCellStyle = DataGridViewCellStyle2
+        DataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle6.WrapMode = DataGridViewTriState.True
+        Column2.DefaultCellStyle = DataGridViewCellStyle6
         Column2.HeaderText = "Bambino"
         Column2.Name = "Column2"
         Column2.Resizable = DataGridViewTriState.True
@@ -145,18 +144,17 @@ Partial Class F_Elenco_da_Stampare
         ' 
         ' Column3
         ' 
-        DataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter
-        Column3.DefaultCellStyle = DataGridViewCellStyle3
-        Column3.HeaderText = "Data"
+        DataGridViewCellStyle7.Alignment = DataGridViewContentAlignment.MiddleCenter
+        Column3.DefaultCellStyle = DataGridViewCellStyle7
+        Column3.HeaderText = "Data Utilizzo"
         Column3.Name = "Column3"
-        Column3.Width = 90
         ' 
         ' Column4
         ' 
-        DataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle4.Font = New Font("Calibri", 6.75F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
-        DataGridViewCellStyle4.WrapMode = DataGridViewTriState.True
-        Column4.DefaultCellStyle = DataGridViewCellStyle4
+        DataGridViewCellStyle8.Alignment = DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle8.Font = New Font("Calibri", 6.75F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        DataGridViewCellStyle8.WrapMode = DataGridViewTriState.True
+        Column4.DefaultCellStyle = DataGridViewCellStyle8
         Column4.HeaderText = "Filename"
         Column4.Name = "Column4"
         Column4.Width = 270
@@ -400,21 +398,12 @@ Partial Class F_Elenco_da_Stampare
         Button6.Text = "Stampa DOCX"
         Button6.UseVisualStyleBackColor = True
         ' 
-        ' Button7
-        ' 
-        Button7.Location = New Point(275, 433)
-        Button7.Name = "Button7"
-        Button7.Size = New Size(46, 23)
-        Button7.TabIndex = 49
-        Button7.Text = "Button7"
-        Button7.UseVisualStyleBackColor = True
-        ' 
         ' F_Elenco_da_Stampare
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
         ClientSize = New Size(542, 461)
-        Controls.Add(Button7)
+        ControlBox = False
         Controls.Add(Button6)
         Controls.Add(Button4)
         Controls.Add(Button3)
@@ -457,16 +446,15 @@ Partial Class F_Elenco_da_Stampare
     Friend WithEvents Button2 As Button
     Friend WithEvents Button3 As Button
     Friend WithEvents Button4 As Button
+    Friend WithEvents Button5 As Button
+    Friend WithEvents TP1 As ToolTip
+    Friend WithEvents Label12 As Label
+    Friend WithEvents Label13 As Label
+    Friend WithEvents Button6 As Button
     Friend WithEvents Column1 As DataGridViewCheckBoxColumn
     Friend WithEvents Column5 As DataGridViewImageColumn
     Friend WithEvents Column2 As DataGridViewTextBoxColumn
     Friend WithEvents Column3 As DataGridViewTextBoxColumn
     Friend WithEvents Column4 As DataGridViewTextBoxColumn
     Friend WithEvents Column6 As DataGridViewTextBoxColumn
-    Friend WithEvents Button5 As Button
-    Friend WithEvents TP1 As ToolTip
-    Friend WithEvents Label12 As Label
-    Friend WithEvents Label13 As Label
-    Friend WithEvents Button6 As Button
-    Friend WithEvents Button7 As Button
 End Class

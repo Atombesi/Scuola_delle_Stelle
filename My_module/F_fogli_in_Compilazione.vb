@@ -159,7 +159,7 @@
             APPEND_LOG(m, ini.File_Log, True)
         End If
         Carica_dgv2()
-
+        F_main.Mostra_stato_rete_e_compilazione()
     End Sub
 
     Private Sub Dgv2_MouseClick(sender As Object, e As MouseEventArgs) Handles Dgv2.MouseClick
@@ -245,7 +245,7 @@
         m = m + "Device: " + mydev.NOME
 
         If MsgBox(m, vbQuestion + vbYesNo + vbDefaultButton2, "Rimozione dispostivo abilitato") <> vbYes Then Exit Sub
-        m = +"Device: " + mydev.NOME + "Rimosso!"
+        m = "Device: " + mydev.NOME + "Rimosso!"
         If Class_DEVICE.Delete(id) Then
             Call MsgBox(m, vbInformation + vbOKOnly)
             m = "Rimozione device Abilitato (" + mydev.NOME + ")"
@@ -265,6 +265,11 @@
         If MsgBox(m, vbYesNo + vbQuestion) <> vbYes Then Exit Sub
         Server_on_off()
 
+
+    End Sub
+
+    Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
+        Me.Hide()
 
     End Sub
 End Class

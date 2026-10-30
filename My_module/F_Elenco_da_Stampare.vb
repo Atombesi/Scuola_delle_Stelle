@@ -9,6 +9,7 @@ Imports MyColor = System.Drawing.Color
 Public Class F_Elenco_da_Stampare
     Dim info_foglio As Struct_FogliDaStampare
     Private Sub F_Elenco_da_Stampare_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        DGV1.AllowUserToAddRows = False   ' Impedisce di visualizzare l'ultima riga vuota 
 
     End Sub
     Sub Main(data As String)
@@ -343,13 +344,4 @@ Public Class F_Elenco_da_Stampare
 
     End Sub
 
-    Private Sub Button7_Click(sender As Object, e As EventArgs) Handles Button7.Click
-        Dim percorso = ini.Path_SCHEDE_DaStampare
-        Dim filename = "Poriva.json"
-
-        ' 3. Unisci tutto in un'unica variabile percorso completo
-        Dim percorsoCompleto As String = Path.Combine(percorso, filename)
-        JSON_SalvaStruttura(Gbl_foglio, percorsoCompleto)
-
-    End Sub
 End Class

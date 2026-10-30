@@ -124,6 +124,7 @@ Partial Class F_checklist
         AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
         ClientSize = New Size(390, 450)
+        ControlBox = False
         Controls.Add(ListBox2)
         Controls.Add(ListBox1)
         Controls.Add(Label4)

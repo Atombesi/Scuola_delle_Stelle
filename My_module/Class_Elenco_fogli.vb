@@ -11,7 +11,7 @@ Public Class Class_Elenco_fogli
         Dim trovato = False
         Dim sql As String = "SELECT 1 FROM GIORNALIERO WHERE DATA = @data LIMIT 1"
 
-        Using cn = DB.GetConnection_Bambino()
+        Using cn = MY_DB.GetConnection_Bambino()
             cn.Open()
             Try
                 Using cmd As New SqliteCommand(sql, cn)
@@ -47,7 +47,7 @@ Public Class Class_Elenco_fogli
 
         Dim lista As New List(Of Class_Elenco_fogli)
 
-        Using cn = DB.GetConnection_Bambino()
+        Using cn = MY_DB.GetConnection_Bambino()
 
             cn.Open()
 

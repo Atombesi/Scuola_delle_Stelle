@@ -280,45 +280,28 @@ Module Funzioni_comuni_2026
         End Using
     End Function
 
-    Public Sub APPEND_LOG_OLD(msg_LOG$, LOG_FILE$, Optional HDR As Boolean = False)
-        REM ===== Appendi messaggio  al log_file ==========
-        If LOG_FILE$ = "" Then Exit Sub
-        'Dim ch1% = FreeFile()
-        Dim a$ = ""
 
-        If Dir(LOG_FILE$) = "" Then Cycle_LOG(LOG_FILE$) ' se non esiste crea
-        'Open LOG_FILE$ For Append As #ch1%
-        Select Case HDR
-            Case True
-                If Gb_IsDebug Then
-                    a$ = "#Debug" + Format$(Now, "dd-MM-yyyy HH:mm") + "," + msg_LOG$ + vbCr
-                Else
-                    a$ = "#" + Format$(Now, "dd-MM-yyyy HH:mm") + "," + msg_LOG$ + vbCr
-                End If
-            Case False
-                a$ = msg_LOG$ + vbCr
-        End Select
-        'Print #ch1%, a$
-        'Close #ch1%
-        Try
-            IO.File.AppendAllText(LOG_FILE, a$ + vbCrLf)
-
-        Catch ex As Exception
-
-        End Try
-
-
-    End Sub
-    Public Sub APPEND_LOG(msg_LOG As String, LOG_FILE As String, Optional HDR As Boolean = False)
+    Public Sub APPEND_LOG(msg_LOG As String, LOG_FILE As String, Optional HDR As Boolean = False, Optional tipo As String = "")
         ' ===== Appendi messaggio al log_file ==========
         If String.IsNullOrEmpty(LOG_FILE) Then Exit Sub
 
         ' Se il file non esiste, invoca la routine per crearlo
         If Not IO.File.Exists(LOG_FILE) Then Cycle_LOG(LOG_FILE)
+        Dim lbx = ""
+        If tipo.ToUpper = "W" Then
+            lbx = "⚠️ "
+        ElseIf tipo.ToUpper = "E" Then
+            lbx = "❌ "
+        ElseIf tipo.ToUpper = "1" Then
+            lbx = "✅ "
+        ElseIf tipo.ToUpper = "I" Then
+            lbx = "ℹ️ "
+
+        End If
 
         Dim rigaLog As String = ""
         Dim dataFormattata As String = DateTime.Now.ToString("dd-MM-yyyy HH:mm")
-
+        msg_LOG = lbx + msg_LOG
         Select Case HDR
             Case True
                 If Gb_IsDebug Then
@@ -329,7 +312,6 @@ Module Funzioni_comuni_2026
             Case False
                 rigaLog = msg_LOG
         End Select
-
         Try
             ' AppendAllText aggiunge automaticamente il testo e gestisce l'apertura/chiusura del file.
             ' Aggiungiamo un solo vbCrLf alla fine della riga.

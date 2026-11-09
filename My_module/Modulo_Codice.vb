@@ -18,8 +18,8 @@ Imports DocumentFormat.OpenXml.Wordprocessing
 Imports Microsoft.Data.SqlClient
 Imports Microsoft.Data.Sqlite
 Imports OpenTK.Graphics.OpenGL
-Imports QRCoder
 Imports MyColor = System.Drawing.Color
+
 
 
 Public Structure Esportazione_dati_ELCAR
@@ -141,6 +141,7 @@ Public Module Modulo_Codice
         Public Path_SCHEDE_DaStampare As String
         Public Path_GRAFICI_DaStampare As String
         Public File_Log As String
+        Public Stampante_defaut As String
         Public Graph_interval As Integer ' Intervallo di default per i dati del grafico
         Public Perc_soglia_ok As Integer
         Public Numero_Totale_Risposte As Integer
@@ -194,6 +195,7 @@ Public Module Modulo_Codice
         Public doc_Esistente As Boolean 'True esiste gia il file docx
         Public Compilato As Boolean     'True il foglio risulta compilato
         Public DaStampare As Boolean    'True bisogna preparare il file docx
+        Public Color As Integer         ' colore di visualizzazione
         Public CP As List(Of Class_COMPORTAMENTI)
         Public ROUTINE As List(Of Class_ROUTINE)
     End Structure
@@ -298,6 +300,7 @@ Public Module Modulo_Codice
     Public Gbl_server_connected As Boolean
     Public Gbl_Elenco_Device As List(Of Class_DEVICE)
     Public Gbl_MioServer As Class_WebServerTablet
+    Public Gbl_versione As String = "1.0"
 
     ' --- VARIABILI DI STATO TABLET ---
     Public DispositiviInAttesa As New List(Of String)
@@ -536,15 +539,7 @@ Public Module Modulo_Codice
     End Function
 
 
-    Public Class DB
 
-        Public Shared ReadOnly ConnectionString As String =
-        "Server=.\SQLEXPRESS;Database=Scuola;Trusted_Connection=True;"
-        Public Shared Function GetConnection() As SqlConnection
-            Return New SqlConnection(ConnectionString)
-        End Function
-
-    End Class
 
     Function Costruisci_nome_foglio(ID_foglio, data, BAMBINO) As String
         Dim nomefoglio = data.ToString + "." + BAMBINO + "." + ID_foglio.ToString + ".DOCX"
@@ -630,6 +625,11 @@ Public Module Modulo_Codice
             ini.Numero_fogli_compilati = 0
         End If
 
+        y = "Nessuna"
+        ini.Stampante_defaut = ReadINIString(fileini, K, "Stampante Default", y)
+
+
+
         '------------------------------------------
         '--- PATH ---
         '------------------------------------------
@@ -711,7 +711,7 @@ Public Module Modulo_Codice
         ini.Modello_Grafico_CP_6 = ReadINIString(fileini, K, "Grafici CP Modello6 ", x)
 
 
-        x = dir_bar(y) + "Modello_Grafico_Totali_Giornaliero.xslx"
+        x = dir_bar(y) + "Modello_Grafico_Totali_Giornaliero.xlsx"
         ini.Modello_Grafico_TotaleGiornaliero = ReadINIString(fileini, K, "Modello Grafico Totale Giornaliero", x)
 
         x = dir_bar(y) + "Modello_Esportazione_dati.xslx"
@@ -780,79 +780,7 @@ Public Module Modulo_Codice
 
     End Function
 
-    Public Function GeneraQRCode_Senzabordo(testo As String, Optional pixelPerModulo As Integer = 10, Optional Spessorebordo As Integer = 1) As Bitmap
 
-        Using qrGenerator As New QRCodeGenerator()
-            Using qrCodeData As QRCodeData = qrGenerator.CreateQrCode(testo, QRCodeGenerator.ECCLevel.Q)
-                Using qrCode As New QRCode(qrCodeData)
-
-                    ' 1. Genera il QR senza il bordo della libreria (False)
-                    Using qrSenzaBordo As Bitmap = qrCode.GetGraphic(pixelPerModulo, MyColor.Black, MyColor.White, False)
-
-                        ' 2. Scegli lo spessore del tuo bordo personalizzato (es. 6 pixel)
-
-                        ' 3. Crea una nuova bitmap più grande per ospitare il bordo
-                        Dim qrConBordo As New Bitmap(qrSenzaBordo.Width + (Spessorebordo * 2), qrSenzaBordo.Height + (Spessorebordo * 2))
-
-                        ' 4. Disegna lo sfondo bianco e incolla il QR al centro
-                        Using g As Graphics = Graphics.FromImage(qrConBordo)
-                            g.Clear(MyColor.White) ' Colore del bordo
-                            g.DrawImage(qrSenzaBordo, Spessorebordo, Spessorebordo)
-                        End Using
-
-                        Return qrConBordo
-                    End Using
-
-                End Using
-            End Using
-        End Using
-    End Function
-
-    Function ROTATE(BMP As Image, Optional angolo As Integer = 90) As Image
-        'BMP = img
-        If angolo = 90 Then
-            BMP.RotateFlip(RotateFlipType.Rotate270FlipNone)
-        ElseIf angolo = 180 Then
-            BMP.RotateFlip(RotateFlipType.Rotate180FlipNone)
-        End If
-        Return BMP
-    End Function
-
-
-    Public Function RuotaImmagine(ByVal imgOrigine As Bitmap, ByVal angoloGradi As Single) As Bitmap
-        ' Calcola le nuove dimensioni per evitare che gli angoli vengano tagliati durante la rotazione
-        ' (Facoltativo: se l'angolo è minimo, es. < 2°, puoi mantenere le stesse dimensioni di imgOrigine)
-        Dim nuovaLarghezza As Integer = imgOrigine.Width
-        Dim nuovaAltezza As Integer = imgOrigine.Height
-
-        ' Crea una nuova bitmap vuota che conterrà l'immagine ruotata
-        Dim imgRuotata As New Bitmap(nuovaLarghezza, nuovaAltezza, imgOrigine.PixelFormat)
-
-        ' Imposta la stessa risoluzione DPI (fondamentale per le scansioni A4)
-        imgRuotata.SetResolution(imgOrigine.HorizontalResolution, imgOrigine.VerticalResolution)
-
-        ' Inizializza l'oggetto Graphics per disegnare sulla nuova bitmap
-        Using g As Graphics = Graphics.FromImage(imgRuotata)
-            ' Massima qualità di rendering (ideale per non perdere dettagli sui testi/QR code)
-            g.InterpolationMode = InterpolationMode.HighQualityBicubic
-            g.SmoothingMode = SmoothingMode.HighQuality
-            g.PixelOffsetMode = PixelOffsetMode.HighQuality
-
-            ' Sposta l'origine degli assi (0,0) esattamente al centro dell'immagine
-            g.TranslateTransform(nuovaLarghezza / 2, nuovaAltezza / 2)
-
-            ' Applica la rotazione dell'angolo desiderato (valori positivi = orario, negativi = antiorario)
-            g.RotateTransform(angoloGradi)
-
-            ' Riposiziona l'asse per disegnare l'immagine centrata rispetto al nuovo centro
-            g.TranslateTransform(-imgOrigine.Width / 2, -imgOrigine.Height / 2)
-
-            ' Disegna l'immagine originale applicando la trasformazione geometrica
-            g.DrawImage(imgOrigine, New Point(0, 0))
-        End Using
-
-        Return imgRuotata
-    End Function
     Function Crea_DB_Bimbo(db_filename) As Boolean
         If IO.File.Exists(db_filename) Then Return True
         Dim db_empty = ini.Modello_DB_Bambini
@@ -1455,7 +1383,7 @@ Public Module Modulo_Codice
         If modello = "" Then
             Call MsgBox("Non è stato trovato nessun modello utilizzabile per questi fogli")
             m = "Non è stato trovato nessun modello utilizzabile (N_elcar:" + nvoci_elcar.ToString + " N_RT:" + nvoci_RT.ToString
-            APPEND_LOG(m, ini.File_Log, True)
+            APPEND_LOG(m, ini.File_Log, True, "W")
 
             Exit Sub
         End If
@@ -1464,7 +1392,7 @@ Public Module Modulo_Codice
             m = "Il modello:" + vbCrLf + modello + vbCrLf + "NON è stato trovato"
             Call MsgBox(m, vbCritical + vbOKOnly, "MOdello non trovato")
             m = "Il file:" + modello + " non è stato trovato"
-            APPEND_LOG(m, ini.File_Log, True)
+            APPEND_LOG(m, ini.File_Log, True, "E")
             Exit Sub
         End If
 
@@ -1500,7 +1428,7 @@ Public Module Modulo_Codice
     End Function
 
 
-    Public Sub JSON_SalvaStruttura(foglio As Struct_foglio, percorsoFile As String)
+    Public Sub XXX_JSON_SalvaStruttura(foglio As Struct_foglio, percorsoFile As String)
         Dim Jfoglio = JSON_Caricavoce_da_foglio(foglio)
 
         Try
@@ -1569,8 +1497,8 @@ Public Module Modulo_Codice
         Try
 
             If Not Class_TODOLIST.Delete(ID_TODOLIST) Then
-                Dim m = "[Errore 009] TODOLIST Errore cancellazione record " + ID_TODOLIST.ToString
-                APPEND_LOG(m, ini.File_Log, True)
+                Dim m = "[009] TODOLIST Errore cancellazione record " + ID_TODOLIST.ToString
+                APPEND_LOG(m, ini.File_Log, True, "E")
                 Return False
             End If
 
@@ -1623,6 +1551,26 @@ Public Module Modulo_Codice
         Return info
     End Function
 
+    Public Function Comunica_Compilazione_annullata(ByVal idToDoList As Integer) As Boolean
+        If idToDoList = 0 Then
+            Dim m = "Annullamento Compilazione Foglio: " + Gbl_foglio.ID_foglio.ToString + ") di: " + Gbl_foglio.Bambino
+            APPEND_LOG(m, ini.File_Log, True, "1")
+
+        End If
+        Try
+            Dim passato = TODOLIST_rimuovi_Foglio_Compilato(idToDoList)
+            If passato Then
+                Dim m = "Annullamento Compilazione Foglio: " + Gbl_foglio.ID_foglio.ToString + ") di: " + Gbl_foglio.Bambino
+                APPEND_LOG(m, ini.File_Log, True, "1")
+            End If
+        Catch ex As Exception
+            Console.WriteLine("CRASH DURANTE IL SALVATAGGIO DEL JSON COMPILATO IN VB: " & ex.Message)
+            Return False
+        End Try
+    End Function
+
+
+
     Public Function SalvaFoglioCompilato_Json(ByVal messaggioRicevuto As String) As Boolean
         If String.IsNullOrWhiteSpace(messaggioRicevuto) Then Return False
 
@@ -1657,6 +1605,7 @@ Public Module Modulo_Codice
                     Console.WriteLine("⚠️ Errore: ID_Questionario o ID_foglio pari a zero. Salvataggio abortito.")
                     Return False
                 End If
+                '  "✅❌⚠️ℹ️"
 
                 ' 5. SALVATAGGIO REALE NEL DATABASE SQLITE DI WINDOWS
                 ' Qui invochiamo la tua routine industriale per sovrascrivere il foglio già esistente.
@@ -1670,30 +1619,26 @@ Public Module Modulo_Codice
                 foglio.RT = foglioCompilato.RT
                 foglio.VociDiUnFoglio = foglioCompilato.VociDiUnFoglio
                 foglio.Compilato = 1
-                Dim salvato = Foglio_Esistente_Aggiorna(foglio, dbBambino)
-                ' return (1) Nessun record salvato
-                ' return >1 Salvataggio parziale record
+
+                Dim salvato = MY_DB.Foglio_Esistente_Aggiorna_solo_Totali(foglio, dbBambino)
+
                 Dim salvataggiook = False
 
-                If salvato.OK Then       ' Salvataggio completo
+                If salvato.OK Then
                     ' Aggiorna anche lo stato del record generale nella tabella TODOLIST del PC Windows
                     Dim passato = TODOLIST_rimuovi_Foglio_Compilato(idTodoList)
                     Fogli_compilati_aggiungi_numero(1)
                     salvataggiook = True
-                Else
-                    Fogli_compilati_aggiungi_numero(1)
-                    Dim m = "[Errore 005] " + salvato.Err + "(" + foglio.ID_foglio.ToString + ") di: " + foglio.Bambino
-                    APPEND_LOG(m, ini.File_Log, True)
-                    salvataggiook = False
+                    Console.WriteLine("✅ Foglio ID " & idFoglio & " del bambino " & foglio.Bambino & " aggiornato nel DB di Windows.")
+                    Return True
                 End If
 
-                If salvataggiook Then
-                    Console.WriteLine("✅ SUCCESS: Foglio ID " & idTodoList & " del bambino " & foglio.Bambino & " aggiornato nel DB di Windows.")
-                    Return True
-                Else
-                    Console.WriteLine("❌ Errore durante la query di aggiornamento SQLite su Windows.")
-                    Return False
-                End If
+                '**** Nessun record salvato
+                Console.WriteLine("❌ Errore durante la query di aggiornamento SQLite su Windows: " & salvato.erroreSu)
+                Dim m = "[005] " + foglio.Bambino + "(" + salvato.erroreSu + ")"
+                APPEND_LOG(m, ini.File_Log, True, "W")
+                Return False
+
             End Using
 
         Catch ex As Exception
@@ -1701,57 +1646,8 @@ Public Module Modulo_Codice
             Return False
         End Try
     End Function
-    Function Foglio_Esistente_Aggiorna(foglio As Struct_foglio, dbbambino As String) As (OK As Boolean, Err As String)
-        '-- SALVO SOLO I TOTALI --
-        '-- Se sono qui devo essere sicuro che il foglio esista gia --
-        ' return (0) Salvataggio completo
-        ' return (-1) Nessun record salvato
-        ' return >0  Salvataggio parziale record
-
-        Dim CPcnt = 0, RTcnt = 0, ELCARcnt = 0, m = ""
-        Dim salvare_cp = True, salvare_rt = True, salvato = 0
-        Try
-            CPcnt = foglio.CP.Count
-            RTcnt = foglio.RT.Count
-            ELCARcnt = foglio.VociDiUnFoglio.Count
-        Catch ex As Exception
-            Return (False, "NESSUN RECORD SALVATO")
-        End Try
-        Dim ok_voci = True, ok_rt = True, Ok_CP = True, ok = True
-
-        '-- Registro nel GIORNALIERO del DB BAMBINO tutte le righe presenti -- 
-        For j = 0 To ELCARcnt - 1
-            If Not foglio.VociDiUnFoglio(j).Salva_totali(dbbambino) Then
-                ok_voci = False : ok = False
-            End If
-        Next
-
-        For j = 0 To CPcnt - 1
-            If Not foglio.CP(j).Salva_Totali(dbbambino) Then
-                Ok_CP = False : ok = False
-            End If
-        Next
 
 
-        '-- Registro nel GIORNALIERO_ROUTINE del DB BAMBINO tutte le righe della routine presenti -- 
-        For j = 0 To RTcnt - 1
-            If Not foglio.RT(j).Salva_totali(dbbambino) Then
-                ok_rt = False : ok = False
-            End If
-        Next
-
-        If ok Then Return (True, "SALVATAGGIO OK")
-
-        Dim x = ""
-        If Not ok_voci Then x = x + " [VOCI ELCAR]"
-        If Not ok_rt Then x = x + " [VOCI RT]"
-        If Not Ok_CP Then x = x + " [VOCI CP]"
-        x = "Problemi salvataggio di:" + x
-        Return (False, x)
-
-
-
-    End Function
 
     Public Function Esportazione_ottieni_tutti_elcar(dbBambino, Optional solocompilati = True) As List(Of Esportazione_dati_ELCAR)
         Dim dt As DataTable = Class_GIORNALIERO.OttieniTuttiIRecordGiornalieri(dbBambino, solocompilati)
@@ -1847,4 +1743,133 @@ Public Module Modulo_Codice
 
 
     End Function
+
+    Public Sub PopolaAlberoElcar(treeView As TreeView, stringaConnessione As String)
+        treeView.Nodes.Clear()
+
+        Dim listaElementi As New List(Of ElementoAlbero)()
+        Dim dizionarioNodi As New Dictionary(Of String, TreeNode)()
+
+        Dim query As String = "SELECT CODICE AS CodiceNodo, NULL AS CodicePadre, TESTO FROM ELCAR " &
+                          "UNION ALL " &
+                          "SELECT (CODICE_ELCAR || '.' || CODICE_VOCE), CODICE_ELCAR, TESTO FROM ELCAR_VOCI " &
+                          "UNION ALL " &
+                          "SELECT (ELCAR || '.' || ID_SUB), ELCAR, TESTO FROM ELCAR_VOCI_SUB WHERE Deleted = 0 OR Deleted IS NULL;"
+        '"SELECT (ELCAR || '.' || ID_SUB), ELCAR, TESTO FROM ELCAR_VOCI_SUB WHERE Deleted = 0 OR Deleted IS NULL " &
+        '"UNION ALL " &
+        '"SELECT (ELCAR || '.' || ID_SUB), ELCAR, TESTO FROM ELCAR_VOCI_SUB2 WHERE Deleted = 0 OR Deleted IS NULL;"
+
+        Using conn As New SqliteConnection(stringaConnessione)
+            Using cmd As New SqliteCommand(query, conn)
+                Try
+                    conn.Open()
+                    Using reader As SqliteDataReader = cmd.ExecuteReader()
+                        While reader.Read()
+                            Dim elem As New ElementoAlbero With {
+                            .CodiceNodo = reader("CodiceNodo").ToString().Trim(),
+                            .CodicePadre = If(reader("CodicePadre") Is DBNull.Value, String.Empty, reader("CodicePadre").ToString().Trim()),
+                            .Testo = reader("TESTO").ToString()
+                        }
+                            listaElementi.Add(elem)
+                        End While
+                    End Using
+                Catch ex As Exception
+                    MessageBox.Show("Errore di lettura: " & ex.Message, "Errore", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                    Exit Sub
+                End Try
+            End Using
+        End Using
+
+        ' --- FASE DI COSTRUZIONE E ORDINAMENTO ALBERO ---
+        treeView.BeginUpdate()
+
+        ' 1. Dividiamo le Radici (Livello 1) dai Figli (Livelli 2, 3, 4)
+        Dim nodiRadice = listaElementi.Where(Function(x) String.IsNullOrEmpty(x.CodicePadre)).ToList()
+        Dim nodiFigli = listaElementi.Where(Function(x) Not String.IsNullOrEmpty(x.CodicePadre)).ToList()
+
+        ' 2. Ordiniamo le Radici convertendo i numeri romani
+        Dim nodiRadiceOrdinati = nodiRadice.OrderBy(Function(x) EstraiChiaveOrdinamentoRomana(x.CodiceNodo)).ToList()
+
+        ' 3. Inseriamo le Radici evitando duplicati
+        For Each radice In nodiRadiceOrdinati
+            If Not dizionarioNodi.ContainsKey(radice.CodiceNodo) Then
+                Dim nuovoNodo As New TreeNode(radice.CodiceNodo & " - " & radice.Testo) With {.Name = radice.CodiceNodo}
+                treeView.Nodes.Add(nuovoNodo)
+                dizionarioNodi.Add(radice.CodiceNodo, nuovoNodo)
+            End If
+        Next
+
+        ' 4. ORDINAMENTO CRUCIALE PER I FIGLI:
+        ' Ordiniamo prima in base al numero di punti '.' presenti nel codice (Livello 2 ha 1 punto, Livello 3 ha 2 punti, Livello 4 ha 3 punti).
+        ' In questo modo i padri di livello 2 e 3 verranno SEMPRE inseriti prima dei loro rispettivi figli di livello 3 e 4.
+        ' Successivamente ordiniamo alfabeticamente/numericamente per il codice.
+        Dim nodiFigliOrdinati = nodiFigli.
+        OrderBy(Function(x) x.CodiceNodo.Count(Function(c) c = "."c)).
+        ThenBy(Function(x) x.CodiceNodo.Length).
+        ThenBy(Function(x) x.CodiceNodo).
+        ToList()
+
+        ' 5. Inseriamo i figli associandoli al rispettivo padre con controllo duplicati incorporato
+        For Each figlio In nodiFigliOrdinati
+            ' Se il nodo figlio è già stato inserito (duplicato nel DB), lo saltiamo per evitare l'errore ArgumentException
+            If dizionarioNodi.ContainsKey(figlio.CodiceNodo) Then Continue For
+
+            Dim nuovoNodo As New TreeNode(figlio.CodiceNodo & " - " & figlio.Testo) With {.Name = figlio.CodiceNodo}
+
+            If dizionarioNodi.ContainsKey(figlio.CodicePadre) Then
+                ' Associa il nodo al suo vero padre gerarchico
+                dizionarioNodi(figlio.CodicePadre).Nodes.Add(nuovoNodo)
+                dizionarioNodi.Add(figlio.CodiceNodo, nuovoNodo)
+            Else
+                ' Se il padre manca temporaneamente o è orfano, lo mette alla radice per sicurezza
+                treeView.Nodes.Add(nuovoNodo)
+                dizionarioNodi.Add(figlio.CodiceNodo, nuovoNodo)
+            End If
+        Next
+
+        treeView.EndUpdate()
+    End Sub
+
+    Private Class ElementoAlbero
+        Public Property CodiceNodo As String
+        Public Property CodicePadre As String
+        Public Property Testo As String
+    End Class
+
+    Private Function EstraiChiaveOrdinamentoRomana(codice As String) As String
+        If String.IsNullOrEmpty(codice) Then Return ""
+        Dim parti As String() = codice.Split("."c)
+        Dim parteRomana As String = parti(0).ToUpper()
+        Dim valoreArabo As Integer = RomanoInArabo(parteRomana)
+
+        If valoreArabo > 0 Then
+            Dim restoCodice As String = If(parti.Length > 1, "." & parti(1), "")
+            Return valoreArabo.ToString("D4") & restoCodice
+        End If
+        Return codice
+    End Function
+
+    Private Function RomanoInArabo(romano As String) As Integer
+        Dim dizionarioRomano As New Dictionary(Of Char, Integer) From {
+        {"I"c, 1}, {"V"c, 5}, {"X"c, 10}, {"L"c, 50}, {"C"c, 100}, {"D"c, 500}, {"M"c, 1000}
+    }
+        Dim totale As Integer = 0
+        Dim valorePrecedente As Integer = 0
+        For i As Integer = romano.Length - 1 To 0 Step -1
+            Dim carattereCorrente As Char = romano(i)
+            If dizionarioRomano.ContainsKey(carattereCorrente) Then
+                Dim valoreCorrente As Integer = dizionarioRomano(carattereCorrente)
+                If valoreCorrente < valorePrecedente Then
+                    totale -= valoreCorrente
+                Else
+                    totale += valoreCorrente
+                End If
+                valorePrecedente = valoreCorrente
+            Else
+                Return 0
+            End If
+        Next
+        Return totale
+    End Function
+
 End Module

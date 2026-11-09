@@ -16,7 +16,7 @@ Public Class Class_DEVICE
         ' Inizializza la lista che conterrà i risultati trovati
         Dim listaRisultati As New List(Of Class_DEVICE)()
         Dim sql_string = ""
-        Using cn = DB.GetConnection_Scuoladellestelle()
+        Using cn = MY_DB.GetConnection_Scuoladellestelle()
 
             sql_string = "SELECT * FROM DEVICE ORDER BY ID"
 
@@ -52,7 +52,7 @@ Public Class Class_DEVICE
 
 
         Try
-            Using cn = DB.GetConnection_Scuoladellestelle()
+            Using cn = MY_DB.GetConnection_Scuoladellestelle()
                 If cn.State <> ConnectionState.Open Then cn.Open()
 
                 Dim sql As String = "DELETE FROM DEVICE WHERE ID = @ID;"
@@ -66,14 +66,14 @@ Public Class Class_DEVICE
             Return True
         Catch ex As SqliteException
             ' Se il database è bloccato da DB Browser, entrerà qui
-            Dim m = "[Errore 015] Impossibile eliminare. Il database potrebbe essere bloccato da un altro programma: " & ex.Message
-            APPEND_LOG(m, ini.File_Log, True)
+            Dim m = "[015] Impossibile eliminare. Il database potrebbe essere bloccato da un altro programma: " & ex.Message
+            APPEND_LOG(m, ini.File_Log, True, "E")
             Return False
         End Try
         Return True
     End Function
     Public Sub Save()
-        Using cn = DB.GetConnection_Scuoladellestelle()
+        Using cn = MY_DB.GetConnection_Scuoladellestelle()
             ' Assicurati di aprire la connessione se GetConnection non lo fa già in automatico
             If cn.State <> ConnectionState.Open Then cn.Open()
 
@@ -124,7 +124,7 @@ Public Class Class_DEVICE
         Dim abilitato = -1
 
         Try
-            Using cn = DB.GetConnection_Scuoladellestelle()
+            Using cn = MY_DB.GetConnection_Scuoladellestelle()
                 If cn.State <> ConnectionState.Open Then cn.Open()
 
                 Dim queryRilevamento As String = "SELECT NOME, ENABLED FROM DEVICE WHERE MAC = @mac"
@@ -156,7 +156,7 @@ Public Class Class_DEVICE
     End Function
     Public Shared Function Load_by_MAC(MAC) As Class_DEVICE
         Try
-            Using cn = DB.GetConnection_Scuoladellestelle()
+            Using cn = MY_DB.GetConnection_Scuoladellestelle()
                 If cn.State <> ConnectionState.Open Then cn.Open()
 
                 Dim queryRilevamento As String = "SELECT * FROM DEVICE WHERE MAC = @mac"
@@ -187,7 +187,7 @@ Public Class Class_DEVICE
     End Function
     Public Shared Function Load_by_ID(ID) As Class_DEVICE
         Try
-            Using cn = DB.GetConnection_Scuoladellestelle()
+            Using cn = MY_DB.GetConnection_Scuoladellestelle()
                 If cn.State <> ConnectionState.Open Then cn.Open()
 
                 Dim queryRilevamento As String = "SELECT * FROM DEVICE WHERE ID = @ID"
@@ -220,7 +220,7 @@ Public Class Class_DEVICE
     Public Shared Function Trova_dispositivo(deviceId As String) As (Esito As Boolean, Devices As Class_DEVICE)
 
         Try
-            Using cn = DB.GetConnection_Scuoladellestelle()
+            Using cn = MY_DB.GetConnection_Scuoladellestelle()
                 If cn.State <> ConnectionState.Open Then cn.Open()
 
                 Dim queryRilevamento As String = "SELECT * FROM DEVICE WHERE MAC = @mac"
@@ -271,7 +271,7 @@ Public Class Class_DEVICE
         Dim queryInserimento As String = "INSERT INTO DEVICE (NOME, ENABLED, MAC, STATO) VALUES (@nome, 0, @mac, @stato)"
 
         Try
-            Using cn = DB.GetConnection_Scuoladellestelle()
+            Using cn = MY_DB.GetConnection_Scuoladellestelle()
                 If cn.State <> ConnectionState.Open Then cn.Open()
 
                 Using cmdInsert As New SqliteCommand(queryInserimento, cn)

@@ -496,9 +496,9 @@ Partial Class F_Foglio_esistente
         Label5.BackColor = Color.FromArgb(CByte(192), CByte(255), CByte(192))
         Label5.BorderStyle = BorderStyle.Fixed3D
         Label5.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
-        Label5.Location = New Point(209, 3)
+        Label5.Location = New Point(213, 3)
         Label5.Name = "Label5"
-        Label5.Size = New Size(205, 17)
+        Label5.Size = New Size(202, 17)
         Label5.TabIndex = 27
         Label5.Text = "Foglio compilato"
         Label5.TextAlign = ContentAlignment.MiddleCenter
@@ -509,7 +509,7 @@ Partial Class F_Foglio_esistente
         Label6.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
         Label6.Location = New Point(11, 3)
         Label6.Name = "Label6"
-        Label6.Size = New Size(188, 17)
+        Label6.Size = New Size(194, 17)
         Label6.TabIndex = 28
         Label6.Text = "Pinco Pallino giuseppe"
         Label6.TextAlign = ContentAlignment.MiddleCenter
@@ -739,7 +739,7 @@ Partial Class F_Foglio_esistente
         TabPage1.Controls.Add(Label24)
         TabPage1.Location = New Point(4, 24)
         TabPage1.Name = "TabPage1"
-        TabPage1.Padding = New Padding(3, 3, 3, 3)
+        TabPage1.Padding = New Padding(3)
         TabPage1.Size = New Size(242, 57)
         TabPage1.TabIndex = 0
         TabPage1.Text = "Option"
@@ -755,7 +755,7 @@ Partial Class F_Foglio_esistente
         TabPage2.Controls.Add(DateTimePicker1)
         TabPage2.Location = New Point(4, 24)
         TabPage2.Name = "TabPage2"
-        TabPage2.Padding = New Padding(3, 3, 3, 3)
+        TabPage2.Padding = New Padding(3)
         TabPage2.Size = New Size(242, 57)
         TabPage2.TabIndex = 1
         TabPage2.Text = "More..."
@@ -1125,7 +1125,7 @@ Partial Class F_Foglio_esistente
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
-        ClientSize = New Size(785, 561)
+        ClientSize = New Size(785, 566)
         Controls.Add(Panel1)
         Controls.Add(Panel_risposte)
         Controls.Add(GroupBox_RT)
@@ -1143,6 +1143,7 @@ Partial Class F_Foglio_esistente
         Controls.Add(GroupBox4)
         Controls.Add(Label18)
         Name = "F_Foglio_esistente"
+        StartPosition = FormStartPosition.CenterScreen
         Text = "Fogli_Esistenti"
         GroupBox4.ResumeLayout(False)
         GroupBox4.PerformLayout()

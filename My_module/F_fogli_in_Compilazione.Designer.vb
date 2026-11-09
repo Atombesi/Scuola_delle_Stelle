@@ -89,6 +89,8 @@ Partial Class F_fogli_in_Compilazione
         TSM_Elimina_foglio = New ToolStripMenuItem()
         Button4 = New Button()
         tp1 = New ToolTip(components)
+        Label17 = New Label()
+        Label18 = New Label()
         CType(dgv1, ComponentModel.ISupportInitialize).BeginInit()
         GroupBox1.SuspendLayout()
         GroupBox2.SuspendLayout()
@@ -166,6 +168,8 @@ Partial Class F_fogli_in_Compilazione
         ' 
         ' GroupBox1
         ' 
+        GroupBox1.Controls.Add(Label17)
+        GroupBox1.Controls.Add(Label18)
         GroupBox1.Controls.Add(Label4)
         GroupBox1.Controls.Add(Label3)
         GroupBox1.Controls.Add(Label2)
@@ -700,6 +704,27 @@ Partial Class F_fogli_in_Compilazione
         Button4.Text = "Close"
         Button4.UseVisualStyleBackColor = False
         ' 
+        ' Label17
+        ' 
+        Label17.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
+        Label17.ImageAlign = ContentAlignment.MiddleLeft
+        Label17.ImageIndex = 3
+        Label17.Location = New Point(474, 16)
+        Label17.Name = "Label17"
+        Label17.Size = New Size(24, 20)
+        Label17.TabIndex = 6
+        Label17.Text = "0"
+        Label17.TextAlign = ContentAlignment.MiddleLeft
+        ' 
+        ' Label18
+        ' 
+        Label18.AutoSize = True
+        Label18.Location = New Point(343, 19)
+        Label18.Name = "Label18"
+        Label18.Size = New Size(129, 15)
+        Label18.TabIndex = 5
+        Label18.Text = "N. fogli compilati oggi:"
+        ' 
         ' F_fogli_in_Compilazione
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
@@ -796,4 +821,6 @@ Partial Class F_fogli_in_Compilazione
     Friend WithEvents Column9 As DataGridViewTextBoxColumn
     Friend WithEvents Column13 As DataGridViewTextBoxColumn
     Friend WithEvents tp1 As ToolTip
+    Friend WithEvents Label17 As Label
+    Friend WithEvents Label18 As Label
 End Class

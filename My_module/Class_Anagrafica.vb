@@ -18,7 +18,7 @@ Public Class Class_ANAGRAFICA
 
     Public Sub Save()
 
-        Using cn = DB.GetConnection_Scuoladellestelle()
+        Using cn = MY_DB.GetConnection_Scuoladellestelle()
             If ID = 0 Then
                 Dim sql As String =
                     "INSERT INTO ANAGRAFICA  (Nome,Cognome,DAta_nascita,Data_Creazione,Nik,DBname,Attivo,ASSENTE) 
@@ -83,7 +83,7 @@ Public Class Class_ANAGRAFICA
         End Get
     End Property
     Public Shared Function Load(id As Integer) As Class_ANAGRAFICA
-        Using cn = DB.GetConnection_Scuoladellestelle()
+        Using cn = MY_DB.GetConnection_Scuoladellestelle()
 
             Dim sql As String =
             "SELECT ID, Nome, Cognome, DAta_nascita, Data_Creazione, Nik, DBname, Attivo, Assente " &
@@ -127,7 +127,7 @@ Public Class Class_ANAGRAFICA
         ' Inizializza la lista che conterrà i risultati trovati
         Dim listaRisultati As New List(Of Class_ANAGRAFICA)()
 
-        Using cn = DB.GetConnection_Scuoladellestelle()
+        Using cn = MY_DB.GetConnection_Scuoladellestelle()
 
             ' Usa l'operatore LIKE per cercare corrispondenze parziali
             Dim sql As String =
@@ -176,7 +176,7 @@ Public Class Class_ANAGRAFICA
         Dim listaTabelle As New List(Of String)()
 
         Try
-            Using cn = DB.GetConnection_Scuoladellestelle()
+            Using cn = MY_DB.GetConnection_Scuoladellestelle()
                 ' Query di sistema SQLite per elencare tutte le tabelle utente
                 Dim sql As String = "SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%' ORDER BY name;"
 
@@ -203,7 +203,7 @@ Public Class Class_ANAGRAFICA
         If InStr(testoCercato, ".DB") > 0 Then
             testoCercato = Strings.Left(testoCercato, Len(testoCercato) - 3)
         End If
-        Using cn = DB.GetConnection_Scuoladellestelle()
+        Using cn = MY_DB.GetConnection_Scuoladellestelle()
 
             ' Usa l'operatore LIKE per cercare corrispondenze parziali
             Dim sql As String =
@@ -245,7 +245,7 @@ Public Class Class_ANAGRAFICA
     Public Shared Function Return_DBNAME(ID_bambino As Integer) As String
         ' Inizializza la lista che conterrà i risultati trovati
 
-        Using cn = DB.GetConnection_Scuoladellestelle()
+        Using cn = MY_DB.GetConnection_Scuoladellestelle()
 
             ' Usa l'operatore LIKE per cercare corrispondenze parziali
             Dim sql As String =

@@ -1,6 +1,7 @@
-﻿Imports DocumentFormat.OpenXml.Spreadsheet
+﻿Imports System.Collections.Generic
+Imports DocumentFormat.OpenXml.Spreadsheet
+Imports Microsoft.Data
 Imports Microsoft.Data.Sqlite
-Imports System.Collections.Generic
 Public Class Class_GIORNALIERO
     Public Property ID As Integer
     Public Property ID_FOGLIO As Integer
@@ -28,7 +29,7 @@ Public Class Class_GIORNALIERO
 
     Public Shared Function Load(id As Integer) As Class_GIORNALIERO
 
-        Using cn = DB.GetConnection_Bambino()
+        Using cn = MY_DB.GetConnection_Bambino()
 
 
             Dim sql As String =
@@ -61,7 +62,7 @@ Public Class Class_GIORNALIERO
     End Function
     Public Shared Function CercaPerCodice(testoCercato As String) As List(Of Class_GIORNALIERO)
         Dim listaRisultati As New List(Of Class_GIORNALIERO)()
-        Using cn = DB.GetConnection_Bambino()
+        Using cn = MY_DB.GetConnection_Bambino()
 
             ' Usa l'operatore LIKE per cercare corrispondenze parziali
             Dim sql As String =
@@ -116,7 +117,7 @@ Public Class Class_GIORNALIERO
         Else
             sql = "SELECT MAX(CAST(ID_FOGLIO AS INTEGER)) FROM GIORNALIERO "
         End If
-        Using cn = DB.GetConnection_Bambino
+        Using cn = MY_DB.GetConnection_Bambino
             ' Applica il filtro WHERE sulla colonna ELCAR e converte ID_SUB in INTEGER per il calcolo del MAX
 
             Using cmd As New SqliteCommand(sql, cn)
@@ -131,7 +132,7 @@ Public Class Class_GIORNALIERO
     End Function
 
     Public Function Salva() As Boolean
-        Using cn = DB.GetConnection_Bambino
+        Using cn = MY_DB.GetConnection_Bambino
             cn.Open()
             Dim sql As String = ""
 
@@ -192,40 +193,88 @@ Public Class Class_GIORNALIERO
         End Using
         Return Me.ID
     End Function
-    Public Function Salva_totali(db_bambino) As Boolean
-        Using cn = DB.GetConnection_Bambino(db_bambino)
-            cn.Open()
-            Dim sql As String = ""
+    Public Function Salva_nuovo(cn As SqliteConnection, trans As SqliteTransaction) As Boolean
+        Dim sql As String = ""
 
-            ' Determina se inserire un nuovo record o aggiornare quello esistente
-            If Me.ID = 0 Then Return False
+        If Me.ID = 0 Then
+            sql = "INSERT INTO GIORNALIERO (ID_FOGLIO, DATA, VALUTATIVO, TUTTELERISPOSTE, Codice, Testo, " &
+                  "TOT1_POS, TOT1_NEG, TOT1_PROMPT, TOT1,TOT2_POS, TOT2_NEG, TOT2_PROMPT, TOT2, COMPILATO, TERMINE) " &
+                  "VALUES (@ID_FOGLIO, @DATA, @VALUTATIVO, @TUTTELERISPOSTE, @Codice, @Testo, " &
+                  "@TOT1_POS, @TOT1_NEG, @TOT1_PROMPT, @TOT1,@TOT2_POS, @TOT2_NEG, @TOT2_PROMPT, @TOT2, @COMPILATO, @TERMINE); "
+            ' Nota: se ti serve recuperare l'ID inserito per i record figli, dovresti usare ExecuteScalar() con last_insert_rowid()
+        Else
             sql = "UPDATE GIORNALIERO SET " &
+                  "ID_FOGLIO = @ID_FOGLIO, DATA = @DATA, VALUTATIVO = @VALUTATIVO, " &
+                  "TUTTELERISPOSTE = @TUTTELERISPOSTE, Codice = @Codice, Testo = @Testo, " &
+                  "TOT1_POS = @TOT1_POS, TOT1_NEG = @TOT1_NEG, TOT1_PROMPT = @TOT1_PROMPT,TOT1 = @TOT1, " &
+                  "TOT2_POS = @TOT2_POS, TOT2_NEG = @TOT2_NEG, TOT2_PROMPT = @TOT2_PROMPT,TOT2 = @TOT2, " &
+                  "COMPILATO = @COMPILATO, TERMINE = @TERMINE " &
+                  "WHERE ID = @ID;"
+        End If
+
+        Using cmd As New SqliteCommand(sql, cn)
+            ' <<< ECCO LA CORREZIONE FONDAMENTALE >>>
+            cmd.Transaction = trans
+
+            ' Assegnazione dei parametri
+            cmd.Parameters.AddWithValue("@ID_FOGLIO", Me.ID_FOGLIO)
+            cmd.Parameters.AddWithValue("@DATA", Me.DATA)
+            cmd.Parameters.AddWithValue("@VALUTATIVO", If(Me.VALUTATIVO, 1, 0))
+            cmd.Parameters.AddWithValue("@TUTTELERISPOSTE", If(Me.TUTTELERISPOSTE, 1, 0))
+            cmd.Parameters.AddWithValue("@Codice", Me.Codice)
+            cmd.Parameters.AddWithValue("@Testo", Me.Testo)
+            cmd.Parameters.AddWithValue("@TOT1_POS", Me.TOT1_POS)
+            cmd.Parameters.AddWithValue("@TOT1_NEG", Me.TOT1_NEG)
+            cmd.Parameters.AddWithValue("@TOT1_PROMPT", Me.TOT1_PROMPT)
+            cmd.Parameters.AddWithValue("@TOT1", Me.TOT1)
+            cmd.Parameters.AddWithValue("@TOT2_POS", Me.TOT2_POS)
+            cmd.Parameters.AddWithValue("@TOT2_NEG", Me.TOT2_NEG)
+            cmd.Parameters.AddWithValue("@TOT2_PROMPT", Me.TOT2_PROMPT)
+            cmd.Parameters.AddWithValue("@TOT2", Me.TOT2)
+            cmd.Parameters.AddWithValue("@COMPILATO", If(Me.COMPILATO, 1, 0))
+            cmd.Parameters.AddWithValue("@TERMINE", If(Me.TERMINE, 1, 0))
+
+            If Me.ID <> 0 Then
+                cmd.Parameters.AddWithValue("@ID", Me.ID)
+            End If
+
+            ' Eseguiamo il comando sotto transazione
+            cmd.ExecuteNonQuery()
+        End Using
+
+        Return True
+    End Function
+
+    Public Function Salva_Totali(cn As SqliteConnection, trans As SqliteTransaction) As Boolean
+        ' Rimosso il vecchio "Using cn ... cn.Open()" perché la connessione arriva già aperta
+
+        If Me.ID = 0 Then Return False
+
+        Dim Sql = "UPDATE GIORNALIERO SET " &
                       "TOT1_POS = @TOT1_POS, TOT1_NEG = @TOT1_NEG, TOT1_PROMPT = @TOT1_PROMPT,TOT1 = @TOT1, " &
                       "TOT2_POS = @TOT2_POS, TOT2_NEG = @TOT2_NEG, TOT2_PROMPT = @TOT2_PROMPT,TOT2 = @TOT2, " &
                       "COMPILATO = @COMPILATO WHERE ID = @ID;"
 
-            Using cmd As New SqliteCommand(sql, cn)
-                Try
-                    ' Assegnazione dei parametri comuni a entrambe le query
-                    cmd.Parameters.AddWithValue("@TOT1_POS", Me.TOT1_POS)
-                    cmd.Parameters.AddWithValue("@TOT1_NEG", Me.TOT1_NEG)
-                    cmd.Parameters.AddWithValue("@TOT1_PROMPT", Me.TOT1_PROMPT)
-                    cmd.Parameters.AddWithValue("@TOT1", Me.TOT1)
-                    cmd.Parameters.AddWithValue("@TOT2_POS", Me.TOT2_POS)
-                    cmd.Parameters.AddWithValue("@TOT2_NEG", Me.TOT2_NEG)
-                    cmd.Parameters.AddWithValue("@TOT2_PROMPT", Me.TOT2_PROMPT)
-                    cmd.Parameters.AddWithValue("@TOT2", Me.TOT2)
-                    cmd.Parameters.AddWithValue("@COMPILATO", If(Me.COMPILATO, 1, 0))
-
-                Catch ex As Exception
-                    Return -1
-                End Try
-                ' Aggiunge il parametro ID ed esegue l'aggiornamento
+        ' Passiamo sia la connessione "cn" che la transazione "trans" al comando
+        Using cmd As New SqliteCommand(Sql, cn, trans)
+            Try
+                cmd.Parameters.AddWithValue("@TOT1_POS", Me.TOT1_POS)
+                cmd.Parameters.AddWithValue("@TOT1_NEG", Me.TOT1_NEG)
+                cmd.Parameters.AddWithValue("@TOT1_PROMPT", Me.TOT1_PROMPT)
+                cmd.Parameters.AddWithValue("@TOT1", Me.TOT1)
+                cmd.Parameters.AddWithValue("@TOT2_POS", Me.TOT2_POS)
+                cmd.Parameters.AddWithValue("@TOT2_NEG", Me.TOT2_NEG)
+                cmd.Parameters.AddWithValue("@TOT2_PROMPT", Me.TOT2_PROMPT)
+                cmd.Parameters.AddWithValue("@TOT2", Me.TOT2)
+                cmd.Parameters.AddWithValue("@COMPILATO", If(Me.COMPILATO, 1, 0))
                 cmd.Parameters.AddWithValue("@ID", Me.ID)
                 cmd.ExecuteNonQuery()
-            End Using
+                Return True ' Ritorna True se l'esecuzione va a buon fine
+            Catch ex As Exception
+                ' Logga l'errore se necessario, ma ritorna False per far scattare il Rollback nel ciclo principale
+                Return False
+            End Try
         End Using
-        Return Me.ID
     End Function
 
     Public Shared Function Carica_Foglio(idFoglio As Integer) As List(Of Class_GIORNALIERO)
@@ -234,7 +283,7 @@ Public Class Class_GIORNALIERO
 
         Dim sql As String = "SELECT * FROM GIORNALIERO WHERE ID_Foglio = @ID_Foglio ORDER BY ID"
         Try
-            Using cn = DB.GetConnection_Bambino()
+            Using cn = MY_DB.GetConnection_Bambino()
                 ' Controlla lo stato della connessione prima di aprirla
                 If cn.State <> ConnectionState.Open Then cn.Open()
 
@@ -295,7 +344,7 @@ Public Class Class_GIORNALIERO
         WHERE (SUBSTR(DATA, 7, 4) || '-' || SUBSTR(DATA, 4, 2) || '-' || SUBSTR(DATA, 1, 2)) 
         BETWEEN @DataInizio AND @DataFine 
         ORDER BY Codice, DATA"
-        Using cn = DB.GetConnection_Bambino()
+        Using cn = MY_DB.GetConnection_Bambino()
 
             Using cmd As New SqliteCommand(query, cn)
                 cmd.Parameters.AddWithValue("@DataInizio", data1.ToString("yyyy-MM-dd"))
@@ -323,7 +372,7 @@ Public Class Class_GIORNALIERO
             query = "SELECT * FROM Giornaliero WHERE CODICE = @codice ORDER BY SUBSTR(DATA, 7, 4) || '-' || SUBSTR(DATA, 4, 2) || '-' || SUBSTR(DATA, 1, 2) ASC"
         End If
 
-        Using cn = DB.GetConnection_Bambino()
+        Using cn = MY_DB.GetConnection_Bambino()
 
             Using cmd As New SqliteCommand(query, cn)
                 ' Aggiungiamo il parametro in modo sicuro
@@ -352,7 +401,7 @@ Public Class Class_GIORNALIERO
         End If
 
 
-        Using cn = DB.GetConnection_Bambino(dbBambino)
+        Using cn = MY_DB.GetConnection_Bambino(dbBambino)
             Using cmd As New SqliteCommand(query, cn)
                 Using reader As SqliteDataReader = cmd.ExecuteReader()
                     ' Carica tutti i record estratti all'interno della DataTable
@@ -373,9 +422,9 @@ Public Class Class_GIORNALIERO
         Else
             Query = "SELECT * FROM Giornaliero ORDER BY SUBSTR(DATA, 7, 4) || '-' || SUBSTR(DATA, 4, 2) || '-' || SUBSTR(DATA, 1, 2) ASC"
         End If
-        Using cn = DB.GetConnection_Bambino()
+        Using cn = MY_DB.GetConnection_Bambino()
 
-            Using cmd As New SqliteCommand(query, cn)
+            Using cmd As New SqliteCommand(Query, cn)
                 ' Aggiungiamo il parametro in modo sicuro
                 Try
                     Using reader As SqliteDataReader = cmd.ExecuteReader()
@@ -383,7 +432,7 @@ Public Class Class_GIORNALIERO
                     End Using
                 Catch ex As Exception
                     Dim m = "Errore nell'apertura della query in OttieniRecordOrderbydata (" + cn.ConnectionString + ")"
-                    Call APPEND_LOG(m, GbL_Logfile, True)
+                    Call APPEND_LOG(m, GbL_Logfile, True, "E")
                     'm = "Errore nell'esecuzione della query  in OttieniRecordOrderbydata:" + vbCrLf + "in: " + cn.ConnectionString
                     'Call MsgBox(m, vbOK + vbCritical)
                 End Try
@@ -399,7 +448,7 @@ Public Class Class_GIORNALIERO
 
         Dim dt As New DataTable()
         Dim query As String = "SELECT * FROM Giornaliero GROUP BY Codice ORDER BY " + sortmode + " ASC"
-        Using cn = DB.GetConnection_Bambino()
+        Using cn = MY_DB.GetConnection_Bambino()
             Using cmd As New SqliteCommand(query, cn)
                 Using reader As SqliteDataReader = cmd.ExecuteReader()
                     dt.Load(reader)
@@ -426,7 +475,7 @@ Public Class Class_GIORNALIERO
                       "WHERE COMPILATO = 0 " &
                       "GROUP BY ID_FOGLIO " &
                       "ORDER BY ID_FOGLIO DESC;"
-        Using cn = DB.GetConnection_Bambino()
+        Using cn = MY_DB.GetConnection_Bambino()
             Using cmd As New SqliteCommand(query, cn)
                 ' Esegui il comando SQLite...
                 Using reader As SqliteDataReader = cmd.ExecuteReader()
@@ -466,7 +515,7 @@ Public Class Class_GIORNALIERO
 
         End If
 
-        Using cn = DB.GetConnection_Bambino()
+        Using cn = MY_DB.GetConnection_Bambino()
             Using cmd As New SqliteCommand(query, cn)
                 ' Esegui il comando SQLite...
                 Using reader As SqliteDataReader = cmd.ExecuteReader()
@@ -497,7 +546,7 @@ Public Class Class_GIORNALIERO
                       "FROM GIORNALIERO " &
                       "GROUP BY ID_foglio"
 
-        Using cn = DB.GetConnection_Bambino(DBBAMNINO)
+        Using cn = MY_DB.GetConnection_Bambino(DBBAMNINO)
             Using cmd As New SqliteCommand(query, cn)
                 ' Esegui il comando SQLite...
                 Using reader As SqliteDataReader = cmd.ExecuteReader()
@@ -523,7 +572,7 @@ Public Class Class_GIORNALIERO
 
         Dim query As String = "SELECT CODICE, TESTO FROM GIORNALIERO GROUP BY CODICE"
         Dim j = -1
-        Using cn = DB.GetConnection_Bambino(DBBAMNINO)
+        Using cn = MY_DB.GetConnection_Bambino(DBBAMNINO)
             Using cmd As New SqliteCommand(query, cn)
                 ' Esegui il comando SQLite...
                 Using reader As SqliteDataReader = cmd.ExecuteReader()

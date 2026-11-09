@@ -8,8 +8,37 @@ Public Class Class_ELCAR_VOCI_PERSONALI
     Public Property ELCAR As String
     Public Property ID_SUB As String
 
-    'Private ReadOnly ConnectionString As String =
-    '   "Server=.\SQLEXPRESS;Database=Scuoladellestelle;Trusted_Connection=True;"
+    Public Shared Function Get_all(Optional dbbambino = "") As List(Of Class_ELCAR_VOCI_PERSONALI)
+
+        Dim lista As New List(Of Class_ELCAR_VOCI_PERSONALI)
+
+        Dim sql As String = "SELECT * FROM ELCAR_VOCI_PERSONALI ORDER BY ELCAR AND ID_SUB"
+        Try
+            Using cn = MY_DB.GetConnection_Bambino(dbbambino)
+                ' Controlla lo stato della connessione prima di aprirla
+                If cn.State <> ConnectionState.Open Then cn.Open()
+                Using cmd As New SqliteCommand(sql, cn)
+                    Using reader As SqliteDataReader = cmd.ExecuteReader()
+                        While reader.Read()
+
+                            Dim record As New Class_ELCAR_VOCI_PERSONALI()
+                            record.ID = Convert.ToInt32(reader("ID"))
+                            record.ELCAR = reader("ELCAR").ToString()
+                            record.ID_SUB = reader("ID_SUB").ToString()
+                            record.Testo = reader("Testo").ToString()
+                            record.Testo_Lungo = reader("Testo_lungo").ToString()
+                            record.Deleted = Convert.ToBoolean(Convert.ToInt32(reader("deleted")))
+                            lista.Add(record)
+                        End While
+                    End Using
+                End Using
+            End Using
+        Catch ex As Exception
+            Console.WriteLine("Errore in Carica_Foglio Giornaliero: " & ex.Message)
+        End Try
+
+        Return lista
+    End Function
 
 
     Public Shared Function Trova_ultimo_IDSUB(codiceElcar As String) As Integer
@@ -19,7 +48,7 @@ Public Class Class_ELCAR_VOCI_PERSONALI
         ' Se il codice passato è vuoto o nullo, restituisce subito 0
         If String.IsNullOrEmpty(codiceElcar) Then Return 0
 
-        Using cn = DB.GetConnection_Bambino
+        Using cn = MY_DB.GetConnection_Bambino
             ' Applica il filtro WHERE sulla colonna ELCAR e converte ID_SUB in INTEGER per il calcolo del MAX
             Dim sql As String = "SELECT MAX(CAST(ID_SUB AS INTEGER)) " &
                                 "FROM ELCAR_VOCI_PERSONALI " &
@@ -65,7 +94,7 @@ Public Class Class_ELCAR_VOCI_PERSONALI
         ' Se il codice passato è vuoto o nullo, restituisce subito 0
         If String.IsNullOrEmpty(CodiceElcar) Then Return 0
 
-        Using cn = DB.GetConnection_Bambino
+        Using cn = MY_DB.GetConnection_Bambino
             ' Applica il filtro WHERE sulla colonna ELCAR e converte ID_SUB in INTEGER per il calcolo del MAX
             Dim sql As String = "SELECT MAX(CAST(ID_SUB AS INTEGER)) " &
                                 "FROM ELCAR_VOCI_PERSONALI " &
@@ -101,7 +130,7 @@ Public Class Class_ELCAR_VOCI_PERSONALI
 
         Try
             ' Apri la connessione e prepara il comando
-            Using cn = DB.GetConnection_Bambino
+            Using cn = MY_DB.GetConnection_Bambino
                 cn.Open()
 
                 Using cmd As New SqliteCommand(query, cn)
@@ -128,11 +157,11 @@ Public Class Class_ELCAR_VOCI_PERSONALI
     End Function
 
 
-    Public Shared Function Load(id As Integer) As Class_ELCAR_VOCI_PERSONALI
+    Public Shared Function Load(id As Integer, Optional DbBambino As String = "") As Class_ELCAR_VOCI_PERSONALI
         ' 1. Dichiara l'oggetto all'inizio della funzione (visibile ovunque)
         Dim voce As Class_ELCAR_VOCI_PERSONALI = Nothing
 
-        Using cn = DB.GetConnection_Bambino
+        Using cn = MY_DB.GetConnection_Bambino(DbBambino)
             Dim sql As String =
         "SELECT ID, ELCAR, ID_SUB, Testo, Testo_Lungo, Deleted " &
         "FROM ELCAR_VOCI_PERSONALI " &
@@ -172,6 +201,8 @@ Public Class Class_ELCAR_VOCI_PERSONALI
         Return voce
     End Function
 
+
+
     Public Shared Function CercaPerCodice(testoCercato As String, Optional testoesatto As Boolean = False) As List(Of Class_ELCAR_VOCI_PERSONALI)
         'ID As Integer
         'ELCAR As String
@@ -193,7 +224,7 @@ Public Class Class_ELCAR_VOCI_PERSONALI
                 "WHERE ELCAR = @Testo"
         End If
 
-        Using cn = DB.GetConnection_Bambino()
+        Using cn = MY_DB.GetConnection_Bambino()
             ' Usa l'operatore LIKE per cercare corrispondenze parziali
             Using cmd As New SqliteCommand(sql, cn)
                 ' Il carattere % indica a SQLite di trovare qualsiasi carattere prima e dopo il testo
@@ -228,11 +259,11 @@ Public Class Class_ELCAR_VOCI_PERSONALI
         End Using
         Return listaRisultati
     End Function
-    Public Function Save() As Boolean
+    Public Function Save(Optional dbbambino As String = "") As Boolean
         ' Se l'oggetto passato è nullo, esce subito restituendo False
         If Me Is Nothing Then Return False
 
-        Using cn = DB.GetConnection_Bambino()
+        Using cn = MY_DB.GetConnection_Bambino(dbbambino)
             Dim sql As String = ""
 
             ' Controlla se inserire un nuovo record o aggiornare uno esistente

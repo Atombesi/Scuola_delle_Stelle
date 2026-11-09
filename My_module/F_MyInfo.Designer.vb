@@ -34,7 +34,9 @@ Partial Class F_MyInfo
         LinkGitHub = New LinkLabel()
         Button4 = New Button()
         Label4 = New Label()
-        LinkLabel1 = New LinkLabel()
+        Label1 = New Label()
+        Label2 = New Label()
+        L_version = New Label()
         SuspendLayout()
         ' 
         ' Label3
@@ -158,19 +160,41 @@ Partial Class F_MyInfo
         Label4.Size = New Size(47, 38)
         Label4.TabIndex = 52
         ' 
-        ' LinkLabel1
+        ' Label1
         ' 
-        LinkLabel1.AutoSize = True
-        LinkLabel1.BackColor = Color.Transparent
-        LinkLabel1.Font = New Font("Segoe UI Semibold", 14.25F, FontStyle.Bold Or FontStyle.Italic, GraphicsUnit.Point, CByte(0))
-        LinkLabel1.ForeColor = Color.LemonChiffon
-        LinkLabel1.LinkColor = Color.FromArgb(CByte(255), CByte(255), CByte(192))
-        LinkLabel1.Location = New Point(219, 238)
-        LinkLabel1.Name = "LinkLabel1"
-        LinkLabel1.Size = New Size(138, 25)
-        LinkLabel1.TabIndex = 51
-        LinkLabel1.TabStop = True
-        LinkLabel1.Text = "Modena (Italy)"
+        Label1.AutoSize = True
+        Label1.BackColor = Color.Transparent
+        Label1.Font = New Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        Label1.ForeColor = Color.WhiteSmoke
+        Label1.Location = New Point(221, 242)
+        Label1.Name = "Label1"
+        Label1.Size = New Size(143, 25)
+        Label1.TabIndex = 53
+        Label1.Text = "Modena (Italy)"
+        ' 
+        ' Label2
+        ' 
+        Label2.AutoSize = True
+        Label2.BackColor = Color.Transparent
+        Label2.Font = New Font("Segoe UI Light", 12F, FontStyle.Italic, GraphicsUnit.Point, CByte(0))
+        Label2.ForeColor = Color.WhiteSmoke
+        Label2.Location = New Point(25, 322)
+        Label2.Name = "Label2"
+        Label2.Size = New Size(73, 21)
+        Label2.TabIndex = 54
+        Label2.Text = "Versione :"
+        ' 
+        ' L_version
+        ' 
+        L_version.AutoSize = True
+        L_version.BackColor = Color.Transparent
+        L_version.Font = New Font("Segoe UI Light", 12F, FontStyle.Italic, GraphicsUnit.Point, CByte(0))
+        L_version.ForeColor = Color.Yellow
+        L_version.Location = New Point(104, 322)
+        L_version.Name = "L_version"
+        L_version.Size = New Size(37, 21)
+        L_version.TabIndex = 55
+        L_version.Text = "1.03"
         ' 
         ' F_MyInfo
         ' 
@@ -180,8 +204,10 @@ Partial Class F_MyInfo
         BackgroundImageLayout = ImageLayout.Stretch
         ClientSize = New Size(594, 362)
         ControlBox = False
+        Controls.Add(L_version)
+        Controls.Add(Label2)
+        Controls.Add(Label1)
         Controls.Add(Label4)
-        Controls.Add(LinkLabel1)
         Controls.Add(Button4)
         Controls.Add(Label7)
         Controls.Add(LinkGitHub)
@@ -209,5 +235,7 @@ Partial Class F_MyInfo
     Friend WithEvents Label7 As Label
     Friend WithEvents LinkGitHub As LinkLabel
     Friend WithEvents Button4 As Button
-    Friend WithEvents LinkLabel1 As LinkLabel
+    Friend WithEvents Label1 As Label
+    Friend WithEvents Label2 As Label
+    Friend WithEvents L_version As Label
 End Class

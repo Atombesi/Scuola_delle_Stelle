@@ -16,12 +16,12 @@
         If esito Then
             MessageBox.Show("Dispositivo abilitato correttamente!")
             Dim m = "Nuovo Device registrato (ID:" + IdDispositivoDaAbilitare.ToString + ") (Nome:" + Nome_Dispositivo + ")"
-            APPEND_LOG(m, ini.File_Log, True)
+            APPEND_LOG(m, ini.File_Log, True, "1")
             Me.Close() ' Chiude la maschera
         Else
             MessageBox.Show("Errore durante l'abilitazione sul database.")
-            Dim m = "[Errore 013] Nuovo Device (errore registrazione) (ID:" + IdDispositivoDaAbilitare.ToString + ") (Nome:" + Nome_Dispositivo + ")"
-            APPEND_LOG(m, ini.File_Log, True)
+            Dim m = "[013] Nuovo Device (errore registrazione) (ID:" + IdDispositivoDaAbilitare.ToString + ") (Nome:" + Nome_Dispositivo + ")"
+            APPEND_LOG(m, ini.File_Log, True, "E")
         End If
     End Sub
 

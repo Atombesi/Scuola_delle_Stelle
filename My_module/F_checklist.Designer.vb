@@ -134,6 +134,7 @@ Partial Class F_checklist
         Controls.Add(Button1)
         Controls.Add(Button5)
         Controls.Add(Label1)
+        FormBorderStyle = FormBorderStyle.FixedDialog
         Name = "F_checklist"
         StartPosition = FormStartPosition.CenterScreen
         Text = "F_checklist"

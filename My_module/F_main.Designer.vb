@@ -55,6 +55,8 @@ Partial Class F_main
         TransparentskControl1 = New ScottPlot.WinForms.TransparentSKControl()
         Panel1 = New Panel()
         Timer1 = New Timer(components)
+        Button11 = New Button()
+        PrintDialog1 = New PrintDialog()
         P_schede.SuspendLayout()
         P_Stampe.SuspendLayout()
         P_liste.SuspendLayout()
@@ -84,7 +86,7 @@ Partial Class F_main
         ' 
         ' Button3
         ' 
-        Button3.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
+        Button3.Font = New Font("Segoe UI", 9F)
         Button3.Location = New Point(5, 25)
         Button3.Name = "Button3"
         Button3.Size = New Size(109, 25)
@@ -144,7 +146,7 @@ Partial Class F_main
         ' CheckBox1
         ' 
         CheckBox1.AutoSize = True
-        CheckBox1.Location = New Point(15, 148)
+        CheckBox1.Location = New Point(15, 158)
         CheckBox1.Name = "CheckBox1"
         CheckBox1.Size = New Size(84, 19)
         CheckBox1.TabIndex = 14
@@ -174,12 +176,12 @@ Partial Class F_main
         ' 
         ' Label2
         ' 
-        Label2.BackColor = Color.Transparent
+        Label2.BackColor = Color.Silver
         Label2.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
-        Label2.ForeColor = Color.Navy
-        Label2.Location = New Point(1, 2)
+        Label2.ForeColor = Color.Black
+        Label2.Location = New Point(0, 1)
         Label2.Name = "Label2"
-        Label2.Size = New Size(118, 18)
+        Label2.Size = New Size(121, 19)
         Label2.TabIndex = 2
         Label2.Text = "Schede"
         Label2.TextAlign = ContentAlignment.MiddleCenter
@@ -212,26 +214,26 @@ Partial Class F_main
         P_liste.Controls.Add(Button9)
         P_liste.Controls.Add(Button8)
         P_liste.Controls.Add(Button3)
-        P_liste.Location = New Point(130, 2)
+        P_liste.Location = New Point(130, 3)
         P_liste.Name = "P_liste"
         P_liste.Size = New Size(120, 185)
         P_liste.TabIndex = 18
         ' 
         ' Label3
         ' 
-        Label3.BackColor = Color.Transparent
+        Label3.BackColor = Color.MediumSeaGreen
         Label3.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
-        Label3.ForeColor = Color.Navy
-        Label3.Location = New Point(1, 2)
+        Label3.ForeColor = Color.Black
+        Label3.Location = New Point(-1, 1)
         Label3.Name = "Label3"
-        Label3.Size = New Size(118, 18)
+        Label3.Size = New Size(120, 19)
         Label3.TabIndex = 13
         Label3.Text = "Liste"
         Label3.TextAlign = ContentAlignment.MiddleCenter
         ' 
         ' Button10
         ' 
-        Button10.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
+        Button10.Font = New Font("Segoe UI", 9F)
         Button10.Location = New Point(5, 83)
         Button10.Name = "Button10"
         Button10.Size = New Size(109, 25)
@@ -241,7 +243,7 @@ Partial Class F_main
         ' 
         ' Button9
         ' 
-        Button9.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
+        Button9.Font = New Font("Segoe UI", 9F)
         Button9.Location = New Point(5, 54)
         Button9.Name = "Button9"
         Button9.Size = New Size(109, 25)
@@ -251,8 +253,8 @@ Partial Class F_main
         ' 
         ' Button8
         ' 
-        Button8.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
-        Button8.Location = New Point(4, 145)
+        Button8.Font = New Font("Segoe UI", 9F)
+        Button8.Location = New Point(4, 113)
         Button8.Name = "Button8"
         Button8.Size = New Size(109, 25)
         Button8.TabIndex = 10
@@ -274,6 +276,7 @@ Partial Class F_main
         ' P_Setting
         ' 
         P_Setting.BackColor = Color.LemonChiffon
+        P_Setting.Controls.Add(Button11)
         P_Setting.Controls.Add(Label4)
         P_Setting.Controls.Add(Button13)
         P_Setting.Controls.Add(Button14)
@@ -285,19 +288,19 @@ Partial Class F_main
         ' 
         ' Label4
         ' 
-        Label4.BackColor = Color.Transparent
+        Label4.BackColor = Color.Khaki
         Label4.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
-        Label4.ForeColor = Color.Navy
-        Label4.Location = New Point(1, 2)
+        Label4.ForeColor = Color.Black
+        Label4.Location = New Point(1, 1)
         Label4.Name = "Label4"
-        Label4.Size = New Size(118, 18)
+        Label4.Size = New Size(118, 19)
         Label4.TabIndex = 14
         Label4.Text = "Setting"
         Label4.TextAlign = ContentAlignment.MiddleCenter
         ' 
         ' Button13
         ' 
-        Button13.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
+        Button13.Font = New Font("Segoe UI", 9F)
         Button13.Location = New Point(5, 25)
         Button13.Name = "Button13"
         Button13.Size = New Size(108, 25)
@@ -307,7 +310,7 @@ Partial Class F_main
         ' 
         ' Button14
         ' 
-        Button14.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
+        Button14.Font = New Font("Segoe UI", 9F)
         Button14.Location = New Point(5, 55)
         Button14.Name = "Button14"
         Button14.Size = New Size(108, 25)
@@ -388,6 +391,20 @@ Partial Class F_main
         ' 
         Timer1.Interval = 60000
         ' 
+        ' Button11
+        ' 
+        Button11.Font = New Font("Segoe UI", 9F)
+        Button11.Location = New Point(5, 85)
+        Button11.Name = "Button11"
+        Button11.Size = New Size(108, 25)
+        Button11.TabIndex = 15
+        Button11.Text = "Set Printer"
+        Button11.UseVisualStyleBackColor = True
+        ' 
+        ' PrintDialog1
+        ' 
+        PrintDialog1.UseEXDialog = True
+        ' 
         ' F_main
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
@@ -451,5 +468,7 @@ Partial Class F_main
     Friend WithEvents Panel1 As Panel
     Friend WithEvents Label5 As Label
     Friend WithEvents Timer1 As Timer
+    Friend WithEvents Button11 As Button
+    Friend WithEvents PrintDialog1 As PrintDialog
 
 End Class

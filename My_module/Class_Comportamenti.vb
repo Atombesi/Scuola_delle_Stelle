@@ -12,7 +12,7 @@ Public Class Class_COMPORTAMENTI
 
     Public Sub Save()
 
-        Using cn = DB.GetConnection_Scuoladellestelle()
+        Using cn = MY_DB.GetConnection_Scuoladellestelle()
 
             If ID = 0 Then
                 Dim sql As String =
@@ -48,7 +48,7 @@ Public Class Class_COMPORTAMENTI
 
     Public Shared Function Load(id As Integer) As Class_COMPORTAMENTI
 
-        Using cn = DB.GetConnection_Scuoladellestelle()
+        Using cn = MY_DB.GetConnection_Scuoladellestelle()
 
             Dim sql As String =
                 "SELECT * FROM COMPORTAMENTI WHERE ID = @ID"
@@ -83,7 +83,7 @@ Public Class Class_COMPORTAMENTI
 
         Dim listaRisultati As New List(Of Class_COMPORTAMENTI)()
 
-        Using cn = DB.GetConnection_Scuoladellestelle()
+        Using cn = MY_DB.GetConnection_Scuoladellestelle()
 
             ' Usa l'operatore LIKE per cercare corrispondenze parziali
             Dim sql As String =

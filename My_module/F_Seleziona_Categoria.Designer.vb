@@ -24,7 +24,7 @@ Partial Class F_Seleziona_Categoria
     Private Sub InitializeComponent()
         components = New ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(F_Seleziona_Categoria))
-        Dim DataGridViewCellStyle2 As DataGridViewCellStyle = New DataGridViewCellStyle()
+        Dim DataGridViewCellStyle3 As DataGridViewCellStyle = New DataGridViewCellStyle()
         ComboBox3 = New ComboBox()
         Label1 = New Label()
         ComboBox2 = New ComboBox()
@@ -94,6 +94,7 @@ Partial Class F_Seleziona_Categoria
         SoloCompilatiToolStripMenuItem = New ToolStripMenuItem()
         ImageList2 = New ImageList(components)
         Label24 = New Label()
+        Tv1 = New TreeView()
         GroupBox1.SuspendLayout()
         CType(PictureBox1, ComponentModel.ISupportInitialize).BeginInit()
         GroupBox2.SuspendLayout()
@@ -117,7 +118,7 @@ Partial Class F_Seleziona_Categoria
         ' Label1
         ' 
         Label1.AutoSize = True
-        Label1.Location = New Point(18, 554)
+        Label1.Location = New Point(18, 541)
         Label1.Name = "Label1"
         Label1.Size = New Size(152, 15)
         Label1.TabIndex = 3
@@ -138,7 +139,7 @@ Partial Class F_Seleziona_Categoria
         Label5.AutoSize = True
         Label5.Font = New Font("Segoe UI", 10F, FontStyle.Bold)
         Label5.ForeColor = Color.Navy
-        Label5.Location = New Point(371, 554)
+        Label5.Location = New Point(371, 540)
         Label5.Name = "Label5"
         Label5.Size = New Size(53, 19)
         Label5.TabIndex = 8
@@ -159,7 +160,7 @@ Partial Class F_Seleziona_Categoria
         TextBox1.BorderStyle = BorderStyle.FixedSingle
         TextBox1.Font = New Font("Microsoft Sans Serif", 8.25F, FontStyle.Bold)
         TextBox1.ForeColor = Color.FromArgb(CByte(0), CByte(0), CByte(192))
-        TextBox1.Location = New Point(15, 575)
+        TextBox1.Location = New Point(15, 568)
         TextBox1.MaxLength = 60
         TextBox1.Multiline = True
         TextBox1.Name = "TextBox1"
@@ -239,7 +240,7 @@ Partial Class F_Seleziona_Categoria
         ' 
         ComboBox0.Font = New Font("Calibri", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         ComboBox0.FormattingEnabled = True
-        ComboBox0.Location = New Point(13, 8)
+        ComboBox0.Location = New Point(9, 3)
         ComboBox0.Name = "ComboBox0"
         ComboBox0.Size = New Size(257, 22)
         ComboBox0.TabIndex = 33
@@ -353,14 +354,15 @@ Partial Class F_Seleziona_Categoria
         ' 
         ' Button3
         ' 
+        Button3.BackColor = Color.PaleGreen
         Button3.Font = New Font("Segoe UI", 9F)
         Button3.ForeColor = SystemColors.ControlText
-        Button3.Location = New Point(358, 578)
+        Button3.Location = New Point(358, 571)
         Button3.Name = "Button3"
         Button3.Size = New Size(92, 33)
         Button3.TabIndex = 20
         Button3.Text = "Add to Sheet"
-        Button3.UseVisualStyleBackColor = True
+        Button3.UseVisualStyleBackColor = False
         ' 
         ' Button4
         ' 
@@ -435,7 +437,7 @@ Partial Class F_Seleziona_Categoria
         Button14.ImageAlign = ContentAlignment.MiddleLeft
         Button14.ImageIndex = 6
         Button14.ImageList = ImageList4
-        Button14.Location = New Point(253, 464)
+        Button14.Location = New Point(269, 464)
         Button14.Name = "Button14"
         Button14.Size = New Size(83, 24)
         Button14.TabIndex = 39
@@ -470,7 +472,7 @@ Partial Class F_Seleziona_Categoria
         Button10.ImageAlign = ContentAlignment.MiddleLeft
         Button10.ImageIndex = 6
         Button10.ImageList = ImageList4
-        Button10.Location = New Point(162, 464)
+        Button10.Location = New Point(178, 464)
         Button10.Name = "Button10"
         Button10.Size = New Size(83, 24)
         Button10.TabIndex = 37
@@ -580,9 +582,10 @@ Partial Class F_Seleziona_Categoria
         Button7.ForeColor = SystemColors.ControlText
         Button7.Location = New Point(11, 464)
         Button7.Name = "Button7"
-        Button7.Size = New Size(104, 24)
+        Button7.Size = New Size(108, 24)
         Button7.TabIndex = 21
-        Button7.Text = "Elimina Codice"
+        Button7.Text = "Rimuovi Codice"
+        TP1.SetToolTip(Button7, "Elimina codice dal foglio")
         Button7.UseVisualStyleBackColor = True
         ' 
         ' Label10
@@ -648,8 +651,8 @@ Partial Class F_Seleziona_Categoria
         ' 
         ' Col2
         ' 
-        DataGridViewCellStyle2.WrapMode = DataGridViewTriState.True
-        Col2.DefaultCellStyle = DataGridViewCellStyle2
+        DataGridViewCellStyle3.WrapMode = DataGridViewTriState.True
+        Col2.DefaultCellStyle = DataGridViewCellStyle3
         Col2.HeaderText = "Testo inserito"
         Col2.Name = "Col2"
         Col2.Width = 370
@@ -670,11 +673,11 @@ Partial Class F_Seleziona_Categoria
         ' 
         Button6.Font = New Font("Segoe UI", 9F)
         Button6.ForeColor = SystemColors.ControlText
-        Button6.Location = New Point(647, 581)
+        Button6.Location = New Point(630, 568)
         Button6.Name = "Button6"
-        Button6.Size = New Size(61, 23)
+        Button6.Size = New Size(167, 33)
         Button6.TabIndex = 36
-        Button6.Text = "Stampa"
+        Button6.Text = "Gestione Stampa Fogli"
         Button6.UseVisualStyleBackColor = True
         ' 
         ' Label23
@@ -750,11 +753,11 @@ Partial Class F_Seleziona_Categoria
         Button12.ForeColor = SystemColors.ControlText
         Button12.ImageIndex = 6
         Button12.ImageList = ImageList5
-        Button12.Location = New Point(863, 581)
+        Button12.Location = New Point(591, 571)
         Button12.Name = "Button12"
-        Button12.Size = New Size(33, 26)
+        Button12.Size = New Size(33, 30)
         Button12.TabIndex = 34
-        TP1.SetToolTip(Button12, "Azzera foglio")
+        TP1.SetToolTip(Button12, "Open Folder ""Fogli da stampare""")
         Button12.UseVisualStyleBackColor = True
         ' 
         ' Label15
@@ -762,7 +765,7 @@ Partial Class F_Seleziona_Categoria
         Label15.AutoSize = True
         Label15.Font = New Font("Microsoft Sans Serif", 10F, FontStyle.Bold)
         Label15.ForeColor = Color.FromArgb(CByte(0), CByte(0), CByte(192))
-        Label15.Location = New Point(320, 12)
+        Label15.Location = New Point(316, 7)
         Label15.Name = "Label15"
         Label15.Size = New Size(14, 17)
         Label15.TabIndex = 28
@@ -775,7 +778,7 @@ Partial Class F_Seleziona_Categoria
         Button11.ImageAlign = ContentAlignment.MiddleLeft
         Button11.ImageKey = "Emoji Objects-117.png"
         Button11.ImageList = ImageList1
-        Button11.Location = New Point(256, 547)
+        Button11.Location = New Point(256, 538)
         Button11.Name = "Button11"
         Button11.Size = New Size(86, 23)
         Button11.TabIndex = 29
@@ -788,7 +791,7 @@ Partial Class F_Seleziona_Categoria
         Label9.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
         Label9.ImageIndex = 4
         Label9.ImageList = ImageList5
-        Label9.Location = New Point(281, 10)
+        Label9.Location = New Point(277, 5)
         Label9.Name = "Label9"
         Label9.Size = New Size(26, 22)
         Label9.TabIndex = 32
@@ -809,21 +812,21 @@ Partial Class F_Seleziona_Categoria
         ' Panel1
         ' 
         Panel1.Controls.Add(ComboBox0)
+        Panel1.Controls.Add(GroupBox1)
         Panel1.Controls.Add(GroupBox3)
         Panel1.Controls.Add(Label9)
-        Panel1.Controls.Add(GroupBox1)
         Panel1.Controls.Add(GroupBox2)
         Panel1.Controls.Add(Label15)
         Panel1.Location = New Point(10, 61)
         Panel1.Name = "Panel1"
-        Panel1.Size = New Size(445, 478)
+        Panel1.Size = New Size(445, 472)
         Panel1.TabIndex = 30
         ' 
         ' Label3
         ' 
         Label3.AutoSize = True
         Label3.Font = New Font("Calibri", 9F)
-        Label3.Location = New Point(176, 555)
+        Label3.Location = New Point(176, 542)
         Label3.Name = "Label3"
         Label3.Size = New Size(59, 14)
         Label3.TabIndex = 31
@@ -882,11 +885,20 @@ Partial Class F_Seleziona_Categoria
         Label24.Text = "foglio n."
         Label24.TextAlign = ContentAlignment.MiddleCenter
         ' 
+        ' Tv1
+        ' 
+        Tv1.Location = New Point(468, 620)
+        Tv1.Name = "Tv1"
+        Tv1.Size = New Size(174, 80)
+        Tv1.TabIndex = 0
+        Tv1.Visible = False
+        ' 
         ' F_Seleziona_Categoria
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
-        ClientSize = New Size(982, 621)
+        ClientSize = New Size(986, 619)
+        Controls.Add(Tv1)
         Controls.Add(Label14)
         Controls.Add(Label23)
         Controls.Add(Button6)
@@ -994,4 +1006,5 @@ Partial Class F_Seleziona_Categoria
     Friend WithEvents ComboBox0 As ComboBox
     Friend WithEvents Label4 As Label
     Friend WithEvents Label14 As Label
+    Friend WithEvents Tv1 As TreeView
 End Class

@@ -31,7 +31,7 @@ Public Class Class_TODOLIST
         ' Inizializza la lista che conterrà i risultati trovati
         Dim listaRisultati As New List(Of Class_TODOLIST)()
         Dim sql_string = ""
-        Using cn = DB.GetConnection_Scuoladellestelle()
+        Using cn = MY_DB.GetConnection_Scuoladellestelle()
 
             sql_string = "SELECT ID, ID_BAMBINO,ID_FOGLIO, DATA_FOGLIO, NOMEFILE, DB_BAMBINO, COMPILATO, CLIENT_ID, CLIENT_NOME, CLIENT_DATAINVIO, BAMBINO, CLIENT_DATARICONSEGNA " &
             "FROM TODOLIST " &
@@ -79,7 +79,7 @@ Public Class Class_TODOLIST
         Dim sql_string = ""
         Dim record As New Class_TODOLIST()
 
-        Using cn = DB.GetConnection_Scuoladellestelle()
+        Using cn = MY_DB.GetConnection_Scuoladellestelle()
 
 
             sql_string = "SELECT * FROM TODOLIST WHERE CLIENT_ID = @CLIENT_ID"
@@ -134,7 +134,7 @@ Public Class Class_TODOLIST
         Dim sql_string = ""
         Dim record As New Class_TODOLIST()
 
-        Using cn = DB.GetConnection_Scuoladellestelle()
+        Using cn = MY_DB.GetConnection_Scuoladellestelle()
 
 
             sql_string = "SELECT * FROM TODOLIST WHERE ID = @ID"
@@ -191,7 +191,7 @@ Public Class Class_TODOLIST
         Dim querySql As String = "DELETE FROM TODOLIST WHERE ID = @id;"
 
         ' 3. Utilizza i blocchi Using per garantire la corretta chiusura delle risorse
-        Using cn = DB.GetConnection_Scuoladellestelle()
+        Using cn = MY_DB.GetConnection_Scuoladellestelle()
 
             Using cmd As New SqliteCommand(querySql, cn)
 
@@ -204,8 +204,8 @@ Public Class Class_TODOLIST
                     Return True
                 Catch ex As Exception
                     ' Gestione di eventuali errori (es. database bloccato o file non trovato)
-                    Dim m = "[Errore 014] Errore durante l'eliminazione del record: " & ex.Message
-                    APPEND_LOG(m, ini.File_Log, True)
+                    Dim m = "[014] Errore durante l'eliminazione del record: " & ex.Message
+                    APPEND_LOG(m, ini.File_Log, True, "E")
                     Return False
                 End Try
 
@@ -215,7 +215,7 @@ Public Class Class_TODOLIST
     End Function
 
     Public Sub Save()
-        Using cn = DB.GetConnection_Scuoladellestelle()
+        Using cn = MY_DB.GetConnection_Scuoladellestelle()
             ' Assicurati di aprire la connessione se GetConnection non lo fa già in automatico
             If cn.State <> ConnectionState.Open Then cn.Open()
 
@@ -289,7 +289,7 @@ Public Class Class_TODOLIST
 
         Dim sql As String = "SELECT * FROM TODOLIST WHERE ID_FOGLIO = @ID_FOGLIO AND ID_BAMBINO = @ID_BAMBINO"
 
-        Using cn = DB.GetConnection_Scuoladellestelle()
+        Using cn = MY_DB.GetConnection_Scuoladellestelle()
             If cn.State <> ConnectionState.Open Then cn.Open()
 
             Using cmd As New SqliteCommand(sql, cn)
@@ -335,7 +335,7 @@ Public Class Class_TODOLIST
         If id_bambino = 0 Then Return False
         Dim sql As String = "SELECT * FROM TODOLIST WHERE ID_FOGLIO = @ID_FOGLIO AND ID_BAMBINO = @ID_BAMBINO"
 
-        Using cn = DB.GetConnection_Scuoladellestelle()
+        Using cn = MY_DB.GetConnection_Scuoladellestelle()
             If cn.State <> ConnectionState.Open Then cn.Open()
 
             Using cmd As New SqliteCommand(sql, cn)
@@ -365,7 +365,7 @@ Public Class Class_TODOLIST
 
 
         Try
-            Using cn = DB.GetConnection_Scuoladellestelle()
+            Using cn = MY_DB.GetConnection_Scuoladellestelle()
                 If cn.State <> ConnectionState.Open Then cn.Open()
 
                 Dim sql As String = "DELETE FROM TODOLIST WHERE ID = @ID;"
@@ -379,8 +379,8 @@ Public Class Class_TODOLIST
             Return True
         Catch ex As SqliteException
             ' Se il database è bloccato da DB Browser, entrerà qui
-            Dim m = "[Errore 015] Impossibile eliminare. Il database potrebbe essere bloccato da un altro programma: " & ex.Message
-            APPEND_LOG(m, ini.File_Log, True)
+            Dim m = "[015] Impossibile eliminare. Il database potrebbe essere bloccato da un altro programma: " & ex.Message
+            APPEND_LOG(m, ini.File_Log, True, "E")
             Return False
         End Try
         Return True
@@ -391,7 +391,7 @@ Public Class Class_TODOLIST
 
         Dim sql As String = "SELECT COUNT(*) FROM TODOLIST WHERE CLIENT_ID <> 0"
 
-        Using cn = DB.GetConnection_Scuoladellestelle()
+        Using cn = MY_DB.GetConnection_Scuoladellestelle()
             If cn.State <> ConnectionState.Open Then cn.Open()
 
             Using cmd As New SqliteCommand(sql, cn)

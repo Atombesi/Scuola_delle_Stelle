@@ -3,6 +3,7 @@ Imports DocumentFormat.OpenXml.Bibliography
 Imports DocumentFormat.OpenXml.Drawing.Charts   ' Contiene le definizioni dei grafici (ChartSpace, NumberValues, ecc.)
 Imports DocumentFormat.OpenXml.Packaging        ' Gestisce i pacchetti del file (ChartPart, MainDocumentPart)
 Imports DocumentFormat.OpenXml.Wordprocessing
+Imports System.Drawing.Printing
 Imports System.Linq ' <-- Fondamentale per far funzionare .Descendants(Of T)()
 
 Imports C = DocumentFormat.OpenXml.Drawing.Charts
@@ -142,6 +143,18 @@ Module Modulo_word
             End If
         Next
     End Sub
+
+    Public Function OttieniStampantePredefinita() As String
+        Try
+            ' Creiamo un oggetto provvisorio per leggere le impostazioni di stampa di Windows
+            Dim impostazioni As New PrinterSettings()
+
+            ' Restituisce il nome della stampante che ha la spunta verde su Windows
+            Return impostazioni.PrinterName
+        Catch ex As Exception
+            Return "Errore nella lettura della stampante: " & ex.Message
+        End Try
+    End Function
 
     '-------------------------------------------------------------------
     '-------------------------------------------------------------------
@@ -860,4 +873,69 @@ Module Modulo_word
             End If
         End Using
     End Sub
+
+
+
+    Public Sub StampaListaSuStampanteScelta(elencoFileDaStampare As List(Of String), nomeStampanteTarget As String)
+        For Each percorsoFile In elencoFileDaStampare
+            If IO.File.Exists(percorsoFile) Then
+                Try
+                    Dim infoProcesso As New ProcessStartInfo()
+
+                    ' Chiamiamo l'eseguibile di LibreOffice (soffice.exe)
+                    infoProcesso.FileName = Trova_percorso_Soffice()
+                    If infoProcesso.FileName = "" Then
+                        Call MsgBox("Soffice non trovato")
+                        Exit Sub
+                    End If
+
+                    ' Argomenti: --headless (invisibile), --pt (invia alla stampante indicata)
+                    infoProcesso.Arguments = $"--headless --pt ""{nomeStampanteTarget}"" ""{percorsoFile}"""
+
+                    infoProcesso.CreateNoWindow = True
+                    infoProcesso.WindowStyle = ProcessWindowStyle.Hidden
+                    infoProcesso.UseShellExecute = False ' Obbligatorio impostare su False per passare gli argomenti a soffice.exe
+
+                    ' Avvia il processo in background
+                    Using proc As Process = Process.Start(infoProcesso)
+                        ' Attendiamo fino a 15 secondi che il file sia inviato allo spooler 
+                        ' prima di passare al documento successivo nella lista
+                        proc.WaitForExit(15000)
+                    End Using
+
+                Catch ex As Exception
+                    Call MsgBox($"Errore nell'invio alla stampante del file {IO.Path.GetFileName(percorsoFile)}: {ex.Message}", MsgBoxStyle.Exclamation)
+                End Try
+            End If
+        Next
+
+        MsgBox("Tutti i documenti della lista sono stati inviati alla stampante selezionata!", MsgBoxStyle.Information)
+    End Sub
+    Function Trova_percorso_Soffice() As String
+        ' 1. TROVA IL PERCORSO REALE DI LIBREOFFICE SUL DISCO FISSO
+        Dim percorsoSoffice As String = ""
+
+        ' Controlliamo i percorsi di installazione standard di Windows
+        Dim percorsiPossibili As String() = {
+            "C:\Program Files\LibreOffice\program\soffice.exe",
+            "C:\Program Files (x86)\LibreOffice\program\soffice.exe"
+        }
+
+        For Each path In percorsiPossibili
+            If IO.File.Exists(path) Then
+                percorsoSoffice = path
+                Return percorsoSoffice
+                Exit Function
+            End If
+        Next
+
+        ' SE NON TROVA LIBREOFFICE: blocchiamo l'esecuzione con un messaggio chiaro
+        If String.IsNullOrEmpty(percorsoSoffice) Then
+            Dim msg As String = "Impossibile avviare la stampa invisibile!" & vbCrLf &
+                                "LibreOffice non è stato trovato nei percorsi standard di installazione." & vbCrLf &
+                                "Verifica che LibreOffice sia installato correttamente sul computer."
+            MsgBox(msg, MsgBoxStyle.Critical, "Errore di Sistema")
+            Return ""
+        End If
+    End Function
 End Module

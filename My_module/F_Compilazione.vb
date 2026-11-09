@@ -288,7 +288,7 @@ Public Class F_Compilazione
         Next
         Label10.Text = CNT & "/" & n_voci
         Label38.Text = Label10.Text
-        Label38.Refresh() :
+        Label38.Refresh()
         Label10.Refresh()
 
         Dim successo = False
@@ -941,8 +941,8 @@ Public Class F_Compilazione
             If MsgBox(m, vbCritical + vbYesNo + vbDefaultButton2, "Totali non corretti") <> vbYes Then Exit Sub
             m = "SEi sicuro di voler proseguire ugualmente anche se ci sono dei totali che non chiudono a 20? "
             If MsgBox(m, vbCritical + vbYesNo + vbDefaultButton2, "Totali non corretti") <> vbYes Then Exit Sub
-            m = "[WARNING 01] Compilazione, salvataggio con (" + cnt.ToString + ") totali Errati"
-            APPEND_LOG(m, ini.File_Log, True)
+            m = "Compilazione, salvataggio con (" + cnt.ToString + ") totali Errati"
+            APPEND_LOG(m, ini.File_Log, True, "W")
         End If
 
         ' Forza il Flag compilato =1
@@ -952,18 +952,23 @@ Public Class F_Compilazione
         For Each voce In Gbl_foglio.CP : voce.COMPILATO = 1 : Next
 
         Dim dbbambino = Gbl_foglio.DB_Bambino
-        Dim stato = Foglio_Esistente_Aggiorna(Gbl_foglio, dbbambino)
+        Dim stato = MY_DB.Foglio_Esistente_Aggiorna_solo_Totali(Gbl_foglio, dbbambino)
+
+
+
+        'Dim stato = Foglio_Esistente_Aggiorna_Totali_old(Gbl_foglio, dbbambino)
         Dim m1 = ""
         If stato.OK Then
             Fogli_compilati_aggiungi_numero(1)
+            m = "Compilazione Foglio: " + Gbl_foglio.ID_foglio.ToString + ") di: " + Gbl_foglio.Bambino
+            APPEND_LOG(m, ini.File_Log, True, "1")
             m = "Il foglio Compilato è stato salvato correttamente" + vbCrLf + vbCrLf + "Foglio: " + Gbl_foglio.ID_foglio.ToString + ") di: " + Gbl_foglio.Bambino
             Call MsgBox(m, vbOKOnly + vbInformation)
         Else
-            Fogli_compilati_aggiungi_numero(1)
-            m = "[Errore 001] " + stato.Err + "(" + Gbl_foglio.ID_foglio.ToString + ") di: " + Gbl_foglio.Bambino
-            APPEND_LOG(m, ini.File_Log, True)
+            'Fogli_compilati_aggiungi_numero(1)
+            m = "[001] COmpilazione foglio" + stato.erroreSu + "(" + Gbl_foglio.ID_foglio.ToString + ") di: " + Gbl_foglio.Bambino
+            APPEND_LOG(m, ini.File_Log, True, "E")
             m = "Errore durante il salvataggio del Foglio: " + Gbl_foglio.ID_foglio.ToString + ") di: " + Gbl_foglio.Bambino
-
             Call MsgBox(m, vbOKOnly + vbCritical)
         End If
 
@@ -1082,6 +1087,5 @@ Public Class F_Compilazione
         B_edit.Tag = ""
         Edit_onoff(False)
     End Sub
-
 
 End Class

@@ -14,6 +14,7 @@ Imports ScottPlot.Statistics
 Imports SkiaSharp.HarfBuzz.SKShaper
 Imports SQLitePCL
 Imports MyColor = System.Drawing.Color
+Imports System.Text.RegularExpressions
 
 
 
@@ -65,6 +66,9 @@ Public Class F_Seleziona_Categoria
 
         ComboBox8.Tag = 0   ' Memorizzo l'indice del bambino
         mostra_info_sul_foglio()
+        Dim cn = "Data Source=" & ini.Database
+
+        PopolaAlberoElcar(Tv1, cn)
 
 
     End Sub
@@ -965,20 +969,21 @@ Public Class F_Seleziona_Categoria
         '---------------------------------------------------------------------------------------
         ' Salva fisicamente i ddati nel database --
         '---------------------------------------------------------------------------------------
-        Dim salvato = Foglio_salva()
+        Dim idff = Label13.Text   ' nuovo id_foglio
 
-        If salvato Then
+        Dim salvato = MY_DB.Foglio_salva(idff, Gbl_foglio.DB_Bambino, Giornaliero)
+        If salvato.OK Then
             '---------------------------------------------------------------------------------------
             ' Aggiungo il foglio alla lista TODOLIST  --
             '---------------------------------------------------------------------------------------
             ToDoList_Aggiungi_voce_foglio(Gbl_foglio)
         End If
 
-        Return salvato
+        Return salvato.OK
 
 
     End Function
-    Function Foglio_salva() As Boolean
+    Function Foglio_salva_OLD() As Boolean
         '-- Preparo messagio di conferma salvataggio
         Dim CPcnt = 0, RTcnt = 0, ELCARcnt = 0
         Dim salvare_cp = True, salvare_rt = True
@@ -1017,8 +1022,8 @@ Public Class F_Seleziona_Categoria
             m = m + "perchè è stato trovato un altro foglio con la stesso stessa Data"
             m = m + "foglio id: " + Gbl_foglio.ID_foglio.ToString + ") del: " + Gbl_foglio.Data + ""
             Call MsgBox(m, vbCritical + vbOKOnly)
-            m = "[Errore 001] Salvataggio foglio " + Gbl_foglio.ID_foglio.ToString + ") del: " + Gbl_foglio.Data + " " + Gbl_foglio.DB_Bambino
-            APPEND_LOG(m, ini.File_Log, True)
+            m = "[001] Salvataggio foglio " + Gbl_foglio.ID_foglio.ToString + ") del: " + Gbl_foglio.Data + " " + Gbl_foglio.DB_Bambino
+            APPEND_LOG(m, ini.File_Log, True, "E")
             Dim st As New StackTrace()
             Dim frame As StackFrame = st.GetFrame(1)
             Return False
@@ -1033,7 +1038,7 @@ Public Class F_Seleziona_Categoria
             If Gbl_foglio.VociDiUnFoglio(j).Codice = "" Then Continue For
             If Not Gbl_foglio.VociDiUnFoglio(j).Salva Then
                 m = "Problemi salvataggio codice (" + Giornaliero.Codice + ") id_foglio:" + Giornaliero.ID_FOGLIO.ToString + " DB:" + Gbl_DB_BAMBINO
-                APPEND_LOG(m, GbL_Logfile, True)
+                APPEND_LOG(m, GbL_Logfile, True, "E")
                 salvato = False
             End If
         Next
@@ -1043,8 +1048,8 @@ Public Class F_Seleziona_Categoria
             Gbl_CP_selezionate = Gbl_foglio.CP
             For j = 0 To Gbl_CP_selezionate.Count - 1
                 If Not Gbl_foglio.CP(j).Salva() Then
-                    m = "[Errore 002] Problemi salvataggio CP (" + Gbl_foglio.CP(j).TESTO + ") id_foglio:" + Gbl_foglio.CP(j).ID_FOGLIO.ToString + " DB:" + Gbl_foglio.DB_Bambino
-                    APPEND_LOG(m, GbL_Logfile, True)
+                    m = "[002] Problemi salvataggio CP (" + Gbl_foglio.CP(j).TESTO + ") id_foglio:" + Gbl_foglio.CP(j).ID_FOGLIO.ToString + " DB:" + Gbl_foglio.DB_Bambino
+                    APPEND_LOG(m, GbL_Logfile, True, "E")
                     salvato = False
 
                 End If
@@ -1057,8 +1062,8 @@ Public Class F_Seleziona_Categoria
             Gbl_RT_selezionate = Gbl_foglio.RT
             For j = 0 To Gbl_RT_selezionate.Count - 1
                 If Not Gbl_foglio.RT(j).Salva() Then
-                    m = "[Errore 003] Problemi salvataggio RT (" + Gbl_foglio.RT(j).TESTO + ") id_foglio:" + Gbl_foglio.RT(j).ID_FOGLIO.ToString + " DB:" + Gbl_foglio.DB_Bambino
-                    APPEND_LOG(m, GbL_Logfile, True)
+                    m = "[003] Problemi salvataggio RT (" + Gbl_foglio.RT(j).TESTO + ") id_foglio:" + Gbl_foglio.RT(j).ID_FOGLIO.ToString + " DB:" + Gbl_foglio.DB_Bambino
+                    APPEND_LOG(m, GbL_Logfile, True, "E")
                     salvato = False
 
                 End If
@@ -1127,33 +1132,6 @@ Public Class F_Seleziona_Categoria
             End If
         Next
         Return False
-    End Function
-    Function Verifica_codici_duplicati() As List(Of Integer)
-        Dim j = 0
-        Dim trovato = False, cod0 = ""
-        Dim nrow = DGV1.Rows.Count
-
-
-        Dim indiciDuplicati As New List(Of Integer)()
-
-        ' Dizionario per memorizzare la stringa (Chiave) e il suo primo indice (Valore)
-        Dim mappaStringhe As New Dictionary(Of String, Integer)()
-
-        ' Cicla l'array usando l'indice numerico
-        For i As Integer = 0 To nrow - 1
-            Dim stringaCorrente As String = DGV1.Rows(i).Cells(0).Value?.ToString()
-            If stringaCorrente = "" Then Continue For
-            ' Se la stringa è già presente nel dizionario, l'indice corrente è un duplicato
-            If mappaStringhe.ContainsKey(stringaCorrente) Then
-                indiciDuplicati.Add(i)
-            Else
-                ' Altrimenti, registra la stringa con il suo primo indice trovato
-                mappaStringhe.Add(stringaCorrente, i)
-            End If
-        Next
-
-        Return indiciDuplicati
-
     End Function
 
     Public Sub Carica_dati_foglio_in_DGV1()
@@ -1307,19 +1285,6 @@ Public Class F_Seleziona_Categoria
         ComboBox0.EndUpdate()
 
     End Sub
-
-    Sub Carica_Combobox2(y)
-        ComboBox2.Items.Clear()
-        Dim x = Split(y, ",")
-        For j = 0 To x.Count - 1
-            ComboBox2.Items.Add(x(j))
-        Next
-        ComboBox2.SelectedIndex = 0
-        cod(2) = ComboBox2.Text
-        ComboBox2.Refresh()
-
-
-    End Sub
     Sub Carica_Combobox3(y)
         'Trovo l
         ComboBox3.Items.Clear()
@@ -1330,9 +1295,6 @@ Public Class F_Seleziona_Categoria
                 Carica_combobox_ELCAR_VOCI()
             End If
         Next
-        'Label5.Text = Gbl_Elenco_Codici_ELCAR(J).TESTO
-        'Label5.Tag = Gbl_Elenco_Codici_ELCAR(J).ID
-        'Label5.Refresh()
     End Sub
     Sub Carica_Combobox4(y)
         ComboBox4.Items.Clear()
@@ -1355,20 +1317,6 @@ Public Class F_Seleziona_Categoria
         ComboBox6.Items.Clear()
         ComboBox6.SelectedIndex = 0
         ComboBox6.Refresh()
-    End Sub
-
-    Private Sub ComboBox3_FormatStringChanged(sender As Object, e As EventArgs) Handles ComboBox3.FormatStringChanged
-
-    End Sub
-
-    Private Sub ComboBox5_SelectedValueChanged(sender As Object, e As EventArgs) Handles ComboBox5.SelectedValueChanged
-
-    End Sub
-
-    Private Sub ComboBox6_DoubleClick(sender As Object, e As EventArgs) Handles ComboBox6.DoubleClick
-    End Sub
-
-    Private Sub ComboBox6_RegionChanged(sender As Object, e As EventArgs) Handles ComboBox6.RegionChanged
     End Sub
 
 
@@ -1402,9 +1350,6 @@ Public Class F_Seleziona_Categoria
             Exit Sub
         End If
 
-
-    End Sub
-    Private Sub TextBox1_TextChanged(sender As Object, e As EventArgs) Handles TextBox1.TextChanged
 
     End Sub
 
@@ -1455,12 +1400,9 @@ Public Class F_Seleziona_Categoria
 
         carica_ultimo_foglio_bambino(id_foglio)
 
-
-
-
-
-
     End Sub
+
+
     Sub carica_ultimo_foglio_bambino(id_foglio As Integer, Optional DBbAMBINO As String = "")
         ' Carico utimo foglio
 
@@ -1516,30 +1458,8 @@ Public Class F_Seleziona_Categoria
         Call Imposta_tipo_caricamento_ultimo_foglio(False)
         Dim n = Gbl_VociDiUnFoglio.Count
 
-
-
-
-
-
-    End Sub
-    Private Sub CheckBox4_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox4.CheckedChanged
     End Sub
 
-
-    Private Sub GroupBox5_Enter(sender As Object, e As EventArgs) Handles GroupBox5.Enter
-
-    End Sub
-
-    Private Sub ImmediatoToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles TSM_Immediato.Click
-        'Imposta_tipo_caricamento_ultimo_foglio()
-
-
-    End Sub
-
-    Private Sub TSM_NONImmediato_Click(sender As Object, e As EventArgs)
-        'Imposta_tipo_caricamento_ultimo_foglio()
-
-    End Sub
     Sub Imposta_tipo_caricamento_ultimo_foglio(Optional modo = False)
         If modo Then
             Gbl_Caricamento_Immediato = True
@@ -1558,14 +1478,13 @@ Public Class F_Seleziona_Categoria
         Dim desc = DGV1(2, r).Value
         Dim m = "Esercizio (" + codice + "):" + vbCrLf
         m = m + desc + vbCrLf
-        m = m + "Vui rimuovere questo esercizio dal foglio?"
+        m = m + "Vuoi rimuovere questo esercizio dal foglio?"
         If MsgBox(m, vbQuestion + vbYesNo, "Rimozione Esercizio") <> vbYes Then Exit Sub
         If Elimina_Codice(codice) Then
             m = "rimozione dell'esercizio (" + codice + "):" + desc + " dal foglio: (" + Gbl_foglio.ID_foglio.ToString + ") di:" + Gbl_foglio.DB_Bambino
-            Call APPEND_LOG(m, GbL_Logfile, True)
-
+            Call APPEND_LOG(m, GbL_Logfile, True, "1")
+        Else
             Carica_dati_foglio_in_DGV1()
-
         End If
 
     End Sub
@@ -2018,7 +1937,6 @@ Public Class F_Seleziona_Categoria
         Dim oggi = Now.ToShortDateString
         F_Elenco_da_Stampare.Main(oggi)
 
-        'Stampa_foglio_giornaliero()
 
     End Sub
 

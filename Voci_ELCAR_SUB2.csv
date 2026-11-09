@@ -1,0 +1,23 @@
+ID;ELCAR;ID_SUB;TESTO;TESTO_LUNGO;Deleted
+1;V.A.38.2;1;Prende il Libro della Pimpa;;False
+2;V.A.38.2;2;apre il Libro della Pimpa;;False
+3;V.A.38.2;3;Sfoglia il Libro della Pimpa;;False
+4;V.A.38.2;4;Chiude il Libro della Pimpa;;False
+5;V.A.38.2;5;Prende il Libro dei Puffi;;False
+6;V.A.38.2;6;apre il Libro della  Puffi;;False
+7;V.A.38.2;7;Sfoglia il Libro della  Puffi;;False
+8;V.A.38.2;8;Chiude il Libro della  Puffi;;False
+9;V.A.8.2;1;si siede quando richiesto;prova multilinea 
+ab
+ccc
+;False
+10;V.A.8.2;2;si siede quando richiesto
+(in maniera composta);;False
+11;V.A.8.2;3;si siede quando richiesto
+(in maniera composta e senza urlare);;False
+12;V.A.20.1;1;Segue il tutor senza piangere
+;;False
+13;V.A.20.1;2;Non piange quando deve rientrare;;False
+14;V.A.20.1;3;Aspetta il prorpio turno senza urlare
+;;False
+15;V.A.38.2;9;Rimette a posto il libro della Pimpa;;False

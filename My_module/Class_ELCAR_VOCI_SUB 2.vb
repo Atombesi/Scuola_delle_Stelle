@@ -17,7 +17,7 @@ Public Class Class_ELCAR_VOCI_SUB2
 
 
     Public Shared Function Load(id As Integer) As Class_ELCAR_VOCI_SUB2
-        Using cn = DB.GetConnection_Scuoladellestelle()
+        Using cn = MY_DB.GetConnection_Scuoladellestelle()
             Dim sql As String =
             "SELECT ID, ELCAR, ID_SUB, Testo, Testo_Lungo, Deleted
              FROM ELCAR_VOCI_SUB2
@@ -58,7 +58,7 @@ Public Class Class_ELCAR_VOCI_SUB2
         ' Se l'oggetto passato è nullo, esce subito restituendo False
         If Me Is Nothing Then Return False
 
-        Using cn = DB.GetConnection_Scuoladellestelle()
+        Using cn = MY_DB.GetConnection_Scuoladellestelle()
             Dim sql As String = ""
 
             ' Controlla se inserire un nuovo record o aggiornare uno esistente
@@ -130,7 +130,7 @@ Public Class Class_ELCAR_VOCI_SUB2
                 "WHERE ELCAR = @Testo"
         End If
 
-        Using cn = DB.GetConnection_Scuoladellestelle()
+        Using cn = MY_DB.GetConnection_Scuoladellestelle()
             ' Usa l'operatore LIKE per cercare corrispondenze parziali
             Using cmd As New SqliteCommand(sql, cn)
                 ' Il carattere % indica a SQLite di trovare qualsiasi carattere prima e dopo il testo
@@ -169,7 +169,7 @@ Public Class Class_ELCAR_VOCI_SUB2
         ' Se il codice passato è vuoto o nullo, restituisce subito 0
         If String.IsNullOrEmpty(codiceElcar) Then Return 0
 
-        Using cn = DB.GetConnection_Scuoladellestelle()
+        Using cn = MY_DB.GetConnection_Scuoladellestelle()
             ' Applica il filtro WHERE sulla colonna ELCAR e converte ID_SUB in INTEGER per il calcolo del MAX
             Dim sql As String = "SELECT MAX(CAST(ID_SUB AS INTEGER)) " &
                                 "FROM ELCAR_VOCI_SUB2 " &
@@ -204,7 +204,7 @@ Public Class Class_ELCAR_VOCI_SUB2
 
         Try
             ' Apri la connessione e prepara il comando
-            Using cn = DB.GetConnection_Scuoladellestelle()
+            Using cn = MY_DB.GetConnection_Scuoladellestelle()
                 cn.Open()
 
                 Using cmd As New SqliteCommand(query, cn)
@@ -228,6 +228,80 @@ Public Class Class_ELCAR_VOCI_SUB2
 
         ' Restituisce -1 se il record non è stato trovato o se si è verificato un errore
         Return -1
+    End Function
+
+    Public Shared Function CercaPerCodice_Esatto(elcar As String, codice As String) As Class_ELCAR_VOCI_SUB2
+        ' Definisci la stringa di connessione (modifica il percorso con il tuo file .db)
+
+        ' La query SQL con i parametri contrassegnati dal simbolo @
+        Dim query As String = "SELECT * FROM ELCAR_VOCI_SUB2 WHERE ELCAR = @elcar AND ID_SUB = @id_sub"
+
+        Try
+            ' Apri la connessione e prepara il comando
+            Using cn = MY_DB.GetConnection_Scuoladellestelle()
+                cn.Open()
+
+                Using cmd As New SqliteCommand(query, cn)
+                    ' Assegna in modo sicuro i valori ai parametri SQL
+                    cmd.Parameters.AddWithValue("@elcar", elcar)
+                    cmd.Parameters.AddWithValue("@id_sub", codice)
+
+                    ' ExecuteScalar esegue la query e restituisce la prima colonna della prima riga (l'ID)
+                    Using rd = cmd.ExecuteReader()
+                        rd.Read()
+                        ' Se il risultato non è nullo, restituisci l'ID convertito in Integer
+                        Try
+                            Dim record As New Class_ELCAR_VOCI_SUB2()
+                            record.Testo = Convert.ToString(rd("TESTO"))
+                            record.Testo_Lungo = Convert.ToString(rd("TESTO_LUNGO"))
+                            record.ELCAR = Convert.ToString(rd("elcar"))
+                            record.ID_SUB = Convert.ToString(rd("ID_SUB"))
+                            record.ID = Convert.ToInt32(rd("ID"))
+                            record.Deleted = Convert.ToBoolean(rd("Deleted"))
+                            Return record
+                        Catch ex As Exception
+                            Return Nothing
+                        End Try
+
+                    End Using
+                End Using
+            End Using
+        Catch ex As Exception
+            Return Nothing
+        End Try
+
+    End Function
+
+    Public Shared Function GetALL_ByID() As List(Of Class_ELCAR_VOCI_SUB2)
+
+        Dim listaRisultati As New List(Of Class_ELCAR_VOCI_SUB2)
+        Dim sql As String =
+                "SELECT * FROM ELCAR_VOCI_SUB2 ORDER BY ID"
+
+        Dim cn = MY_DB.GetConnection_Scuoladellestelle()
+        Using cmd As New SqliteCommand(sql, cn)
+            Using rd = cmd.ExecuteReader()
+                ' Usa While al posto di If perché ci possono essere più record corrispondenti
+                While rd.Read()
+                    ' Crea una nuova istanza della classe per ogni riga trovata
+                    Dim record As New Class_ELCAR_VOCI_SUB2
+                    record.Testo = Convert.ToString(rd("TESTO"))
+                    record.Testo_Lungo = Convert.ToString(rd("TESTO_LUNGO"))
+                    record.ELCAR = Convert.ToString(rd("elcar"))
+                    record.ID_SUB = Convert.ToString(rd("ID_SUB"))
+                    record.Deleted = Convert.ToBoolean(rd("Deleted"))
+                    Try
+                        record.ID = Convert.ToInt32(rd("ID"))
+                    Catch ex As Exception
+                        record.ID = 0
+                    End Try
+
+                    ' Aggiunge il record alla lista dei risultati solo se attivi
+                    listaRisultati.Add(record)
+                End While
+                Return listaRisultati
+            End Using
+        End Using
     End Function
 
 End Class

@@ -36,6 +36,7 @@
             Label4.Text = "        OFF"
         End If
         Label2.Text = Gbl_IP_SERVER
+        Label17.Text = ini.Numero_fogli_compilati.ToString
 
 
     End Sub
@@ -94,7 +95,7 @@
             Dim r = Dgv2.Rows.Count - 1
             Dgv2.Rows.Add(ImageList1.Images(img_index), voce.CLIENT_NOME, voce.BAMBINO, foglio, stato, voce.CLIENT_DATAINVIO, voce.ID, voce.ID_FOGLIO, voce.ID_BAMBINO, voce.CLIENT_ID, r)
         Next
-
+        mostra_stato_server()
     End Sub
 
     Private Sub Button6_Click(sender As Object, e As EventArgs) Handles Button6.Click
@@ -129,7 +130,7 @@
         If Gbl_VociDiTodolist(r).COMPILATO = 1 Then Button3.Text = "      Importa"
         Button3.Refresh()
         If Gbl_VociDiTodolist(r).CLIENT_ID > 0 Then Button3.Enabled = True
-
+        mostra_stato_server()
 
     End Function
     Private Sub TabPage1_Click(sender As Object, e As EventArgs) Handles TabPage1.Click
@@ -156,10 +157,11 @@
         m = "Annullamento compilazione client (" + thistodo.CLIENT_NOME + ") " + Gbl_VociDiTodolist(r).BAMBINO + "-" + Gbl_VociDiTodolist(r).ID_FOGLIO.ToString
         If Class_DEVICE.Delete(id) Then
             Call MsgBox(m, vbInformation + vbOKOnly)
-            APPEND_LOG(m, ini.File_Log, True)
+            APPEND_LOG(m, ini.File_Log, True, "1")
         End If
         Carica_dgv2()
         F_main.Mostra_stato_rete_e_compilazione()
+        mostra_stato_server()
     End Sub
 
     Private Sub Dgv2_MouseClick(sender As Object, e As MouseEventArgs) Handles Dgv2.MouseClick
@@ -249,7 +251,7 @@
         If Class_DEVICE.Delete(id) Then
             Call MsgBox(m, vbInformation + vbOKOnly)
             m = "Rimozione device Abilitato (" + mydev.NOME + ")"
-            APPEND_LOG(m, ini.File_Log, True)
+            APPEND_LOG(m, ini.File_Log, True, "1")
         End If
         Carica_dgv1()
 

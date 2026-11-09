@@ -11,7 +11,6 @@ Public Class F_main
     Private Sub F_main_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
         Me.Width = 145
-
         Class_WebServerTablet.FormPrincipaleRiferimento = Me
         P_liste.Visible = False
         P_Setting.Visible = False
@@ -21,6 +20,8 @@ Public Class F_main
         P_Setting.Left = P_schede.Left
 
         Call Read_ini()
+        APPEND_LOG("Avvio programma", ini.File_Log, True, "I")
+
         Carica_elenco_CODICI_ELCAR()
         Gbl_Elenco_bambini = Carica_bambini()
         'Carico elenco comportamenti
@@ -29,8 +30,14 @@ Public Class F_main
         End If
 
         isCaricato = True
+        Gbl_MioServer = New Class_WebServerTablet
+        Server_OnOff(True)
         Mostra_stato_rete_e_compilazione()
         Timer1.Enabled = True
+        ' "✅❌"
+
+
+
     End Sub
 
 
@@ -203,8 +210,50 @@ Public Class F_main
         End If
 
     End Sub
+    Function Server_OnOff(Optional da_attivare As Boolean = True) As Boolean
+        Dim stato As Boolean
+        'comando da dare se non si hanno i privilegi per connettersi
+        'netsh http add urlacl url=http://+:8080/ user=Everyone
+
+        If da_attivare And Not Gbl_server_connected Then
+            'Gbl_MioServer = New Class_WebServerTablet
+            stato = Gbl_MioServer.StartServer
+            Gbl_server_connected = stato
+        End If
+
+        If Not da_attivare And Gbl_server_connected Then
+            'Gbl_MioServer = New Class_WebServerTablet
+            Gbl_MioServer.StopServer()
+            stato = False
+            Gbl_server_connected = stato
+        End If
+
+
+        'Accendo il server 
+
+        If Gbl_server_connected Then
+            Gbl_IP_SERVER = Class_WebServerTablet.OttieniIPAscoltoReale
+            CheckBox4.BackColor = MyColor.PaleGreen
+            CheckBox4.ImageIndex = 1
+            TP1.SetToolTip(CheckBox4, "Attivo IP: " + Gbl_IP_SERVER)
+
+        Else
+            CheckBox4.BackColor = Button2.BackColor
+            CheckBox4.ImageIndex = 2
+            TP1.SetToolTip(CheckBox4, "Spento IP: " + Gbl_IP_SERVER)
+        End If
+        CheckBox4.Refresh()
+
+    End Function
 
     Private Sub CheckBox4_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox4.CheckedChanged
+        If CheckBox4.Checked Then
+            Server_OnOff(True)
+        Else
+            Server_OnOff(False)
+        End If
+        Exit Sub
+
         If CheckBox4.Checked Then
             CheckBox4.ImageIndex = 1
             Gbl_MioServer = New Class_WebServerTablet
@@ -213,7 +262,7 @@ Public Class F_main
                 Gbl_server_connected = True
                 Dim ip As String
                 Gbl_IP_SERVER = Class_WebServerTablet.OttieniIPAscoltoReale
-                ip = "IP: " + Gbl_IP_SERVER
+                ip = "Connesso IP: " + Gbl_IP_SERVER
                 TP1.SetToolTip(CheckBox4, ip)
             Else
                 CheckBox4.BackColor = MyColor.Salmon
@@ -267,7 +316,7 @@ Public Class F_main
     Private Sub Button14_Click(sender As Object, e As EventArgs) Handles Button14.Click
         If Not IO.File.Exists(ini.File_Log) Then
             Dim m = "File log non trovato!" + vbCrLf + ini.File_Log
-            Call MsgBox(m, vbInformation + vbOKOnly)
+            MsgBox(m, vbInformation + vbOKOnly)
             Exit Sub
         End If
         Apri_documento(ini.File_Log)
@@ -284,7 +333,7 @@ Public Class F_main
     End Sub
 
     Private Sub Button8_Click(sender As Object, e As EventArgs) Handles Button8.Click
-
+        F_Gestione_Codici_ELCAR.ShowDialog()
     End Sub
 
     Private Sub Button12_Click(sender As Object, e As EventArgs)
@@ -302,5 +351,25 @@ Public Class F_main
 
     Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
         Mostra_stato_rete_e_compilazione()
+    End Sub
+
+    Private Sub Button11_Click(sender As Object, e As EventArgs) Handles Button11.Click
+        Dim impostazioniAvanzate As New System.Drawing.Printing.PrinterSettings()
+        PrintDialog1.PrinterSettings = impostazioniAvanzate
+        ' 2. Mostriamo la finestra nativa a schermo e attendiamo la scelta dell'utente
+        If PrintDialog1.ShowDialog() = DialogResult.OK Then
+            ' 3. Catturiamo il nome esatto della stampante che l'utente ha selezionato
+            Dim x As String = PrintDialog1.PrinterSettings.PrinterName
+            Dim m = "Stampante selezionata selezionata:" + vbCrLf
+            m = m + x + vbCrLf + vbCrLf
+            m = m + "Vuoi salvare questa stampante cone quella di Default?"
+            If MsgBox(m, vbQuestion + vbYesNo + vbDefaultButton1, "Selezione stampante default") <> vbYes Then Exit Sub
+
+            Dim fileini = Gbl_app_path + "\Scuola_delle_Stelle.ini"
+            WriteINIString(fileini, "GENERAL", "Stampante Default", x)
+            ini.Stampante_defaut = x
+        End If
+
+
     End Sub
 End Class

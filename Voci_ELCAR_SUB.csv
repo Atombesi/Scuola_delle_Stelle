@@ -1,0 +1,190 @@
+ID;ELCAR;ID_SUB;TESTO;TESTO_LUNGO;Deleted
+1;V.A.8;1;Da attività gradite ad attività non gradite;Da attività gradite ad attività non gradite;False
+2;V.A.8;2;Tra le attività di classe;Tra le attività di classe;False
+3;V.A.8;3;Transizioni in setting differenti;Transizioni in setting differenti;False
+4;V.A.20;1;Tempo libero;Tempo libero;False
+5;V.A.20;2;Attività strutturata;Attività strutturata;False
+6;V.A.24;1;Esegue le seguenti routine di classe in modo indipendente;Esegue le seguenti routine di classe in modo indipendente;False
+7;V.A.38;1;Prende i quaderni e le schede (o i suoi materiali);Prende i quaderni e le schede (o i suoi materiali);False
+8;V.A.38;2;Completa i suoi compiti da solo;Completa i suoi compiti da solo;False
+9;V.A.38;3;Avendo a sua disposizione il modello della risposta corretta, corregge da solo il proprio compito;Avendo a sua disposizione il modello della risposta corretta, corregge da solo il proprio compito;False
+10;V.A.38;4;Registra in modo accurato le risposte corrette e quelle non corrette;Registra in modo accurato le risposte corrette e quelle non corrette;False
+11;V.A.38;5;Richiama l’attenzione dell’insegnante in modo appropriato quando ha finito il suo compito;Richiama l’attenzione dell’insegnante in modo appropriato quando ha finito il suo compito;False
+12;V.A.39;1;Registra in modo accurato le risposte del compagno alle domande dell’insegnante;Registra in modo accurato le risposte del compagno alle domande dell’insegnante;False
+13;V.A.39;2;Fornisce antecedenti adeguati;Fornisce antecedenti adeguati;False
+14;V.A.39;3;Fornisce approvazioni contingenti;Fornisce approvazioni contingenti;False
+15;V.A.39;4;Fornisce correzioni contingenti;Fornisce correzioni contingenti;False
+16;V.A.39;5;Registra le risposte del compagno in modo accurato;Registra le risposte del compagno in modo accurato;False
+17;V.A.40;1;Il proprio comportamento;Il proprio comportamento;False
+18;V.A.40;2;Il comportamento di un compagno;Il comportamento di un compagno;False
+19;V.A.42;1;Descrive e conteggia in modo accurato i comportamenti target per la gestione delle contingenze;Descrive e conteggia in modo accurato i comportamenti target per la gestione delle contingenze;False
+20;V.A.42;2;Imposta i propri obiettivi personali relativi a quanto sopra;Imposta i propri obiettivi personali relativi a quanto sopra;False
+21;V.A.42;3;Seleziona i propri rinforzatori per raggiungere obiettivi;Seleziona i propri rinforzatori per raggiungere obiettivi;False
+22;V.A.42;4;Rinforza il proprio comportamento in modo accurato quando raggiunge i propri obiettivi;Rinforza il proprio comportamento in modo accurato quando raggiunge i propri obiettivi;False
+23;V.B.8;1;Viene provocato dai coetane;Viene provocato dai coetane;False
+24;V.B.8;2;Ha bisogno di un aiuto o di un consiglio;Ha bisogno di un aiuto o di un consiglio;False
+25;V.B.9;1;Adulti;Adulti;False
+26;V.B.9;2;coetanei;coetanei;False
+27;V.B.10;1;Adulti;Adulti;False
+28;V.B.10;2;coetanei;coetanei;False
+29;V.B.15;1;Mands;Mands;False
+30;V.B.15;2;Tacts;Tacts;False
+31;V.B.16;1;Mands;Mands;False
+32;V.B.16;2;Tacts;Tacts;False
+33;V.B.18;1;Adulti;Adulti;False
+34;V.B.18;2;Pari;Pari;False
+35;V.B.26;1;Inizia interazione sociale;Inizia interazione sociale;False
+36;V.B.26;2;Risponde a interazione sociale;Risponde a interazione sociale;False
+37;V.B.27;1;Inizia interazione sociale;Inizia interazione sociale;False
+38;V.B.27;2;Risponde a interazione sociale;Risponde a interazione sociale;False
+39;V.B.29;1;Vince a un gioco;Vince a un gioco;False
+40;V.B.29;2;Perde a un gioco;Perde a un gioco;False
+41;VI.A.2;1;Orienta il proprio sguardo sull’oggetto preferito;Orienta il proprio sguardo sull’oggetto preferito;False
+42;VI.A.2;2;Si allunga verso l’oggetto preferito;Si allunga verso l’oggetto preferito;False
+43;VI.A.2;3;Tocca l’oggetto preferito;Tocca l’oggetto preferito;False
+44;VI.D.2;1;Nuovi oggetti identici;Nuovi oggetti identici;False
+45;VI.D.2;2;Nuove immagini identiche;Nuove immagini identiche;False
+46;VI.D.2;3;Abbina nuovi oggetti alle immagini corrispondenti dell’oggetto;Abbina nuovi oggetti alle immagini corrispondenti dell’oggetto;False
+47;VI.D.2;4;(3D a 2D);(3D a 2D);False
+48;VI.D.2;5;Abbina nuove immagini di un oggetto agli oggetti corrispondenti (2D a 3D);Abbina nuove immagini di un oggetto agli oggetti corrispondenti (2D a 3D);False
+49;VI.D.2;6;Nuovi oggetti con caratteristiche non importanti;Nuovi oggetti con caratteristiche non importanti;False
+50;VI.D.2;7;Nuove immagini con caratteristiche non importanti;Nuove immagini con caratteristiche non importanti;False
+51;VI.D.2;8;Nuove immagini agli oggetti con caratteristiche non rilevanti;Nuove immagini agli oggetti con caratteristiche non rilevanti;False
+52;VII.A.6;1;individualmente;individualmente;False
+53;VII.A.6;2;In piccolo gruppo (choral responding);In piccolo gruppo (choral responding);False
+54;VIII.A.1;1;Come Tact;Come Tact;False
+55;VIII.A.1;2;Come Mand;Come Mand;False
+56;VIII.A.2;1;Come Tact;Come Tact;False
+57;VIII.A.2;2;Come Mand;Come Mand;False
+58;VIII.A.5;1;Come Tact;Come Tact;False
+59;VIII.A.5;2;Come Mand;Come Mand;False
+60;VIII.A.6;1;Come Tact;Come Tact;False
+61;VIII.A.6;2;Come Mand;Come Mand;False
+62;VIII.A.7;1;Come Tact;Come Tact;False
+63;VIII.A.7;2;Come Mand;Come Mand;False
+64;VIII.A.8;1;Come Tact;Come Tact;False
+65;VIII.A.8;2;Come Mand;Come Mand;False
+66;VIII.A.9;1;Come Tact;Come Tact;False
+67;VIII.A.9;2;Come Mand;Come Mand;False
+68;VIII.H.1;1;Una parola;Una parola;False
+69;VIII.H.1;2;Due o più parole;Due o più parole;False
+70;VIII.H.8;1;Chi;Chi;False
+71;VIII.H.8;2;Perché;Perché;False
+72;VIII.H.8;3;Quando;Quando;False
+73;VIII.H.8;4;Dove;Dove;False
+74;VIII.H.13;1;Con gesti;Con gesti;False
+75;VIII.H.13;2;Senza gesti;Senza gesti;False
+76;VIII.H.16;1;Con 1 tact/autoclitico;Con 1 tact/autoclitico;False
+77;VIII.H.16;2;Con 2 tact/autoclitici;Con 2 tact/autoclitici;False
+78;VIII.H.16;3;Con 3 tact/autoclitici;Con 3 tact/autoclitici;False
+79;VIII.H.16;4;on più di 3 tact/autoclitici;on più di 3 tact/autoclitici;False
+80;IX.A.2;1;Costruzioni;Costruzioni;False
+81;IX.A.2;2;Puzzle;Puzzle;False
+82;IX.A.2;3;Materiale per colorare;Materiale per colorare;False
+83;IX.A.2;4;Pongo, Didò;Pongo, Didò;False
+84;IX.A.2;5;Giochi causa-effetto;Giochi causa-effetto;False
+85;IX.A.2;6;Giocattoli per il gioco d’immaginazione (pupazzetti,l macchine, cose della cucina, bamboole, treni);Giocattoli per il gioco d’immaginazione (pupazzetti,l macchine, cose della cucina, bamboole, treni);False
+86;IX.A.2;7;Libri;Libri;False
+87;IX.A.2;8;Altro;Altro;False
+88;IX.A.3;1;Edibili;Edibili;False
+89;IX.A.3;2;Giocattoli;Giocattoli;False
+90;IX.A.3;3;Libri;Libri;False
+91;IX.A.3;4;Giocare da solo;Giocare da solo;False
+92;IX.A.3;5;Giocare con i coetanei;Giocare con i coetanei;False
+93;IX.A.3;6;giochi di gruppo/da tavolo (la pesca, il memory, la tombola);giochi di gruppo/da tavolo (la pesca, il memory, la tombola);False
+94;IX.A.3;7;Giochi di immaginazione (travestirsi con i compagni);Giochi di immaginazione (travestirsi con i compagni);False
+95;IX.A.3;8;Cartoni animati/video/film per bambini;Cartoni animati/video/film per bambini;False
+96;IX.A.3;9;Ballare o attività di movimento;Ballare o attività di movimento;False
+97;IX.A.3;10;Ascoltare la musica;Ascoltare la musica;False
+98;IX.A.3;11;Attività artistiche;Attività artistiche;False
+99;IX.A.3;12;Altro;Altro;False
+100;IX.A.4;1;gesti;gesti;False
+101;IX.A.4;2;Uso degli oggetti;Uso degli oggetti;False
+102;IX.A.4;3;Sequenza di gioco durante il gioco libero;Sequenza di gioco durante il gioco libero;False
+103;IX.A.5;1;Storia letta dall’insegnante con presenza del libro, rimane seduto e si orienta verso l’insegnante o il libro;Storia letta dall’insegnante con presenza del libro, rimane seduto e si orienta verso l’insegnante o il libro;False
+104;IX.A.5;2;Storia raccontata dall’insegnante senza la presenza del libro, rimane seduto e si orienta verso l’insegnante;Storia raccontata dall’insegnante senza la presenza del libro, rimane seduto e si orienta verso l’insegnante;False
+105;IX.A.7;1;Si orienta verso l’insegnante cantando una canzone per il 90% dell’attività;Si orienta verso l’insegnante cantando una canzone per il 90% dell’attività;False
+106;IX.A.7;2;Fa le azioni associate alla canzone;Fa le azioni associate alla canzone;False
+107;IX.A.7;3;Imita le sequenze di ballo;Imita le sequenze di ballo;False
+108;IX.A.7;4;Suona o batte le mani a tempo;Suona o batte le mani a tempo;False
+109;IX.A.7;5;Balla a tempo con un un ritmo costante;Balla a tempo con un un ritmo costante;False
+110;IX.A.7;6;Canta le parole di una canzone, 2 canzoni da solo;Canta le parole di una canzone, 2 canzoni da solo;False
+111;IX.C.1;1;Materiali manipolativi relativi alla matematica;Materiali manipolativi relativi alla matematica;False
+112;IX.C.1;2;Schede di matematica;Schede di matematica;False
+113;IX.C.2;1;Materiali di scienza e tecnologia;Materiali di scienza e tecnologia;False
+114;IX.C.2;2;Esperimenti scientifici e dimostrazioni;Esperimenti scientifici e dimostrazioni;False
+115;X.A.1;1;Colori;Colori;False
+116;X.A.1;2;forme;forme;False
+117;X.C.2;1;Mand;Mand;False
+118;X.C.2;2;tact;tact;False
+119;X.C.2;3;intraverbale;intraverbale;False
+120;X.C.4;1;Mand;Mand;False
+121;X.C.4;2;tact;tact;False
+122;X.C.4;3;intraverbale;intraverbale;False
+123;X.C.6;1;Mand;Mand;False
+124;X.C.6;2;tact;tact;False
+125;X.C.6;3;intraverbale;intraverbale;False
+126;X.C.8;1;Mand;Mand;False
+127;X.C.8;2;tact;tact;False
+128;X.C.8;3;intraverbale;intraverbale;False
+129;X.C.10;1;Mand;Mand;False
+130;X.C.10;2;tact;tact;False
+131;X.C.10;3;intraverbale;intraverbale;False
+132;X.C.12;1;Mand;Mand;False
+133;X.C.12;2;tact;tact;False
+134;X.C.12;3;intraverbale;intraverbale;False
+135;X.C.13;1;Mand;Mand;False
+136;X.C.13;2;tact;tact;False
+137;X.C.13;3;intraverbale;intraverbale;False
+138;X.C.15;1;Mand;Mand;False
+139;X.C.15;2;tact;tact;False
+140;X.C.15;3;intraverbale;intraverbale;False
+141;X.C.17;1;Mand;Mand;False
+142;X.C.17;2;tact;tact;False
+143;X.C.17;3;intraverbale;intraverbale;False
+144;X.D.7;1;Pointing;Pointing;False
+145;X.D.7;2;Risposte intraverbali (Questa è una parola o un’immagine?);Risposte intraverbali (Questa è una parola o un’immagine?);False
+146;X.D.8;1;2 fonemi;2 fonemi;False
+147;X.D.8;2;3 fonemi;3 fonemi;False
+148;X.D.8;3;4 fonemi;4 fonemi;False
+149;X.G.3;1;Imita lettere maiuscole A-Z;Imita lettere maiuscole A-Z;False
+150;X.G.3;2;Imita lettere minuscole  a-z;Imita lettere minuscole  a-z;False
+151;X.G.3;3;Emula (ricopia) lettere maiuscole A-Z;Emula (ricopia) lettere maiuscole A-Z;False
+152;X.G.3;4;Emula (ricopia) lettere minuscole  a-z;Emula (ricopia) lettere minuscole  a-z;False
+153;X.G.6;1;Imita la scrittura del suo nome e cognome;Imita la scrittura del suo nome e cognome;False
+154;X.G.6;2;Emula (ricopia) il suo nome e cognome;Emula (ricopia) il suo nome e cognome;False
+155;X.G.6;3;Scrive in modo indipendente il suo nome e cognome;Scrive in modo indipendente il suo nome e cognome;False
+156;X.G.7;1;Suoni vocalici brevi;Suoni vocalici brevi;False
+157;X.G.7;2;Suoni vocalici lunghi;Suoni vocalici lunghi;False
+158;X.G.10;1;Scrive lettere maiuscole e minuscole usando la tastiera;Scrive lettere maiuscole e minuscole usando la tastiera;False
+159;X.G.10;2;Scrive numeri usando la tastiera;Scrive numeri usando la tastiera;False
+160;X.G.10;3;Scrive nome e cognome usando la tastiera;Scrive nome e cognome usando la tastiera;False
+161;X.G.10;4;Scrive 10 parole sight usando la tastiera;Scrive 10 parole sight usando la tastiera;False
+162;X.G.10;5;Apre il motore di ricerca internet e digita la password;Apre il motore di ricerca internet e digita la password;False
+163;XI.A.1;1;Con esempio (“indica qui” e l’esempio fisico);Con esempio (“indica qui” e l’esempio fisico);False
+164;XI.A.1;2;Indicare stimoli che fanno parte del curriculum di indicazione per l’identificazione (listener);Indicare stimoli che fanno parte del curriculum di indicazione per l’identificazione (listener);False
+165;XI.A.2;1;Abbina immagini (Metti_________con__________) in campo di;Abbina immagini (Metti_________con__________) in campo di;False
+166;XI.A.2;2;Abbina oggetti (Metti_________con__________) in campo di 3;Abbina oggetti (Metti_________con__________) in campo di 3;False
+167;XI.A.15;1;Mette la colla sul retro di ciò che deve incollare e lo gira per attaccarlo sull’altro foglio o cartocino;Mette la colla sul retro di ciò che deve incollare e lo gira per attaccarlo sull’altro foglio o cartocino;False
+168;XI.A.15;2;Senza assistenza per 1 minuto;Senza assistenza per 1 minuto;False
+169;XI.A.15;3;Incolla 5 immagini da solo;Incolla 5 immagini da solo;False
+170;XI.A.30;1;Mangiare;Mangiare;False
+171;XI.A.30;2;Mescolare;Mescolare;False
+172;XI.A.32;1;Tagliare;Tagliare;False
+173;XI.A.32;2;Spalmare;Spalmare;False
+174;XI.C.10;1;Sale le scale salendo sempre con lo stesso piede  per 10 gradini;Sale le scale salendo sempre con lo stesso piede  per 10 gradini;False
+175;XI.C.10;2;Sale le scale alternando i piedi per 10 gradini;Sale le scale alternando i piedi per 10 gradini;False
+176;XI.C.11;1;Sale le scale salendo sempre con lo stesso piede  per 10 gradini;Sale le scale salendo sempre con lo stesso piede  per 10 gradini;False
+177;XI.C.11;2;Sale le scale alternando i piedi per 10 gradini;Sale le scale alternando i piedi per 10 gradini;False
+178;XI.C.13;1;Su due piedi (minimo 60 cm);Su due piedi (minimo 60 cm);False
+179;XI.C.13;2;Su due piedi per 3 volte consecutive;Su due piedi per 3 volte consecutive;False
+180;XI.C.13;3;Salta in avanti, indietro, a destra e a sinistra con due piedi;Salta in avanti, indietro, a destra e a sinistra con due piedi;False
+181;XI.C.13;4;Salta sul posto da solo per 10 volte;Salta sul posto da solo per 10 volte;False
+182;XI.C.14;1;Almeno 5 cm di altezza dal pavimento;Almeno 5 cm di altezza dal pavimento;False
+183;XI.C.14;2;Almeno 12 cm di altezza dal pavimento;Almeno 12 cm di altezza dal pavimento;False
+184;XI.C.17;1;Da soprA;Da soprA;False
+185;XI.C.17;2;Da sotto;Da sotto;False
+186;XI.C.18;1;Su rimbalzo;Su rimbalzo;False
+187;XI.C.18;2;Al volo;Al volo;False
+188;XI.C.28;1;Si tiene mentre viene spinto;Si tiene mentre viene spinto;False
+189;XI.C.28;2;Si fa dondolare da solo per 20 cicli;Si fa dondolare da solo per 20 cicli;False

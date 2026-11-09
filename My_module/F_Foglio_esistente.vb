@@ -244,9 +244,11 @@ Public Class F_Foglio_esistente
         If Not iscompilato Then
             Label5.Text = "Foglio da compilare"
             Label5.BackColor = MyColor.Orange
+            Label6.BackColor = MyColor.Orange
         Else
             Label5.Text = "Foglio già compilato"
             Label5.BackColor = MyColor.LightGreen
+            Label6.BackColor = MyColor.LightGreen
         End If
 
         If G_foglio.Valutativo Then
@@ -453,14 +455,16 @@ Public Class F_Foglio_esistente
         If MsgBox(m, vbInformation + vbYesNo + vbDefaultButton2) <> vbYes Then Exit Sub
 
         Dim dbbambno = G_foglio.DB_Bambino
-        Dim stato = Foglio_Esistente_Aggiorna(G_foglio, dbbambno)
+        'Dim stato = Foglio_Esistente_Aggiorna_Totali(G_foglio, dbbambno)
+        Dim stato = MY_DB.Foglio_Esistente_Aggiorna_solo_Totali(G_foglio, dbbambno)
+
         Dim m1 = ""
         If stato.OK Then
             m = "Foglio Modificato (" + G_foglio.ID_foglio.ToString + ") di: " + G_foglio.Bambino
             m1 = "Modifiche Registrate Correttamente"
         Else
-            m = "[Errore 002] " + stato.Err + "(" + G_foglio.ID_foglio.ToString + ") di: " + G_foglio.Bambino
-            APPEND_LOG(m, ini.File_Log, True)
+            m = "[002] " + stato.erroreSu + "(" + G_foglio.ID_foglio.ToString + ") di: " + G_foglio.Bambino
+            APPEND_LOG(m, ini.File_Log, True, "E")
         End If
 
         Call MsgBox(m, vbOKOnly + vbInformation)
@@ -532,7 +536,7 @@ Public Class F_Foglio_esistente
         End If
         G_DB_Bambino = elemento1.Tag
         Gbl_DB_BAMBINO = Costruisci_filenameDB_bambino(G_DB_Bambino)
-
+        Label6.Text = ComboBox2.Text
         If Trova_tutti_fogli_Bambino() = 0 Then
             Label18.Visible = True
             GroupBox4.Visible = False
@@ -647,15 +651,16 @@ Public Class F_Foglio_esistente
             voce.TOT = 0 : voce.COMPILATO = 0
         Next
         Dim dbBambino = G_foglio.DB_Bambino
-        Dim stato = Foglio_Esistente_Aggiorna(G_foglio, dbBambino)
+        'Dim stato = Foglio_Esistente_Aggiorna_Totali(G_foglio, dbBambino)
+        Dim stato = MY_DB.Foglio_Esistente_Aggiorna_solo_Totali(G_foglio, dbBambino)
         Dim m1 = ""
         If stato.OK Then
             m = "Azzeramento foglio completato " + vbCrLf + "Foglio n.(" + G_foglio.ID_foglio.ToString + ") di: " + G_foglio.Bambino
             Call MsgBox(m, vbOKOnly + vbInformation)
             Exit Sub
         Else
-            m = "[Errore 003] " + stato.Err + "(" + G_foglio.ID_foglio.ToString + ") di: " + G_foglio.Bambino
-            APPEND_LOG(m, ini.File_Log, True)
+            m = "[003] " + stato.erroreSu + "(" + G_foglio.ID_foglio.ToString + ") di: " + G_foglio.Bambino
+            APPEND_LOG(m, ini.File_Log, True, "E")
             m = "Errore nell'azzeramento delle voci del foglio"
             Call MsgBox(m, vbOKOnly + vbInformation)
         End If
@@ -676,14 +681,16 @@ Public Class F_Foglio_esistente
             voce.COMPILATO = 0
         Next
         Dim dbBambino = G_foglio.DB_Bambino
-        Dim stato = Foglio_Esistente_Aggiorna(G_foglio, dbBambino)
+        'Dim stato = Foglio_Esistente_Aggiorna_Totali(G_foglio, dbBambino)
+        Dim stato = MY_DB.Foglio_Esistente_Aggiorna_solo_Totali(G_foglio, dbBambino)
+
         Dim m1 = ""
         If stato.OK Then
             m = "Annullamento Compilazione foglio (" + G_foglio.ID_foglio.ToString + ") di: " + G_foglio.Bambino
             Call MsgBox(m, vbOKOnly + vbInformation)
         Else
-            m = "[Errore 004] " + stato.Err + "(" + G_foglio.ID_foglio.ToString + ") di: " + G_foglio.Bambino
-            APPEND_LOG(m, ini.File_Log, True)
+            m = "[004] " + stato.erroreSu + "(" + G_foglio.ID_foglio.ToString + ") di: " + G_foglio.Bambino
+            APPEND_LOG(m, ini.File_Log, True, "E")
             m1 = "Errore nell'Annullamento Compilazione"
             Call MsgBox(m, vbOKOnly + vbInformation)
         End If
@@ -894,5 +901,9 @@ Public Class F_Foglio_esistente
             PictureBox1.BackColor = MyColor.PaleGreen
             PictureBox0.BackColor = SystemColors.Control
         End If
+    End Sub
+
+    Private Sub Label5_Click(sender As Object, e As EventArgs) Handles Label5.Click
+
     End Sub
 End Class

@@ -1,6 +1,6 @@
 ﻿Public Class F_MyInfo
     Private Sub F_MyInfo_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-
+        L_version.Text = gbl_versione.tostring
     End Sub
 
     Private Sub Label3_Click(sender As Object, e As EventArgs) Handles Label3.Click
@@ -32,7 +32,7 @@
     Private Sub LinkGitHub_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkGitHub.LinkClicked
         Try
             ' Avvia il browser predefinito di sistema aprendo l'URL specificato
-            Process.Start(New ProcessStartInfo("https://ghihub.com/Atombesi") With {.UseShellExecute = True})
+            Process.Start(New ProcessStartInfo("https://github.com/Atombesi") With {.UseShellExecute = True})
         Catch ex As Exception
             MessageBox.Show("Impossibile aprire la pagina web: " & ex.Message)
         End Try

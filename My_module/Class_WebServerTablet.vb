@@ -155,7 +155,7 @@ Public Class Class_WebServerTablet
                         Dim idRichiesto As Integer = root.GetProperty("id_questionario").GetInt32()
                         Dim jsonFoglioBambino As String = Carica_Foglio_da_inviare_al_Tablet(idRichiesto)
                         rispostaJson = "{""type"":""FOGLIO_RICEVUTO"", ""dati"":" & jsonFoglioBambino & "}"
-                        'Debug.Print(rispostaJson)
+                        Debug.Print(rispostaJson)
 
                         If Not String.IsNullOrEmpty(rispostaJson) Then
                             Dim bufferRisposta() As Byte = Encoding.UTF8.GetBytes(rispostaJson)
@@ -183,6 +183,16 @@ Public Class Class_WebServerTablet
                         ' 2. 🎯 RISPOSTA DI CONFERMA: Spariamo la parola chiave obbligatoria concordata con il tablet
                         ' Questo messaggio sbloccherà il tablet, azzerando lo schermo e richiedendo il rinfresco
                         rispostaJson = "{""type"":""FOGLIO_RICEVUTO"",""dati"":{""stato"":""OK_SALVATO""}}"
+                        Debug.Print(rispostaJson)
+
+                    ' --- 7. COMPILAZIONE ANNULLATA ---
+                    Case "COMPILAZIONE_ANNULLATA"
+                        ' 1. Esegui la sotto-routine che elabora il JSON per scrivere le risposte finali nel DB SQLite di Windows
+                        Dim parser As System.Text.Json.JsonDocument = System.Text.Json.JsonDocument.Parse(messaggioRicevuto)
+                        Dim root As System.Text.Json.JsonElement = parser.RootElement
+                        Dim idRichiesto As Integer = root.GetProperty("id_questionario").GetInt32()
+
+                        Call Comunica_Compilazione_annullata(idRichiesto)
                         Debug.Print(rispostaJson)
 
                     Case Else

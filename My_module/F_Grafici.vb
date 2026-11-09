@@ -219,10 +219,19 @@ Public Class F_Grafici
         Dim percorsoCartellaStampa As String = dir_bar(ini.Path_GRAFICI_DaStampare)
         Dim destinazioneXlsx As String = IO.Path.Combine(percorsoCartellaStampa, bambino & ".Totale giornaliero.xlsx")
         Dim modelloXlsx As String = ini.Modello_Grafico_TotaleGiornaliero
+        'venot IO.File.Exists(destinazioneXlsx) Then IO.File.Delete(destinazioneXlsx)
 
         ' 1. Sdoppiamento del file modello
+        Dim m = "", m1 = ""
+        If Not IO.File.Exists(modelloXlsx) Then
+            m1 = "il modello:" + modelloXlsx + "NON ESISTE!"
+            m = "il modello:" + vbCrLf
+            m = m + modelloXlsx + vbCrLf + "NON ESISTE!"
+            APPEND_LOG(m1, ini.File_Log, True, "E")
+            Call MsgBox(m, vbCritical + vbOKOnly)
+        End If
         Try
-            If IO.File.Exists(destinazioneXlsx) Then IO.File.Delete(destinazioneXlsx)
+
             IO.File.Copy(modelloXlsx, destinazioneXlsx, True)
         Catch ex As Exception
             Call MsgBox("Errore duplicazione modello: " & ex.Message, MsgBoxStyle.Critical)
@@ -1093,7 +1102,7 @@ Public Class F_Grafici
         If elementiDaRimuovere <= 0 Then Return elenco_gf
         elenco_gf.RemoveRange(0, elementiDaRimuovere)
         Dim m = "Rimozione (" + elementiDaRimuovere.ToString + " dati in eccesso per il grafico " + Nome_bambino
-        APPEND_LOG(m, ini.File_Log, True)
+        APPEND_LOG(m, ini.File_Log, True, "W")
         Return elenco_gf
 
     End Function

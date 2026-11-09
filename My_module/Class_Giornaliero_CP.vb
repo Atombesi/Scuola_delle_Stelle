@@ -16,7 +16,7 @@ Public Class Class_Giornaliero_CP
         Dim listaRisultati As New List(Of Class_Giornaliero_CP)()
 
         Try
-            Using cn = DB.GetConnection_Bambino()
+            Using cn = MY_DB.GetConnection_Bambino()
                 ' Forza l'apertura fisica del database se chiuso
                 If cn.State <> ConnectionState.Open Then cn.Open()
 
@@ -59,7 +59,7 @@ Public Class Class_Giornaliero_CP
 
 
     Public Function Salva() As Boolean
-        Using cn = DB.GetConnection_Bambino
+        Using cn = MY_DB.GetConnection_Bambino
             cn.Open()
             Dim sql As String = ""
 
@@ -104,31 +104,64 @@ Public Class Class_Giornaliero_CP
         End Using
         Return True
     End Function
-    Public Function Salva_Totali(dbbambino) As Boolean
-        Using cn = DB.GetConnection_Bambino(dbbambino)
-            cn.Open()
-            Dim sql As String = ""
+    Public Function Salva_nuovo(cn As SqliteConnection, trans As SqliteTransaction) As Boolean
+        Dim sql As String = ""
 
-            ' Determina se inserire un nuovo record o aggiornare quello esistente
-            If Me.ID = 0 Then Return False
-            sql = "UPDATE GIORNALIERO_COMPORTAMENTALE SET " &
-                      "TOT = @TOT, COMPILATO = @COMPILATO WHERE ID = @ID;"
+        ' Determina se inserire un nuovo record o aggiornare quello esistente
+        If Me.ID = 0 Then
+                sql = "INSERT INTO GIORNALIERO_COMPORTAMENTALE (ID_FOGLIO, ID_VOCE, DATA, TESTO, TOT, COMPILATO) " &
+                      "VALUES (@ID_FOGLIO, @ID_VOCE, @DATA, @TESTO, @TOT, @COMPILATO); " &
+                      "SELECT last_insert_rowid();"
+            Else
+                sql = "UPDATE GIORNALIERO_COMPORTAMENTALE SET " &
+                      "ID_FOGLIO = @ID_FOGLIO, DATA = @DATA, ID_VOCE = @ID_VOCE, " &
+                      "TESTO = @TESTO, TOT = @TOT, COMPILATO = @COMPILATO " &
+                      "WHERE ID = @ID;"
+            End If
 
-            Using cmd As New SqliteCommand(sql, cn)
-                Try
-                    ' Assegnazione dei parametri comuni a entrambe le query
-                    cmd.Parameters.AddWithValue("@TOT", Me.TOT)
-                    cmd.Parameters.AddWithValue("@COMPILATO", Me.COMPILATO)
+        Using cmd As New SqliteCommand(sql, cn)
+            cmd.Transaction = trans
 
-                Catch ex As Exception
-                    Return False
-                End Try
-                ' Aggiunge il parametro ID ed esegue l'aggiornamento
+            Try
+                ' Assegnazione dei parametri comuni a entrambe le query
+                cmd.Parameters.AddWithValue("@ID_FOGLIO", Me.ID_FOGLIO)
+                cmd.Parameters.AddWithValue("@ID_VOCE", Me.ID_VOCE)
+                cmd.Parameters.AddWithValue("@DATA", Me.DATA)
+                cmd.Parameters.AddWithValue("@TESTO", Me.TESTO)
+                cmd.Parameters.AddWithValue("@TOT", Me.TOT)
+                cmd.Parameters.AddWithValue("@COMPILATO", Me.COMPILATO)
+            Catch ex As Exception
+                Return False
+            End Try
+            If Me.ID <> 0 Then
                 cmd.Parameters.AddWithValue("@ID", Me.ID)
-                cmd.ExecuteNonQuery()
-            End Using
+            End If
+            cmd.ExecuteNonQuery()
         End Using
         Return True
+    End Function
+    Public Function Salva_Totali(cn As SqliteConnection, trans As SqliteTransaction) As Boolean
+        ' Rimosso il vecchio "Using cn ... cn.Open()" perché la connessione arriva già aperta
+
+        If Me.ID = 0 Then Return False
+
+        Dim sql As String = "UPDATE GIORNALIERO_COMPORTAMENTALE SET " &
+                         "TOT = @TOT, COMPILATO = @COMPILATO WHERE ID = @ID;"
+
+        ' Passiamo sia la connessione "cn" che la transazione "trans" al comando
+        Using cmd As New SqliteCommand(sql, cn, trans)
+            Try
+                cmd.Parameters.AddWithValue("@TOT", Me.TOT)
+                cmd.Parameters.AddWithValue("@COMPILATO", Me.COMPILATO)
+                cmd.Parameters.AddWithValue("@ID", Me.ID)
+
+                cmd.ExecuteNonQuery()
+                Return True ' Ritorna True se l'esecuzione va a buon fine
+            Catch ex As Exception
+                ' Logga l'errore se necessario, ma ritorna False per far scattare il Rollback nel ciclo principale
+                Return False
+            End Try
+        End Using
     End Function
 
     Public Shared Function OttieniTuttiIRecordGiornalieri(Optional dbBambino = "") As DataTable
@@ -138,7 +171,7 @@ Public Class Class_Giornaliero_CP
         Dim query As String = "SELECT * FROM GIORNALIERO_COMPORTAMENTALE " &
                           "ORDER BY TESTO ASC, " &
                           "SUBSTR(DATA, 7, 4) || '-' || SUBSTR(DATA, 4, 2) || '-' || SUBSTR(DATA, 1, 2) ASC"
-        Using cn = DB.GetConnection_Bambino(dbBambino)
+        Using cn = MY_DB.GetConnection_Bambino(dbBambino)
             Using cmd As New SqliteCommand(query, cn)
                 Using reader As SqliteDataReader = cmd.ExecuteReader()
                     ' Carica tutti i record estratti all'interno della DataTable
@@ -154,7 +187,7 @@ Public Class Class_Giornaliero_CP
 
         Dim dt As New DataTable()
         Dim query As String = "SELECT * FROM GIORNALIERO_COMPORTAMENTALE GROUP BY ID_VOCE ORDER BY TESTO ASC"
-        Using cn = DB.GetConnection_Bambino()
+        Using cn = MY_DB.GetConnection_Bambino()
             Using cmd As New SqliteCommand(query, cn)
                 Using reader As SqliteDataReader = cmd.ExecuteReader()
                     dt.Load(reader)
@@ -175,7 +208,7 @@ Public Class Class_Giornaliero_CP
             query = "SELECT * FROM GIORNALIERO_COMPORTAMENTALE WHERE TESTO = @testo ORDER BY SUBSTR(DATA, 7, 4) || '-' || SUBSTR(DATA, 4, 2) || '-' || SUBSTR(DATA, 1, 2) ASC"
         End If
 
-        Using cn = DB.GetConnection_Bambino()
+        Using cn = MY_DB.GetConnection_Bambino()
 
             Using cmd As New SqliteCommand(query, cn)
                 ' Aggiungiamo il parametro in modo sicuro
@@ -195,7 +228,7 @@ Public Class Class_Giornaliero_CP
         Dim query As String = ""
         Dim dt As New DataTable()
         query = "SELECT * FROM GIORNALIERO_COMPORTAMENTALE WHERE ID_FOGLIO = @ID_FOGLIO"
-        Using cn = DB.GetConnection_Bambino()
+        Using cn = MY_DB.GetConnection_Bambino()
             Using cmd As New SqliteCommand(query, cn)
                 cmd.Parameters.AddWithValue("@ID_FOGLIO", id_foglio)
                 Using reader As SqliteDataReader = cmd.ExecuteReader()

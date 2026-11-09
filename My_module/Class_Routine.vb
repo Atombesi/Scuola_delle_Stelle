@@ -14,7 +14,7 @@ Public Class Class_ROUTINE
     Public Property IsChecked As Boolean = False
 
     Public Function Save() As Integer
-        Using cn = DB.GetConnection_Scuoladellestelle()
+        Using cn = MY_DB.GetConnection_Scuoladellestelle()
             If ID = 0 Then
                 Dim sql As String =
                     "INSERT INTO ROUTINE (TESTO,ATTIVA) 
@@ -50,7 +50,7 @@ Public Class Class_ROUTINE
 
     Public Function Load(id As Integer) As Class_ROUTINE
 
-        Using cn = DB.GetConnection_Scuoladellestelle()
+        Using cn = MY_DB.GetConnection_Scuoladellestelle()
 
             Dim sql As String =
                 "SELECT ID, TESTO,ID_SUB,ATTIVA,Deleted
@@ -85,7 +85,7 @@ Public Class Class_ROUTINE
 
         Dim listaRisultati As New List(Of Class_ROUTINE)()
 
-        Using cn = DB.GetConnection_Scuoladellestelle()
+        Using cn = MY_DB.GetConnection_Scuoladellestelle()
 
             ' Usa l'operatore LIKE per cercare corrispondenze parziali
             Dim sql As String =

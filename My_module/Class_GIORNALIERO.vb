@@ -27,27 +27,40 @@ Public Class Class_GIORNALIERO
     '   "Server=.\SQLEXPRESS;Database=Scuoladellestelle;Trusted_Connection=True;"
 
 
-    Public Shared Function Load(id As Integer) As Class_GIORNALIERO
+    Public Shared Function Load(idF As Integer, Optional DBbambino As String = "") As Class_GIORNALIERO
 
-        Using cn = MY_DB.GetConnection_Bambino()
+        Using cn = MY_DB.GetConnection_Bambino(DBbambino)
 
 
             Dim sql As String =
-                "SELECT ID, CODICE,Testo,Testo_Lungo 
-                 FROM ELCAR
-                 WHERE ID = @ID"
+                "SELECT * FROM GIORNALIERO WHERE ID_foglio = @testo"
 
             Using cmd As New SqliteCommand(sql, cn)
 
-                cmd.Parameters.AddWithValue("@ID", id)
+                cmd.Parameters.AddWithValue("@testo", idF)
 
                 Using rd = cmd.ExecuteReader()
 
                     If rd.Read() Then
                         Dim record As New Class_GIORNALIERO()
                         record.ID = Convert.ToInt32(rd("ID"))
-                        record.Codice = Convert.ToString(rd("Codice"))
-                        record.Testo = Convert.ToString(rd("Testo"))
+                        record.ID = Convert.ToInt32(rd("ID_FOGLIO"))
+                        record.Testo = Convert.ToString(rd("TESTO"))
+                        record.Codice = Convert.ToString(rd("CODICE"))
+                        record.TOT1_POS = Convert.ToString(rd("TOT1_pos"))
+                        record.TOT1_NEG = Convert.ToString(rd("TOT1_neg"))
+                        record.TOT1_PROMPT = Convert.ToString(rd("TOT1_prompt"))
+                        record.TOT1 = Convert.ToString(rd("TOT1"))
+                        record.TOT2_POS = Convert.ToString(rd("TOT1_pos"))
+                        record.TOT2_NEG = Convert.ToString(rd("TOT1_neg"))
+                        record.TOT2_PROMPT = Convert.ToString(rd("TOT1_prompt"))
+                        record.TOT2 = Convert.ToString(rd("TOT1"))
+                        record.DATA = Convert.ToString(rd("data"))
+                        record.VALUTATIVO = Convert.ToBoolean(rd("valutativo"))
+                        record.TUTTELERISPOSTE = Convert.ToBoolean(rd("TUTTELERISPOSTE"))
+                        record.COMPILATO = Convert.ToBoolean(rd("COMPILATO"))
+
+                        Return record
                     Else
                         Return Nothing
 
@@ -106,7 +119,7 @@ Public Class Class_GIORNALIERO
         End Using
         Return listaRisultati
     End Function
-    Public Shared Function Trova_ultimo_IDFOGLIO(Optional solocompilato As Boolean = False) As Integer
+    Public Shared Function Trova_ultimo_IDFOGLIO(Optional solocompilato As Boolean = False, Optional dbBambino As String = "") As Integer
         ' Valore predefinito se non vengono trovati record per quel codice ELCAR
         Dim ultimoId As Integer = 0
 
@@ -117,7 +130,8 @@ Public Class Class_GIORNALIERO
         Else
             sql = "SELECT MAX(CAST(ID_FOGLIO AS INTEGER)) FROM GIORNALIERO "
         End If
-        Using cn = MY_DB.GetConnection_Bambino
+        Using cn = MY_DB.GetConnection_Bambino(dbBambino)
+
             ' Applica il filtro WHERE sulla colonna ELCAR e converte ID_SUB in INTEGER per il calcolo del MAX
 
             Using cmd As New SqliteCommand(sql, cn)
@@ -337,12 +351,12 @@ Public Class Class_GIORNALIERO
         Dim dt As New DataTable()
 
 
-        Dim query As String = "SELECT * FROM Giornaliero WHERE DATA BETWEEN @DataInizio AND @DataFine ORDER BY Codice, Data"
+        Dim query As String = "SELECT * FROM Giornaliero WHERE DATA BETWEEN @DataInizio And @DataFine ORDER BY Codice, Data"
         query = "
-        SELECT * 
-        FROM Giornaliero 
-        WHERE (SUBSTR(DATA, 7, 4) || '-' || SUBSTR(DATA, 4, 2) || '-' || SUBSTR(DATA, 1, 2)) 
-        BETWEEN @DataInizio AND @DataFine 
+        Select Case*
+        From Giornaliero
+        Where (SUBSTR(DATA, 7, 4) || '-' || SUBSTR(DATA, 4, 2) || '-' || SUBSTR(DATA, 1, 2)) 
+        BETWEEN @DataInizio And @DataFine 
         ORDER BY Codice, DATA"
         Using cn = MY_DB.GetConnection_Bambino()
 
@@ -367,24 +381,24 @@ Public Class Class_GIORNALIERO
         Dim query = ""
         Dim dt As New DataTable()
         If Solocompilati Then
-            query = "SELECT * FROM Giornaliero WHERE CODICE = @codice AND COMPILATO = 1 ORDER BY SUBSTR(DATA, 7, 4) || '-' || SUBSTR(DATA, 4, 2) || '-' || SUBSTR(DATA, 1, 2) ASC"
+            query = "Select * FROM Giornaliero WHERE CODICE = @codice And COMPILATO = 1 ORDER BY SUBSTR(DATA, 7, 4) || '-' || SUBSTR(DATA, 4, 2) || '-' || SUBSTR(DATA, 1, 2) ASC"
         Else
-            query = "SELECT * FROM Giornaliero WHERE CODICE = @codice ORDER BY SUBSTR(DATA, 7, 4) || '-' || SUBSTR(DATA, 4, 2) || '-' || SUBSTR(DATA, 1, 2) ASC"
-        End If
+            Query = "SELECT * FROM Giornaliero WHERE CODICE = @codice ORDER BY SUBSTR(DATA, 7, 4) || '-' || SUBSTR(DATA, 4, 2) || '-' || SUBSTR(DATA, 1, 2) ASC"
+            End If
 
-        Using cn = MY_DB.GetConnection_Bambino()
+            Using cn = MY_DB.GetConnection_Bambino()
 
-            Using cmd As New SqliteCommand(query, cn)
-                ' Aggiungiamo il parametro in modo sicuro
-                cmd.Parameters.AddWithValue("@codice", codice)
+                Using cmd As New SqliteCommand(Query, cn)
+                    ' Aggiungiamo il parametro in modo sicuro
+                    cmd.Parameters.AddWithValue("@codice", Codice)
 
-                Using reader As SqliteDataReader = cmd.ExecuteReader()
-                    dt.Load(reader)
+                    Using reader As SqliteDataReader = cmd.ExecuteReader()
+                        dt.Load(reader)
+                    End Using
                 End Using
             End Using
-        End Using
 
-        Return dt
+            Return dt
     End Function
     Public Shared Function OttieniTuttiIRecordGiornalieri(Optional dbBambino = "", Optional solocompilati = False) As DataTable
         Dim dt As New DataTable()

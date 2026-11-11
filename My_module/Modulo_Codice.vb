@@ -181,7 +181,15 @@ Public Module Modulo_Codice
         Public Labeltag As String
         Public Bambino As String
     End Structure
-
+    Public Structure Struct_Stato_compilazione
+        Public Bambino As String
+        Public ID_Bambino As Integer
+        Public DB_Bambino As String
+        Public Data As String
+        Public id_foglio As Integer
+        Public Compilato As Boolean    'True iL FOGLIO è PRESENTE NEL DATABASE DEL BAMBINO
+        Public TODOLIS As String
+    End Structure
 
 
     Public Structure Struct_FogliDaStampare

@@ -1,4 +1,8 @@
-﻿Public Class F_fogli_in_Compilazione
+﻿Imports OpenTK.Graphics.ES20
+
+Public Class F_fogli_in_Compilazione
+    Dim elenco_stato_compilazione As New Struct_Stato_compilazione
+
     Sub main(Optional tab = "DEVICE")
         Carica_dgv2()
         Carica_dgv1()
@@ -17,6 +21,9 @@
     Private Sub F_fogli_in_Compilazione_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         GroupBox3.Left = 452 : GroupBox3.Top = 5
         mostra_stato_server()
+        Label21.Tag = Now
+        Label21.Text = "       " + Now.ToString("dddd d MMMM yyyy")
+
         'Carica elenco device registrati 
         Panel1.Top = Panel2.Top
         Panel1.Left = Panel2.Left
@@ -25,6 +32,7 @@
 
         Carica_dgv2()
         Carica_dgv1()
+        Call Mostra_riassunto_GIORNALIERO_compilazione(Label21.Tag)
 
     End Sub
     Sub mostra_stato_server()
@@ -195,6 +203,7 @@
         Panel1.Visible = True
         TextBox1.ReadOnly = False
         Button9.Tag = "RENAME"
+        TextBox1.Focus()
     End Sub
 
     Private Sub Button8_Click(sender As Object, e As EventArgs) Handles Button8.Click
@@ -273,5 +282,69 @@
     Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
         Me.Hide()
 
+    End Sub
+
+    Private Sub Button10_Click(sender As Object, e As EventArgs)
+        Mostra_riassunto_GIORNALIERO_compilazione(Label21.Tag)
+
+    End Sub
+
+    Sub Mostra_riassunto_GIORNALIERO_compilazione(data)
+        'Mostral lo stato di compilazione degli ultiimi fogli 
+        '1) trovo tutti i fogli della data 
+        Dim voce As New Struct_Stato_compilazione
+        Dim elenco_vocistatocompilazione As New List(Of Struct_Stato_compilazione)
+        For Each bambino In Gbl_Elenco_bambini
+            voce.Bambino = bambino.NomeCompleto
+            voce.DB_Bambino = bambino.DBname
+            voce.ID_Bambino = bambino.ID
+            Dim IDF = Class_GIORNALIERO.Trova_ultimo_IDFOGLIO(False, voce.DB_Bambino)
+            Dim FOGLIO = Class_GIORNALIERO.Load(IDF, voce.DB_Bambino)
+            voce.Data = FOGLIO.DATA
+            voce.Compilato = FOGLIO.COMPILATO
+            elenco_vocistatocompilazione.Add(voce)
+        Next
+        '2) integro informazioni con informazioni della todolist
+        For Each el_todolist In Gbl_VociDiTodolist
+            For Each voceb In elenco_vocistatocompilazione
+                If el_todolist.ID_BAMBINO <> voceb.ID_Bambino Then Continue For
+                If voceb.Compilato Then Continue For
+                voceb.TODOLIS = el_todolist.CLIENT_NOME + " (" + el_todolist.CLIENT_DATAINVIO + ")"
+            Next
+        Next
+
+        DGV3.Rows.Clear()
+        Dim img_index = 0, stato = ""
+        For Each voceb In elenco_vocistatocompilazione
+            If voceb.Compilato Then
+                img_index = 6 : stato = "Compilato"
+            Else
+                img_index = 11 : stato = "NON Compilato"
+            End If
+            DGV3.Rows.Add(ImageList1.Images(img_index), voceb.Data, voceb.Bambino, voceb.id_foglio, stato, voceb.TODOLIS)
+        Next
+
+
+    End Sub
+
+    Private Sub TabPage3_Click(sender As Object, e As EventArgs) Handles TabPage3.Click
+
+    End Sub
+
+    Private Sub Button11_Click(sender As Object, e As EventArgs) Handles Button11.Click
+        Call Mostra_riassunto_GIORNALIERO_compilazione(Label21.Tag)
+
+    End Sub
+
+    Private Sub TextBox1_TextChanged(sender As Object, e As EventArgs) Handles TextBox1.TextChanged
+
+    End Sub
+
+    Private Sub TextBox1_GotFocus(sender As Object, e As EventArgs) Handles TextBox1.GotFocus
+        TextBox1.BackColor = MyColor.LightYellow
+    End Sub
+
+    Private Sub TextBox1_LostFocus(sender As Object, e As EventArgs) Handles TextBox1.LostFocus
+        TextBox1.BackColor = SystemColors.Control
     End Sub
 End Class

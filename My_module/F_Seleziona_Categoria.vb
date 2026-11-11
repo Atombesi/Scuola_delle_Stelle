@@ -944,7 +944,13 @@ Public Class F_Seleziona_Categoria
         End If
 
         Dim successo = True
-        If error_cnt > 0 Then successo = False
+        If error_cnt > 0 Then
+            successo = False
+            Dim x = ""
+            For Each voce In error_list
+                APPEND_LOG(voce, ini.File_Log, True, "E")
+            Next
+        End If
         Return (successo, error_list)
 
 
@@ -963,7 +969,9 @@ Public Class F_Seleziona_Categoria
         '---------------------------------------------------------------------------------------
         Dim result = Foglio_Verifica_consistenza_GBL_foglio()
         If Not result.Successo Then
-            Call MsgBox("Errore")
+            Dim m = "Errore durante la verifica" + vbCrLf + "Controlla il file log"
+            Call MsgBox(m, vbOKOnly + vbCritical, "errore")
+            Return False
         End If
 
         '---------------------------------------------------------------------------------------
@@ -977,9 +985,13 @@ Public Class F_Seleziona_Categoria
             ' Aggiungo il foglio alla lista TODOLIST  --
             '---------------------------------------------------------------------------------------
             ToDoList_Aggiungi_voce_foglio(Gbl_foglio)
+        Else
+            Dim m = "Errore durante il salvataggio" + vbCrLf + "Controlla il file log"
+            Call MsgBox(m, vbOKOnly + vbCritical, "errore")
+            Return False
         End If
 
-        Return salvato.OK
+        Return True
 
 
     End Function

@@ -1,5 +1,6 @@
 ﻿Imports System.Windows
 Imports DocumentFormat.OpenXml.Drawing
+Imports DocumentFormat.OpenXml.Office2010.PowerPoint
 Imports DocumentFormat.OpenXml.Spreadsheet
 Imports Microsoft.Data.Sqlite
 
@@ -21,7 +22,8 @@ Public Class F_main
 
         Call Read_ini()
         APPEND_LOG("Avvio programma", ini.File_Log, True, "I")
-
+        Dim m = "Printer:" + ini.Stampante_defaut
+        TP1.SetToolTip(Button11, m)
         Carica_elenco_CODICI_ELCAR()
         Gbl_Elenco_bambini = Carica_bambini()
         'Carico elenco comportamenti
@@ -364,12 +366,17 @@ Public Class F_main
             m = m + x + vbCrLf + vbCrLf
             m = m + "Vuoi salvare questa stampante cone quella di Default?"
             If MsgBox(m, vbQuestion + vbYesNo + vbDefaultButton1, "Selezione stampante default") <> vbYes Then Exit Sub
-
             Dim fileini = Gbl_app_path + "\Scuola_delle_Stelle.ini"
             WriteINIString(fileini, "GENERAL", "Stampante Default", x)
             ini.Stampante_defaut = x
+            m = "Modifica stampante di default: " + ini.Stampante_defaut
+            APPEND_LOG(m, ini.File_Log, True, "I")
         End If
 
+
+    End Sub
+
+    Private Sub TransparentskControl1_PaintSurface(sender As Object, e As SkiaSharp.Views.Desktop.SKPaintSurfaceEventArgs) Handles TransparentskControl1.PaintSurface
 
     End Sub
 End Class

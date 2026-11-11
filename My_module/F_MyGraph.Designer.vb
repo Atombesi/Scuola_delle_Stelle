@@ -54,11 +54,17 @@ Partial Class F_MyGraph
         Column5 = New DataGridViewTextBoxColumn()
         Column6 = New DataGridViewTextBoxColumn()
         TabPage3 = New TabPage()
-        Label12 = New Label()
-        Label11 = New Label()
-        Label10 = New Label()
-        Label9 = New Label()
-        Label8 = New Label()
+        Label14 = New Label()
+        Label15 = New Label()
+        Label16 = New Label()
+        Label17 = New Label()
+        Label18 = New Label()
+        Label19 = New Label()
+        Label20 = New Label()
+        Label21 = New Label()
+        Label22 = New Label()
+        Label23 = New Label()
+        Label24 = New Label()
         GroupBox1.SuspendLayout()
         TabControl1.SuspendLayout()
         TabPage2.SuspendLayout()
@@ -351,11 +357,17 @@ Partial Class F_MyGraph
         ' 
         ' TabPage3
         ' 
-        TabPage3.Controls.Add(Label12)
-        TabPage3.Controls.Add(Label11)
-        TabPage3.Controls.Add(Label10)
-        TabPage3.Controls.Add(Label9)
-        TabPage3.Controls.Add(Label8)
+        TabPage3.Controls.Add(Label14)
+        TabPage3.Controls.Add(Label23)
+        TabPage3.Controls.Add(Label15)
+        TabPage3.Controls.Add(Label24)
+        TabPage3.Controls.Add(Label16)
+        TabPage3.Controls.Add(Label22)
+        TabPage3.Controls.Add(Label17)
+        TabPage3.Controls.Add(Label21)
+        TabPage3.Controls.Add(Label18)
+        TabPage3.Controls.Add(Label20)
+        TabPage3.Controls.Add(Label19)
         TabPage3.Location = New Point(4, 24)
         TabPage3.Name = "TabPage3"
         TabPage3.Padding = New Padding(3)
@@ -364,70 +376,143 @@ Partial Class F_MyGraph
         TabPage3.Text = "Info"
         TabPage3.UseVisualStyleBackColor = True
         ' 
-        ' Label12
+        ' Label14
         ' 
-        Label12.Font = New Font("Calibri", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
-        Label12.ImageAlign = ContentAlignment.MiddleLeft
-        Label12.ImageIndex = 5
-        Label12.ImageList = ImageList1
-        Label12.Location = New Point(6, 114)
-        Label12.Name = "Label12"
-        Label12.Size = New Size(232, 26)
-        Label12.TabIndex = 6
-        Label12.Text = "     Nessun Trend (<8) (Valutare)"
-        Label12.TextAlign = ContentAlignment.MiddleLeft
+        Label14.Font = New Font("Calibri", 8.25F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        Label14.ImageAlign = ContentAlignment.MiddleLeft
+        Label14.ImageIndex = 3
+        Label14.Location = New Point(38, 144)
+        Label14.Name = "Label14"
+        Label14.Size = New Size(173, 17)
+        Label14.TabIndex = 17
+        Label14.Text = ">4 dati con andamento non definito "
+        Label14.TextAlign = ContentAlignment.MiddleLeft
         ' 
-        ' Label11
+        ' Label15
         ' 
-        Label11.Font = New Font("Calibri", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
-        Label11.ImageAlign = ContentAlignment.MiddleLeft
-        Label11.ImageIndex = 0
-        Label11.ImageList = ImageList1
-        Label11.Location = New Point(6, 88)
-        Label11.Name = "Label11"
-        Label11.Size = New Size(232, 26)
-        Label11.TabIndex = 5
-        Label11.Text = "     Dati insuffcienti  (Continuare)"
-        Label11.TextAlign = ContentAlignment.MiddleLeft
+        Label15.Font = New Font("Calibri", 8.25F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        Label15.ImageAlign = ContentAlignment.MiddleLeft
+        Label15.ImageIndex = 3
+        Label15.Location = New Point(37, 184)
+        Label15.Name = "Label15"
+        Label15.Size = New Size(173, 17)
+        Label15.TabIndex = 16
+        Label15.Text = "meno di 4 registrazioni"
+        Label15.TextAlign = ContentAlignment.MiddleLeft
         ' 
-        ' Label10
+        ' Label16
         ' 
-        Label10.Font = New Font("Calibri", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
-        Label10.ImageAlign = ContentAlignment.MiddleLeft
-        Label10.ImageIndex = 2
-        Label10.ImageList = ImageList1
-        Label10.Location = New Point(6, 62)
-        Label10.Name = "Label10"
-        Label10.Size = New Size(232, 26)
-        Label10.TabIndex = 4
-        Label10.Text = "     Trend Negativo (Cambiare)"
-        Label10.TextAlign = ContentAlignment.MiddleLeft
+        Label16.Font = New Font("Calibri", 8.25F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        Label16.ImageAlign = ContentAlignment.MiddleLeft
+        Label16.ImageIndex = 3
+        Label16.Location = New Point(37, 105)
+        Label16.Name = "Label16"
+        Label16.Size = New Size(173, 17)
+        Label16.TabIndex = 15
+        Label16.Text = "4 eventi consec. decrescenti "
+        Label16.TextAlign = ContentAlignment.MiddleLeft
         ' 
-        ' Label9
+        ' Label17
         ' 
-        Label9.Font = New Font("Calibri", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
-        Label9.ImageAlign = ContentAlignment.MiddleLeft
-        Label9.ImageIndex = 3
-        Label9.ImageList = ImageList1
-        Label9.Location = New Point(6, 36)
-        Label9.Name = "Label9"
-        Label9.Size = New Size(232, 26)
-        Label9.TabIndex = 3
-        Label9.Text = "     Trend Positivo (Continuare)"
-        Label9.TextAlign = ContentAlignment.MiddleLeft
+        Label17.Font = New Font("Calibri", 8.25F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        Label17.ImageAlign = ContentAlignment.MiddleLeft
+        Label17.ImageIndex = 3
+        Label17.Location = New Point(37, 66)
+        Label17.Name = "Label17"
+        Label17.Size = New Size(173, 17)
+        Label17.TabIndex = 14
+        Label17.Text = "4 eventi consec. crescenti < 80%"
+        Label17.TextAlign = ContentAlignment.MiddleLeft
         ' 
-        ' Label8
+        ' Label18
         ' 
-        Label8.Font = New Font("Calibri", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
-        Label8.ImageAlign = ContentAlignment.MiddleLeft
-        Label8.ImageIndex = 4
-        Label8.ImageList = ImageList1
-        Label8.Location = New Point(6, 10)
-        Label8.Name = "Label8"
-        Label8.Size = New Size(155, 26)
-        Label8.TabIndex = 2
-        Label8.Text = "     Obiettivo ragiunto"
-        Label8.TextAlign = ContentAlignment.MiddleLeft
+        Label18.Font = New Font("Calibri", 8.25F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        Label18.ImageAlign = ContentAlignment.MiddleLeft
+        Label18.ImageIndex = 3
+        Label18.Location = New Point(38, 28)
+        Label18.Name = "Label18"
+        Label18.Size = New Size(173, 17)
+        Label18.TabIndex = 13
+        Label18.Text = "3 eventi consecutivi >= 80%"
+        Label18.TextAlign = ContentAlignment.MiddleLeft
+        ' 
+        ' Label19
+        ' 
+        Label19.Font = New Font("Calibri", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        Label19.ImageAlign = ContentAlignment.MiddleLeft
+        Label19.ImageIndex = 1
+        Label19.ImageList = ImageList1
+        Label19.Location = New Point(22, 200)
+        Label19.Name = "Label19"
+        Label19.Size = New Size(188, 20)
+        Label19.TabIndex = 12
+        Label19.Text = "     Nessun dato inserito"
+        Label19.TextAlign = ContentAlignment.MiddleLeft
+        ' 
+        ' Label20
+        ' 
+        Label20.Font = New Font("Calibri", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        Label20.ImageAlign = ContentAlignment.MiddleLeft
+        Label20.ImageIndex = 5
+        Label20.ImageList = ImageList1
+        Label20.Location = New Point(22, 122)
+        Label20.Name = "Label20"
+        Label20.Size = New Size(188, 26)
+        Label20.TabIndex = 11
+        Label20.Text = "     Nessun Trend (<8) (Valutare)"
+        Label20.TextAlign = ContentAlignment.MiddleLeft
+        ' 
+        ' Label21
+        ' 
+        Label21.Font = New Font("Calibri", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        Label21.ImageAlign = ContentAlignment.MiddleLeft
+        Label21.ImageIndex = 0
+        Label21.ImageList = ImageList1
+        Label21.Location = New Point(22, 161)
+        Label21.Name = "Label21"
+        Label21.Size = New Size(188, 26)
+        Label21.TabIndex = 10
+        Label21.Text = "     Dati insuffcienti  (Continuare)"
+        Label21.TextAlign = ContentAlignment.MiddleLeft
+        ' 
+        ' Label22
+        ' 
+        Label22.Font = New Font("Calibri", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        Label22.ImageAlign = ContentAlignment.MiddleLeft
+        Label22.ImageIndex = 2
+        Label22.ImageList = ImageList1
+        Label22.Location = New Point(22, 86)
+        Label22.Name = "Label22"
+        Label22.Size = New Size(188, 23)
+        Label22.TabIndex = 9
+        Label22.Text = "     Trend Negativo (Cambiare)"
+        Label22.TextAlign = ContentAlignment.MiddleLeft
+        ' 
+        ' Label23
+        ' 
+        Label23.Font = New Font("Calibri", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        Label23.ImageAlign = ContentAlignment.MiddleLeft
+        Label23.ImageIndex = 3
+        Label23.ImageList = ImageList1
+        Label23.Location = New Point(22, 46)
+        Label23.Name = "Label23"
+        Label23.Size = New Size(188, 22)
+        Label23.TabIndex = 8
+        Label23.Text = "     Trend Positivo (Continuare)"
+        Label23.TextAlign = ContentAlignment.MiddleLeft
+        ' 
+        ' Label24
+        ' 
+        Label24.Font = New Font("Calibri", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        Label24.ImageAlign = ContentAlignment.MiddleLeft
+        Label24.ImageIndex = 4
+        Label24.ImageList = ImageList1
+        Label24.Location = New Point(22, 7)
+        Label24.Name = "Label24"
+        Label24.Size = New Size(155, 26)
+        Label24.TabIndex = 7
+        Label24.Text = "     Obiettivo ragiunto"
+        Label24.TextAlign = ContentAlignment.MiddleLeft
         ' 
         ' F_MyGraph
         ' 
@@ -481,9 +566,15 @@ Partial Class F_MyGraph
     Friend WithEvents l8 As Label
     Friend WithEvents l7 As Label
     Friend WithEvents L6 As Label
-    Friend WithEvents Label8 As Label
-    Friend WithEvents Label10 As Label
-    Friend WithEvents Label9 As Label
-    Friend WithEvents Label11 As Label
-    Friend WithEvents Label12 As Label
+    Friend WithEvents Label14 As Label
+    Friend WithEvents Label23 As Label
+    Friend WithEvents Label15 As Label
+    Friend WithEvents Label24 As Label
+    Friend WithEvents Label16 As Label
+    Friend WithEvents Label22 As Label
+    Friend WithEvents Label17 As Label
+    Friend WithEvents Label21 As Label
+    Friend WithEvents Label18 As Label
+    Friend WithEvents Label20 As Label
+    Friend WithEvents Label19 As Label
 End Class

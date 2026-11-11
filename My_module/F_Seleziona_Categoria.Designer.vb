@@ -24,7 +24,7 @@ Partial Class F_Seleziona_Categoria
     Private Sub InitializeComponent()
         components = New ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(F_Seleziona_Categoria))
-        Dim DataGridViewCellStyle3 As DataGridViewCellStyle = New DataGridViewCellStyle()
+        Dim DataGridViewCellStyle2 As DataGridViewCellStyle = New DataGridViewCellStyle()
         ComboBox3 = New ComboBox()
         Label1 = New Label()
         ComboBox2 = New ComboBox()
@@ -651,8 +651,8 @@ Partial Class F_Seleziona_Categoria
         ' 
         ' Col2
         ' 
-        DataGridViewCellStyle3.WrapMode = DataGridViewTriState.True
-        Col2.DefaultCellStyle = DataGridViewCellStyle3
+        DataGridViewCellStyle2.WrapMode = DataGridViewTriState.True
+        Col2.DefaultCellStyle = DataGridViewCellStyle2
         Col2.HeaderText = "Testo inserito"
         Col2.Name = "Col2"
         Col2.Width = 370
@@ -673,12 +673,13 @@ Partial Class F_Seleziona_Categoria
         ' 
         Button6.Font = New Font("Segoe UI", 9F)
         Button6.ForeColor = SystemColors.ControlText
-        Button6.Location = New Point(630, 568)
+        Button6.Location = New Point(631, 571)
         Button6.Name = "Button6"
-        Button6.Size = New Size(167, 33)
+        Button6.Size = New Size(121, 29)
         Button6.TabIndex = 36
-        Button6.Text = "Gestione Stampa Fogli"
+        Button6.Text = "Gestione Stampe"
         Button6.UseVisualStyleBackColor = True
+        Button6.Visible = False
         ' 
         ' Label23
         ' 
@@ -759,6 +760,7 @@ Partial Class F_Seleziona_Categoria
         Button12.TabIndex = 34
         TP1.SetToolTip(Button12, "Open Folder ""Fogli da stampare""")
         Button12.UseVisualStyleBackColor = True
+        Button12.Visible = False
         ' 
         ' Label15
         ' 
@@ -917,6 +919,7 @@ Partial Class F_Seleziona_Categoria
         Controls.Add(TextBox1)
         FormBorderStyle = FormBorderStyle.FixedSingle
         Name = "F_Seleziona_Categoria"
+        ShowIcon = False
         Text = "Preparazione foglio esercizi individuale"
         GroupBox1.ResumeLayout(False)
         GroupBox1.PerformLayout()

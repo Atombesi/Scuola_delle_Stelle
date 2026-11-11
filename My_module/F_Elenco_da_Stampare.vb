@@ -379,22 +379,14 @@ Public Class F_Elenco_da_Stampare
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+        ' Prepara DOCX dei fogli selezionati 
         Dim cnt = 0
         Dim NN = Label15.Tag - Label17.Tag
 
-        'Dim preparatutto As Boolean = False
-        'If NN > 0 Then
-        '    Dim m = "Sono presenti " + NN.ToString + ") fogli gia pronti?" + vbCrLf + vbCrLf
-        '    m = m + "Vuoi Rifare anche quelli?"
-        '    If MsgBox(m, vbInformation + vbYesNo + vbDefaultButton2, "Preparazione docx per stampa") = vbYes Then preparatutto = True
-        'End If
 
         Dim n = DGV1.Rows.Count - 1
         For jr = 0 To n
             If Not DGV1.Rows(jr).Cells(0).Value Then Continue For  ' Non selezionata 
-            'If Not DGV1.Rows(jr).Cells(6).Value = 2 Then           ' Verde, gia pronto
-            '    If Not preparatutto Then Continue For
-            'End If
             Dim j = DGV1.Rows(jr).Cells(5).Value
             Dim ID_foglio = Gbl_Elenco_fogli_stampa(j).id_foglio
             Gbl_DB_BAMBINO = Gbl_Elenco_fogli_stampa(j).DB_Bambino
@@ -499,7 +491,6 @@ Public Class F_Elenco_da_Stampare
             Dim f = Gbl_Elenco_fogli_stampa(i).filename
             If IO.File.Exists(f) Then listaFoglidaStampare.Add(f)
         Next
-
 
         If ini.Stampante_defaut = "Nessuna" Then
             Dim x = Imposta_stampante()

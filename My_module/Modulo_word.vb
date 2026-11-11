@@ -877,6 +877,7 @@ Module Modulo_word
 
 
     Public Sub StampaListaSuStampanteScelta(elencoFileDaStampare As List(Of String), nomeStampanteTarget As String)
+        Dim m = "", cnt_ok = 0, cnt_err = 0
         For Each percorsoFile In elencoFileDaStampare
             If IO.File.Exists(percorsoFile) Then
                 Try
@@ -885,13 +886,14 @@ Module Modulo_word
                     ' Chiamiamo l'eseguibile di LibreOffice (soffice.exe)
                     infoProcesso.FileName = Trova_percorso_Soffice()
                     If infoProcesso.FileName = "" Then
+                        m = "Processo di stampa (Soffuce.exe) NON Trovato"
+                        Call APPEND_LOG(m, ini.File_Log, True, "E")
                         Call MsgBox("Soffice non trovato")
                         Exit Sub
                     End If
 
                     ' Argomenti: --headless (invisibile), --pt (invia alla stampante indicata)
                     infoProcesso.Arguments = $"--headless --pt ""{nomeStampanteTarget}"" ""{percorsoFile}"""
-
                     infoProcesso.CreateNoWindow = True
                     infoProcesso.WindowStyle = ProcessWindowStyle.Hidden
                     infoProcesso.UseShellExecute = False ' Obbligatorio impostare su False per passare gli argomenti a soffice.exe
@@ -902,14 +904,23 @@ Module Modulo_word
                         ' prima di passare al documento successivo nella lista
                         proc.WaitForExit(15000)
                     End Using
-
+                    cnt_ok = cnt_ok + 1
                 Catch ex As Exception
+                    m = "Errore di stampa del foglio: " + IO.Path.GetFileName(percorsoFile)
+                    Call APPEND_LOG(m, ini.File_Log, True, "E")
                     Call MsgBox($"Errore nell'invio alla stampante del file {IO.Path.GetFileName(percorsoFile)}: {ex.Message}", MsgBoxStyle.Exclamation)
+                    cnt_err = cnt_err + 1
                 End Try
             End If
         Next
-
         MsgBox("Tutti i documenti della lista sono stati inviati alla stampante selezionata!", MsgBoxStyle.Information)
+        If cnt_err = 0 Then
+            m = "Stampati correttamente " + cnt_ok.ToString + "Fogli"
+            Call APPEND_LOG(m, ini.File_Log, True, "1")
+        Else
+            m = "Stampati correttamente " + cnt_ok.ToString + "Fogli su " + elencoFileDaStampare.Count.ToString
+            Call APPEND_LOG(m, ini.File_Log, True, "W")
+        End If
     End Sub
     Function Trova_percorso_Soffice() As String
         ' 1. TROVA IL PERCORSO REALE DI LIBREOFFICE SUL DISCO FISSO

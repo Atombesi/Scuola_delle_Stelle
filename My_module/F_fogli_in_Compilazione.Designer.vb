@@ -34,6 +34,8 @@ Partial Class F_fogli_in_Compilazione
         Column14 = New DataGridViewTextBoxColumn()
         Label1 = New Label()
         GroupBox1 = New GroupBox()
+        Label17 = New Label()
+        Label18 = New Label()
         Label4 = New Label()
         ImageList1 = New ImageList(components)
         Label3 = New Label()
@@ -74,6 +76,19 @@ Partial Class F_fogli_in_Compilazione
         Button7 = New Button()
         TextBox1 = New TextBox()
         Label5 = New Label()
+        TabPage3 = New TabPage()
+        Label21 = New Label()
+        Button11 = New Button()
+        Label19 = New Label()
+        DGV3 = New DataGridView()
+        Column15 = New DataGridViewImageColumn()
+        DataGridViewTextBoxColumn9 = New DataGridViewTextBoxColumn()
+        DataGridViewTextBoxColumn6 = New DataGridViewTextBoxColumn()
+        DataGridViewTextBoxColumn7 = New DataGridViewTextBoxColumn()
+        DataGridViewTextBoxColumn8 = New DataGridViewTextBoxColumn()
+        DataGridViewTextBoxColumn10 = New DataGridViewTextBoxColumn()
+        DataGridViewTextBoxColumn11 = New DataGridViewTextBoxColumn()
+        DataGridViewTextBoxColumn12 = New DataGridViewTextBoxColumn()
         GroupBox3 = New GroupBox()
         Label8 = New Label()
         Label7 = New Label()
@@ -89,8 +104,6 @@ Partial Class F_fogli_in_Compilazione
         TSM_Elimina_foglio = New ToolStripMenuItem()
         Button4 = New Button()
         tp1 = New ToolTip(components)
-        Label17 = New Label()
-        Label18 = New Label()
         CType(dgv1, ComponentModel.ISupportInitialize).BeginInit()
         GroupBox1.SuspendLayout()
         GroupBox2.SuspendLayout()
@@ -100,6 +113,8 @@ Partial Class F_fogli_in_Compilazione
         TabPage2.SuspendLayout()
         Panel2.SuspendLayout()
         Panel1.SuspendLayout()
+        TabPage3.SuspendLayout()
+        CType(DGV3, ComponentModel.ISupportInitialize).BeginInit()
         GroupBox3.SuspendLayout()
         CMenuStrip1.SuspendLayout()
         SuspendLayout()
@@ -111,7 +126,7 @@ Partial Class F_fogli_in_Compilazione
         dgv1.Location = New Point(9, 22)
         dgv1.Name = "dgv1"
         dgv1.RowHeadersVisible = False
-        dgv1.Size = New Size(437, 140)
+        dgv1.Size = New Size(562, 140)
         dgv1.TabIndex = 0
         ' 
         ' Column11
@@ -181,6 +196,27 @@ Partial Class F_fogli_in_Compilazione
         GroupBox1.TabStop = False
         GroupBox1.Text = "Network status"
         ' 
+        ' Label17
+        ' 
+        Label17.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
+        Label17.ImageAlign = ContentAlignment.MiddleLeft
+        Label17.ImageIndex = 3
+        Label17.Location = New Point(523, 16)
+        Label17.Name = "Label17"
+        Label17.Size = New Size(24, 20)
+        Label17.TabIndex = 6
+        Label17.Text = "0"
+        Label17.TextAlign = ContentAlignment.MiddleLeft
+        ' 
+        ' Label18
+        ' 
+        Label18.AutoSize = True
+        Label18.Location = New Point(392, 19)
+        Label18.Name = "Label18"
+        Label18.Size = New Size(129, 15)
+        Label18.TabIndex = 5
+        Label18.Text = "N. fogli compilati oggi:"
+        ' 
         ' Label4
         ' 
         Label4.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
@@ -209,6 +245,8 @@ Partial Class F_fogli_in_Compilazione
         ImageList1.Images.SetKeyName(7, "icons8-informazioni-144.png")
         ImageList1.Images.SetKeyName(8, "Setting.png")
         ImageList1.Images.SetKeyName(9, "icons8-rimuovere-96.png")
+        ImageList1.Images.SetKeyName(10, "Emoji Objects-108.png")
+        ImageList1.Images.SetKeyName(11, "icons8-eliminare-96.png")
         ' 
         ' Label3
         ' 
@@ -233,7 +271,7 @@ Partial Class F_fogli_in_Compilazione
         GroupBox2.Controls.Add(dgv1)
         GroupBox2.Location = New Point(6, 6)
         GroupBox2.Name = "GroupBox2"
-        GroupBox2.Size = New Size(473, 176)
+        GroupBox2.Size = New Size(600, 176)
         GroupBox2.TabIndex = 3
         GroupBox2.TabStop = False
         GroupBox2.Text = "Client registrati"
@@ -267,7 +305,7 @@ Partial Class F_fogli_in_Compilazione
         ' 
         DataGridViewTextBoxColumn3.HeaderText = "Bambino"
         DataGridViewTextBoxColumn3.Name = "DataGridViewTextBoxColumn3"
-        DataGridViewTextBoxColumn3.Width = 130
+        DataGridViewTextBoxColumn3.Width = 160
         ' 
         ' DataGridViewTextBoxColumn4
         ' 
@@ -322,6 +360,7 @@ Partial Class F_fogli_in_Compilazione
         ' 
         TabControl1.Controls.Add(TabPage1)
         TabControl1.Controls.Add(TabPage2)
+        TabControl1.Controls.Add(TabPage3)
         TabControl1.Location = New Point(3, 54)
         TabControl1.Name = "TabControl1"
         TabControl1.SelectedIndex = 0
@@ -484,7 +523,7 @@ Partial Class F_fogli_in_Compilazione
         ' 
         Panel2.Controls.Add(Button2)
         Panel2.Controls.Add(Button5)
-        Panel2.Location = New Point(264, 197)
+        Panel2.Location = New Point(358, 197)
         Panel2.Name = "Panel2"
         Panel2.Size = New Size(179, 33)
         Panel2.TabIndex = 60
@@ -520,7 +559,7 @@ Partial Class F_fogli_in_Compilazione
         ' 
         Panel1.Controls.Add(Button8)
         Panel1.Controls.Add(Button9)
-        Panel1.Location = New Point(266, 234)
+        Panel1.Location = New Point(360, 234)
         Panel1.Name = "Panel1"
         Panel1.Size = New Size(179, 33)
         Panel1.TabIndex = 59
@@ -559,7 +598,7 @@ Partial Class F_fogli_in_Compilazione
         Button7.ForeColor = SystemColors.ControlText
         Button7.ImageIndex = 9
         Button7.ImageList = ImageList1
-        Button7.Location = New Point(451, 201)
+        Button7.Location = New Point(545, 201)
         Button7.Name = "Button7"
         Button7.Size = New Size(25, 26)
         Button7.TabIndex = 64
@@ -570,7 +609,7 @@ Partial Class F_fogli_in_Compilazione
         TextBox1.Location = New Point(141, 204)
         TextBox1.Name = "TextBox1"
         TextBox1.ReadOnly = True
-        TextBox1.Size = New Size(115, 23)
+        TextBox1.Size = New Size(205, 23)
         TextBox1.TabIndex = 61
         ' 
         ' Label5
@@ -581,6 +620,115 @@ Partial Class F_fogli_in_Compilazione
         Label5.Size = New Size(122, 15)
         Label5.TabIndex = 60
         Label5.Text = "Nome del dispositivo:"
+        ' 
+        ' TabPage3
+        ' 
+        TabPage3.Controls.Add(Label21)
+        TabPage3.Controls.Add(Button11)
+        TabPage3.Controls.Add(Label19)
+        TabPage3.Controls.Add(DGV3)
+        TabPage3.Location = New Point(4, 24)
+        TabPage3.Name = "TabPage3"
+        TabPage3.Padding = New Padding(3)
+        TabPage3.Size = New Size(629, 255)
+        TabPage3.TabIndex = 2
+        TabPage3.Text = "Stato compilazione"
+        TabPage3.UseVisualStyleBackColor = True
+        ' 
+        ' Label21
+        ' 
+        Label21.BackColor = SystemColors.Control
+        Label21.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
+        Label21.ImageAlign = ContentAlignment.MiddleLeft
+        Label21.ImageIndex = 10
+        Label21.ImageList = ImageList1
+        Label21.Location = New Point(350, 8)
+        Label21.Name = "Label21"
+        Label21.Size = New Size(189, 23)
+        Label21.TabIndex = 71
+        Label21.Text = "         Data:"
+        Label21.TextAlign = ContentAlignment.MiddleLeft
+        ' 
+        ' Button11
+        ' 
+        Button11.BackColor = SystemColors.Control
+        Button11.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
+        Button11.ForeColor = SystemColors.ControlText
+        Button11.ImageIndex = 4
+        Button11.ImageList = ImageList1
+        Button11.Location = New Point(6, 6)
+        Button11.Name = "Button11"
+        Button11.Size = New Size(31, 28)
+        Button11.TabIndex = 70
+        Button11.UseVisualStyleBackColor = False
+        ' 
+        ' Label19
+        ' 
+        Label19.BorderStyle = BorderStyle.Fixed3D
+        Label19.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
+        Label19.Location = New Point(40, 12)
+        Label19.Name = "Label19"
+        Label19.Size = New Size(278, 18)
+        Label19.TabIndex = 68
+        Label19.Text = "Risassunto dello stato di compilazione dei fogli:"
+        ' 
+        ' DGV3
+        ' 
+        DGV3.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        DGV3.Columns.AddRange(New DataGridViewColumn() {Column15, DataGridViewTextBoxColumn9, DataGridViewTextBoxColumn6, DataGridViewTextBoxColumn7, DataGridViewTextBoxColumn8, DataGridViewTextBoxColumn10, DataGridViewTextBoxColumn11, DataGridViewTextBoxColumn12})
+        DGV3.Location = New Point(17, 45)
+        DGV3.Name = "DGV3"
+        DGV3.RowHeadersVisible = False
+        DGV3.Size = New Size(596, 198)
+        DGV3.TabIndex = 1
+        ' 
+        ' Column15
+        ' 
+        Column15.HeaderText = ""
+        Column15.Name = "Column15"
+        Column15.Width = 40
+        ' 
+        ' DataGridViewTextBoxColumn9
+        ' 
+        DataGridViewTextBoxColumn9.HeaderText = "Data"
+        DataGridViewTextBoxColumn9.Name = "DataGridViewTextBoxColumn9"
+        DataGridViewTextBoxColumn9.Width = 80
+        ' 
+        ' DataGridViewTextBoxColumn6
+        ' 
+        DataGridViewTextBoxColumn6.HeaderText = "Bambino"
+        DataGridViewTextBoxColumn6.Name = "DataGridViewTextBoxColumn6"
+        DataGridViewTextBoxColumn6.Width = 130
+        ' 
+        ' DataGridViewTextBoxColumn7
+        ' 
+        DataGridViewTextBoxColumn7.HeaderText = "IDF"
+        DataGridViewTextBoxColumn7.Name = "DataGridViewTextBoxColumn7"
+        DataGridViewTextBoxColumn7.Width = 30
+        ' 
+        ' DataGridViewTextBoxColumn8
+        ' 
+        DataGridViewTextBoxColumn8.HeaderText = "Stato"
+        DataGridViewTextBoxColumn8.Name = "DataGridViewTextBoxColumn8"
+        DataGridViewTextBoxColumn8.ReadOnly = True
+        ' 
+        ' DataGridViewTextBoxColumn10
+        ' 
+        DataGridViewTextBoxColumn10.HeaderText = "Note"
+        DataGridViewTextBoxColumn10.Name = "DataGridViewTextBoxColumn10"
+        DataGridViewTextBoxColumn10.Width = 200
+        ' 
+        ' DataGridViewTextBoxColumn11
+        ' 
+        DataGridViewTextBoxColumn11.HeaderText = "ID_FOGLIO"
+        DataGridViewTextBoxColumn11.Name = "DataGridViewTextBoxColumn11"
+        DataGridViewTextBoxColumn11.Visible = False
+        ' 
+        ' DataGridViewTextBoxColumn12
+        ' 
+        DataGridViewTextBoxColumn12.HeaderText = "DBBambino"
+        DataGridViewTextBoxColumn12.Name = "DataGridViewTextBoxColumn12"
+        DataGridViewTextBoxColumn12.Visible = False
         ' 
         ' GroupBox3
         ' 
@@ -704,27 +852,6 @@ Partial Class F_fogli_in_Compilazione
         Button4.Text = "Close"
         Button4.UseVisualStyleBackColor = False
         ' 
-        ' Label17
-        ' 
-        Label17.Font = New Font("Segoe UI", 9F, FontStyle.Bold)
-        Label17.ImageAlign = ContentAlignment.MiddleLeft
-        Label17.ImageIndex = 3
-        Label17.Location = New Point(474, 16)
-        Label17.Name = "Label17"
-        Label17.Size = New Size(24, 20)
-        Label17.TabIndex = 6
-        Label17.Text = "0"
-        Label17.TextAlign = ContentAlignment.MiddleLeft
-        ' 
-        ' Label18
-        ' 
-        Label18.AutoSize = True
-        Label18.Location = New Point(343, 19)
-        Label18.Name = "Label18"
-        Label18.Size = New Size(129, 15)
-        Label18.TabIndex = 5
-        Label18.Text = "N. fogli compilati oggi:"
-        ' 
         ' F_fogli_in_Compilazione
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
@@ -751,6 +878,8 @@ Partial Class F_fogli_in_Compilazione
         TabPage2.PerformLayout()
         Panel2.ResumeLayout(False)
         Panel1.ResumeLayout(False)
+        TabPage3.ResumeLayout(False)
+        CType(DGV3, ComponentModel.ISupportInitialize).EndInit()
         GroupBox3.ResumeLayout(False)
         CMenuStrip1.ResumeLayout(False)
         ResumeLayout(False)
@@ -809,6 +938,14 @@ Partial Class F_fogli_in_Compilazione
     Friend WithEvents Panel1 As Panel
     Friend WithEvents Button8 As Button
     Friend WithEvents Button9 As Button
+    Friend WithEvents tp1 As ToolTip
+    Friend WithEvents Label17 As Label
+    Friend WithEvents Label18 As Label
+    Friend WithEvents TabPage3 As TabPage
+    Friend WithEvents Label19 As Label
+    Friend WithEvents DGV3 As DataGridView
+    Friend WithEvents Button11 As Button
+    Friend WithEvents Label21 As Label
     Friend WithEvents Column10 As DataGridViewImageColumn
     Friend WithEvents DataGridViewTextBoxColumn2 As DataGridViewTextBoxColumn
     Friend WithEvents DataGridViewTextBoxColumn3 As DataGridViewTextBoxColumn
@@ -820,7 +957,12 @@ Partial Class F_fogli_in_Compilazione
     Friend WithEvents Column7 As DataGridViewTextBoxColumn
     Friend WithEvents Column9 As DataGridViewTextBoxColumn
     Friend WithEvents Column13 As DataGridViewTextBoxColumn
-    Friend WithEvents tp1 As ToolTip
-    Friend WithEvents Label17 As Label
-    Friend WithEvents Label18 As Label
+    Friend WithEvents Column15 As DataGridViewImageColumn
+    Friend WithEvents DataGridViewTextBoxColumn9 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn6 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn7 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn8 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn10 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn11 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn12 As DataGridViewTextBoxColumn
 End Class

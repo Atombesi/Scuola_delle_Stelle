@@ -44,6 +44,7 @@ Partial Class F_main
         Button8 = New Button()
         CheckBox2 = New CheckBox()
         P_Setting = New Panel()
+        Button11 = New Button()
         Label4 = New Label()
         Button13 = New Button()
         Button14 = New Button()
@@ -55,7 +56,6 @@ Partial Class F_main
         TransparentskControl1 = New ScottPlot.WinForms.TransparentSKControl()
         Panel1 = New Panel()
         Timer1 = New Timer(components)
-        Button11 = New Button()
         PrintDialog1 = New PrintDialog()
         P_schede.SuspendLayout()
         P_Stampe.SuspendLayout()
@@ -286,6 +286,16 @@ Partial Class F_main
         P_Setting.Size = New Size(120, 185)
         P_Setting.TabIndex = 20
         ' 
+        ' Button11
+        ' 
+        Button11.Font = New Font("Segoe UI", 9F)
+        Button11.Location = New Point(5, 85)
+        Button11.Name = "Button11"
+        Button11.Size = New Size(108, 25)
+        Button11.TabIndex = 15
+        Button11.Text = "Set Printer"
+        Button11.UseVisualStyleBackColor = True
+        ' 
         ' Label4
         ' 
         Label4.BackColor = Color.Khaki
@@ -390,16 +400,6 @@ Partial Class F_main
         ' Timer1
         ' 
         Timer1.Interval = 60000
-        ' 
-        ' Button11
-        ' 
-        Button11.Font = New Font("Segoe UI", 9F)
-        Button11.Location = New Point(5, 85)
-        Button11.Name = "Button11"
-        Button11.Size = New Size(108, 25)
-        Button11.TabIndex = 15
-        Button11.Text = "Set Printer"
-        Button11.UseVisualStyleBackColor = True
         ' 
         ' PrintDialog1
         ' 

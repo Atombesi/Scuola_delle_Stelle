@@ -118,42 +118,40 @@ Public Class Class_DEVICE
     End Sub
 
 
+
+    ' TABLET-REG-01 - INIZIO: verifica stato dispositivo
     Public Shared Function Dispositivo_Registrato_Stato(ByVal deviceId As String, ByRef nomeDevice As String) As Integer
-        ' Ritorna: 1 = Approvato, 0 = In Attesa, -1 = Non Presente
+        ' 1 = autorizzato, 0 = in attesa, -1 = sconosciuto, -2 = errore
         nomeDevice = ""
-        Dim abilitato = -1
+
+        If String.IsNullOrWhiteSpace(deviceId) Then Return -2
 
         Try
             Using cn = MY_DB.GetConnection_Scuoladellestelle()
                 If cn.State <> ConnectionState.Open Then cn.Open()
 
-                Dim queryRilevamento As String = "SELECT NOME, ENABLED FROM DEVICE WHERE MAC = @mac"
-                Using cmd As New SqliteCommand(queryRilevamento, cn)
+                Dim sql As String = "SELECT NOME, ENABLED FROM DEVICE WHERE MAC = @mac"
+                Using cmd As New SqliteCommand(sql, cn)
                     cmd.Parameters.AddWithValue("@mac", deviceId)
 
                     Using reader As SqliteDataReader = cmd.ExecuteReader()
-                        If reader.Read() Then
-                            Dim enabled As Integer = Convert.ToInt32(reader("ENABLED"))
-                            nomeDevice = reader("NOME").ToString()
-                            Abilitato = reader("ENABLED")
-                            ' Esiste! Ritorna il valore reale del flag (1 o 0)
-                            If abilitato = 1 Then
-                                Return 1
-                            Else
-                                Return 0
-                            End If
-                        Else
-                            ' Non esiste proprio nel DB
-                            Return -1
-                        End If
+                        If Not reader.Read() Then Return -1
+
+                        nomeDevice = Convert.ToString(reader("NOME"))
+                        Dim enabled As Integer = Convert.ToInt32(reader("ENABLED"))
+
+                        If enabled = 1 Then Return 1
+                        Return 0
                     End Using
                 End Using
             End Using
         Catch ex As Exception
-            Console.WriteLine("Errore SQLite: " & ex.Message)
-            Return -1
+            Console.WriteLine("Errore durante la verifica del dispositivo: " & ex.Message)
+            Return -2
         End Try
     End Function
+    ' TABLET-REG-01 - FINE
+
     Public Shared Function Load_by_MAC(MAC) As Class_DEVICE
         Try
             Using cn = MY_DB.GetConnection_Scuoladellestelle()
@@ -266,27 +264,24 @@ Public Class Class_DEVICE
     End Function
 
 
+
+    ' TABLET-REG-01 - INIZIO: validazione registrazione
     Public Shared Function RegistraNuovoDispositivo(ByVal deviceId As String, ByVal messaggioUtente As String, Optional Abilitato As Boolean = False) As Boolean
-        ' In SQLite, i nomi dei campi e parametri seguono lo stesso standard standardizzato
-        Dim queryInserimento As String = "INSERT INTO DEVICE (NOME, ENABLED, MAC, STATO) VALUES (@nome, 0, @mac, @stato)"
+        If String.IsNullOrWhiteSpace(deviceId) OrElse String.IsNullOrWhiteSpace(messaggioUtente) Then
+            Return False
+        End If
+
+        Dim sql As String = "INSERT INTO DEVICE (NOME, ENABLED, MAC, STATO) VALUES (@nome, 0, @mac, @stato)"
 
         Try
             Using cn = MY_DB.GetConnection_Scuoladellestelle()
                 If cn.State <> ConnectionState.Open Then cn.Open()
 
-                Using cmdInsert As New SqliteCommand(queryInserimento, cn)
-                    ' Configurazione dei parametri inseriti dall'utente del tablet
-                    cmdInsert.Parameters.AddWithValue("@nome", "Richiesta: " & messaggioUtente)
-                    cmdInsert.Parameters.AddWithValue("@mac", deviceId)
-                    If Abilitato Then
-                        cmdInsert.Parameters.AddWithValue("@enabled", 1)
-                        cmdInsert.Parameters.AddWithValue("@stato", "Abilitato")
-                    Else
-                        cmdInsert.Parameters.AddWithValue("@enabled", 0)
-                        cmdInsert.Parameters.AddWithValue("@stato", "In attesa")
-                    End If
-                    ' Esegue l'inserimento fisico nel file del database SQLite
-                    cmdInsert.ExecuteNonQuery()
+                Using cmd As New SqliteCommand(sql, cn)
+                    cmd.Parameters.AddWithValue("@nome", "Richiesta: " & messaggioUtente.Trim())
+                    cmd.Parameters.AddWithValue("@mac", deviceId.Trim())
+                    cmd.Parameters.AddWithValue("@stato", "In attesa")
+                    cmd.ExecuteNonQuery()
                     Return True
                 End Using
             End Using
@@ -295,4 +290,6 @@ Public Class Class_DEVICE
             Return False
         End Try
     End Function
+    ' TABLET-REG-01 - FINE
+
 End Class

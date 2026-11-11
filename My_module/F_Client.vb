@@ -2,28 +2,56 @@
     Public IdDispositivoDaAbilitare As String
     Public Nome_Dispositivo As String
     Public NotaDispositivo As String
+
+    ' TABLET-REG-02A - INIZIO: approvazione e salvataggio del nome assegnato
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button_Abilita.Click
-        Nome_Dispositivo = T_nomeclient.Text
-        Nome_Dispositivo = InputBox("Nome identificativo del dispositivo:", "Nuovo dispositivo Android", Nome_Dispositivo)
+
+        Nome_Dispositivo = InputBox(
+        "Nome identificativo del dispositivo:",
+        "Nuovo dispositivo Android",
+        T_nomeclient.Text).Trim()
+
         If String.IsNullOrWhiteSpace(Nome_Dispositivo) Then
             MessageBox.Show("Inserisci un nome da assegnare a questo dispositivo.")
             T_nomeclient.Focus()
             Return
         End If
 
-        'Dim esito As Boolean = Class_DEVICE.RegistraNuovoDispositivo(IdDispositivoDaAbilitare, Nome_Dispositivo, True)
-        Dim esito = Class_DEVICE.Abilita_dispositivo(IdDispositivoDaAbilitare, True)
-        If esito Then
+        Try
+            Dim dispositivo As Class_DEVICE = Class_DEVICE.Load_by_MAC(IdDispositivoDaAbilitare)
+
+            If dispositivo Is Nothing Then
+                MessageBox.Show("Dispositivo non trovato nel database.")
+                Return
+            End If
+
+            dispositivo.NOME = Nome_Dispositivo
+            dispositivo.ENABLED = 1
+            dispositivo.STATO = "OK"
+
+            dispositivo.Save()
+
             MessageBox.Show("Dispositivo abilitato correttamente!")
-            Dim m = "Nuovo Device registrato (ID:" + IdDispositivoDaAbilitare.ToString + ") (Nome:" + Nome_Dispositivo + ")"
+
+            Dim m As String = "Nuovo Device registrato (ID:" &
+                          IdDispositivoDaAbilitare &
+                          ") (Nome:" & Nome_Dispositivo & ")"
+
             APPEND_LOG(m, ini.File_Log, True, "1")
-            Me.Close() ' Chiude la maschera
-        Else
-            MessageBox.Show("Errore durante l'abilitazione sul database.")
-            Dim m = "[013] Nuovo Device (errore registrazione) (ID:" + IdDispositivoDaAbilitare.ToString + ") (Nome:" + Nome_Dispositivo + ")"
+            Me.Close()
+
+        Catch ex As Exception
+            MessageBox.Show("Errore durante l'abilitazione sul database: " & ex.Message)
+
+            Dim m As String = "[013] Errore abilitazione Device (ID:" &
+                          IdDispositivoDaAbilitare & "): " & ex.Message
+
             APPEND_LOG(m, ini.File_Log, True, "E")
-        End If
+        End Try
+
     End Sub
+    ' TABLET-REG-02A - FINE
+
 
     Private Sub F_Client_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         LblDeviceID.Text = IdDispositivoDaAbilitare

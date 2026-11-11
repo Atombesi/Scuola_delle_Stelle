@@ -79,6 +79,8 @@ Public Class Class_WebServerTablet
         ' Buffer di transito per i singoli segmenti in arrivo dalla rete
         Dim buffer(4096) As Byte
         Console.WriteLine("🔄 Thread di ascolto WebSocket avviato per il dispositivo.")
+        Dim handshakeCompletato As Boolean = False
+        Dim deviceIdAutenticato As String = ""
 
         While ws.State = WebSocketState.Open
             Try
@@ -115,29 +117,101 @@ Public Class Class_WebServerTablet
                 Dim msgDecodificato As Struct_Decode_Android_message = Decode_Android_message(messaggioRicevuto)
                 Dim rispostaJson As String = ""
 
+
+                ' TABLET-REG-03 - INIZIO: controllo autorizzazione tablet
+
+                Dim comando As String = msgDecodificato.type
+
+                If comando <> "HANDSHAKE" AndAlso comando <> "PING_VERIFICA" Then
+
+                    Dim nomeTablet As String = ""
+                    Dim statoTablet As Integer = -2
+
+                    ' Il dispositivo deve avere completato almeno un handshake
+                    ' valido su questa connessione WebSocket.
+                    If handshakeCompletato Then
+                        statoTablet = Class_DEVICE.Dispositivo_Registrato_Stato(
+            deviceIdAutenticato, nomeTablet)
+                    End If
+
+                    If statoTablet <> 1 Then
+
+                        rispostaJson = JsonSerializer.Serialize(New With {
+            .type = "ACCESSO_NEGATO",
+            .messaggio = "Tablet non autorizzato"
+        })
+
+                        Dim bytesRisposta() As Byte = Encoding.UTF8.GetBytes(rispostaJson)
+
+                        Await ws.SendAsync(
+            New ArraySegment(Of Byte)(bytesRisposta),
+            WebSocketMessageType.Text,
+            True,
+            CancellationToken.None)
+
+                        Continue While
+                    End If
+
+                End If
+
+                ' TABLET-REG-03 - FINE
+
+
                 ' Switch dei comandi basato sulla struttura
                 Select Case msgDecodificato.type
                                         ' --- 1. GESTIONE PACCHETTO HANDSHAKE ---
+
+' TABLET-REG-02B - INIZIO: gestione handshake e registrazione tablet
                     Case "HANDSHAKE"
-                        Dim parser As System.Text.Json.JsonDocument = System.Text.Json.JsonDocument.Parse(messaggioRicevuto)
-                        Dim root As System.Text.Json.JsonElement = parser.RootElement
-                        Dim notaUtente As String = root.GetProperty("nota_utente").GetString()
+
                         Dim nomeAssegnato As String = ""
+                        Dim notaUtente As String = ""
 
-                        Dim statoHardware As Integer = Class_DEVICE.Dispositivo_Registrato_Stato(msgDecodificato.deviceId, nomeAssegnato)
+                        Using parser As JsonDocument = JsonDocument.Parse(messaggioRicevuto)
+                            Dim root As JsonElement = parser.RootElement
+                            Dim elementoNota As JsonElement
 
-                        If statoHardware = 1 Then ' Device gia identificato
-                            ' 🎯 LOGICA PULITA: Inviamo solo l'OK formale. Il tablet userà il nome che ha già sul disco.
-                            rispostaJson = "{""type"":""HANDSHAKE_OK""}"
-                            'Debug.Print(rispostaJson)
-                        ElseIf statoHardware = 0 OrElse statoHardware = -1 Then
-                            If statoHardware = -1 Then
-                                Dim inserimentoOK As Boolean = Class_DEVICE.RegistraNuovoDispositivo(msgDecodificato.deviceId, notaUtente)
+                            If root.TryGetProperty("nota_utente", elementoNota) AndAlso
+                               elementoNota.ValueKind = JsonValueKind.String Then
+                                notaUtente = elementoNota.GetString()
                             End If
-                            AttivaSegnalazioneSulForm(msgDecodificato.deviceId)
-                            rispostaJson = "{""type"":""HANDSHAKE_PENDING"",""messaggio"":""In attesa di abilitazione...""}"
-                            'Debug.Print(rispostaJson)
-                        End If
+                        End Using
+
+                        Dim deviceId As String = msgDecodificato.deviceId
+                        Dim stato As Integer = Class_DEVICE.Dispositivo_Registrato_Stato(deviceId, nomeAssegnato)
+
+                        Select Case stato
+
+                            Case 1
+                                handshakeCompletato = True
+                                deviceIdAutenticato = deviceId
+                                rispostaJson = JsonSerializer.Serialize(New With {.type = "HANDSHAKE_OK", .nome_dispositivo = nomeAssegnato})
+                            Case 0
+                                AttivaSegnalazioneSulForm(deviceId)
+                                rispostaJson = "{""type"":""HANDSHAKE_PENDING"",""messaggio"":""In attesa di abilitazione...""}"
+
+                            Case -1
+                                If String.IsNullOrWhiteSpace(notaUtente) Then
+                                    rispostaJson = "{""type"":""HANDSHAKE_REGISTRATION_REQUIRED""}"
+                                Else
+                                    Dim registrato As Boolean =
+                                        Class_DEVICE.RegistraNuovoDispositivo(deviceId, notaUtente)
+
+                                    If registrato Then
+                                        AttivaSegnalazioneSulForm(deviceId)
+                                        rispostaJson = "{""type"":""HANDSHAKE_PENDING"",""messaggio"":""In attesa di abilitazione...""}"
+                                    Else
+                                        rispostaJson = "{""type"":""HANDSHAKE_ERROR"",""messaggio"":""Registrazione non riuscita""}"
+                                    End If
+                                End If
+
+                            Case Else
+                                rispostaJson = "{""type"":""HANDSHAKE_ERROR"",""messaggio"":""Errore verifica dispositivo""}"
+
+                        End Select
+
+' TABLET-REG-02B - FINE
+
 
 
                     ' --- 2. GESTIONE PACCHETTO RICHIESTA ELENCO ---
